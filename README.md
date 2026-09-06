@@ -48,8 +48,8 @@ git config --global credential.helper store
 ### 4. Clone โปรเจกต์มาไว้ในเครื่อง
 
 ```
-git clone https://github.com/Ren843/Ryo-Q.git
-cd Ryo-Q
+git clone https://github.com/Ren843/Project.git
+cd Project
 ```
 
 ตอนถูกถาม username/password ให้ใส่ username GitHub และวาง token แทนรหัสผ่าน

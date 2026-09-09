@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Ryo-q</string>
+    <string name="play_button_description">Play Button</string>
 </resources>

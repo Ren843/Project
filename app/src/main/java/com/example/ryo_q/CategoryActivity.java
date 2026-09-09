@@ -17,7 +17,7 @@ import androidx.core.view.WindowInsetsControllerCompat;
 
 public class CategoryActivity extends AppCompatActivity {
     View btnJava, btnCpp, btnPython;
-    View btnEasy, btnNormal, btnHard;
+    View btnEasy, btnNormal, btnHard, btnStart;
     LinearLayout languageLayout;
     LinearLayout DifficultyLayout;
 
@@ -42,18 +42,34 @@ public class CategoryActivity extends AppCompatActivity {
         btnEasy = findViewById(R.id.easyButton);
         btnNormal = findViewById(R.id.normalButton);
         btnHard = findViewById(R.id.hardButton);
+        btnStart = findViewById(R.id.startButton);
 
         //ซ่อนปุ่มความยาก
         
         //เลือกภาษา
-        btnJava.setOnClickListener(v -> selectLanguage(GameConstants.LANG_JAVA));
-        btnCpp.setOnClickListener(v -> selectLanguage(GameConstants.LANG_CPP));
-        btnPython.setOnClickListener(v -> selectLanguage(GameConstants.LANG_PYTHON));
-
+        if (btnJava != null) {
+            btnJava.setOnClickListener(v -> selectLanguage(GameConstants.LANG_JAVA));
+        }
+        if (btnCpp != null) {
+            btnCpp.setOnClickListener(v -> selectLanguage(GameConstants.LANG_CPP));
+        }
+        if (btnPython != null) {
+            btnPython.setOnClickListener(v -> selectLanguage(GameConstants.LANG_PYTHON));
+        }
         //เลือกความยาก
-        btnEasy.setOnClickListener(v -> selectDifficulty(GameConstants.DIFF_EASY));
-        btnNormal.setOnClickListener(v -> selectDifficulty(GameConstants.DIFF_NORMAL));
-        btnHard.setOnClickListener(v -> selectDifficulty(GameConstants.DIFF_HARD));
+        if (btnEasy != null) {
+            btnEasy.setOnClickListener(v -> selectDifficulty(GameConstants.DIFF_EASY));
+        }
+        if (btnNormal != null) {
+            btnNormal.setOnClickListener(v -> selectDifficulty(GameConstants.DIFF_NORMAL));
+        }
+        if (btnHard != null) {
+            btnHard.setOnClickListener(v -> selectDifficulty(GameConstants.DIFF_HARD));
+        }
+
+        if (btnStart != null) {
+            btnStart.setOnClickListener(v -> startGame());
+        }
 
         // ใส่แอนิเมชันให้ปุ่ม
         setupButtonsAnimation();
@@ -87,7 +103,12 @@ public class CategoryActivity extends AppCompatActivity {
 
     private void selectDifficulty(String difficulty) {
         selectedDifficulty = difficulty;
-        startGame();
+        if (btnStart != null) {
+            btnStart.setVisibility(View.VISIBLE);
+            // เพิ่ม Animation เล็กน้อยตอนโผล่มา
+            btnStart.setAlpha(0f);
+            btnStart.animate().alpha(1f).setDuration(500).start();
+        }
     }
 
     private void showDifficulty() {
@@ -95,13 +116,7 @@ public class CategoryActivity extends AppCompatActivity {
         DifficultyLayout.setVisibility(View.VISIBLE);
         // สามารถเพิ่ม Animation ตรงนี้ได้
     }
-    private void getQuestion(){
-        QuestionRepository repository = new QuestionRepository();
 
-        repository.getQuestions(
-                selectedLanguage,selectedDifficulty
-        );
-    }
 
     private void startGame() {
         // TODO: ส่งข้อมูลไปยัง Activity ถัดไป (เช่น GameActivity)
@@ -122,6 +137,7 @@ public class CategoryActivity extends AppCompatActivity {
         setupButtonTouchAnimation(btnEasy);
         setupButtonTouchAnimation(btnNormal);
         setupButtonTouchAnimation(btnHard);
+        setupButtonTouchAnimation(btnStart);
 
         // แอนิเมชันลอย (Floating) Layout
         startFloatingAnimation(languageLayout, 0);

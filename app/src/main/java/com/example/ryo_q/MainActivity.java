@@ -7,19 +7,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.WindowCompat;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
-
-import java.util.List;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+
+
+ //hide ActionBar
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -47,22 +44,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        // ทดสอบระบบ Data Layer หลังจากปรับปรุงเสร็จสมบูรณ์
-        List<Question> testList = QuestionRepository.getQuestions(GameConstants.LANG_JAVA, GameConstants.DIFF_EASY);
-        Log.d("DB_TEST", "จำนวนโจทย์ Java Easy (จากค่าคงที่): " + testList.size());
-
-        Robot robot = RobotRepository.getRobotById(1);
-        if (robot != null) {
-            Log.d("DB_TEST", "พบหุ่นยนต์: " + robot.getName());
-        }
-
-        ScoreManager.saveStars(this, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL, 3);
-        int totalStars = ScoreManager.getTotalStars(this);
-        Log.d("DB_TEST", "คะแนนรวมทั้งหมด: " + totalStars);
-
         setupButtons();
-
-
     }
 
     //ปุ่ม

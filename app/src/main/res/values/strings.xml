@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Ryo-q</string>
     <string name="play_button_description">Play Button</string>
+    <string name="exit_button_description">Exit Button</string>
+    <string name="select_java_description">Select Java</string>
+    <string name="select_cpp_description">Select C++</string>
+    <string name="select_python_description">Select Python</string>
+    <string name="select_easy_description">Select Easy</string>
+    <string name="select_normal_description">Select Normal</string>
+    <string name="select_hard_description">Select Hard</string>
+    <string name="start_button_description">เริ่มเกม</string>
 </resources>

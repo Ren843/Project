@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CategoryActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/insite2dpixel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <LinearLayout
+        android:id="@+id/languageLayout"
+        android:layout_width="232dp"
+        android:layout_height="360dp"
+        android:background="@drawable/textbox"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.167"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/javaButton"
+            android:layout_width="135dp"
+            android:layout_height="58dp"
+            android:layout_marginBottom="12dp"
+            android:contentDescription= "@string/select_java_description"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/java" />
+
+        <ImageView
+            android:id="@+id/cppButton"
+            android:layout_width="135dp"
+            android:layout_height="58dp"
+            android:layout_marginBottom="12dp"
+            android:contentDescription= "@string/select_cpp_description"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/cpp" />
+
+        <ImageView
+            android:id="@+id/pythonButton"
+            android:layout_width="135dp"
+            android:layout_height="58dp"
+            android:contentDescription= "@string/select_python_description"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/python" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/difficultyLayout"
+        android:layout_width="232dp"
+        android:layout_height="360dp"
+        android:background="@drawable/textbox"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.167"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/easyButton"
+            android:layout_width="135dp"
+            android:layout_height="58dp"
+            android:layout_marginBottom="12dp"
+            android:contentDescription= "@string/select_easy_description"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/easy" />
+
+        <ImageView
+            android:id="@+id/normalButton"
+            android:layout_width="135dp"
+            android:layout_height="58dp"
+            android:layout_marginBottom="12dp"
+            android:contentDescription= "@string/select_normal_description"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/normal" />
+
+        <ImageView
+            android:id="@+id/hardButton"
+            android:layout_width="135dp"
+            android:layout_height="58dp"
+            android:contentDescription= "@string/select_hard_description"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/hard" />
+
+        <ImageView
+            android:id="@+id/startButton"
+            android:layout_width="135dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="20dp"
+            android:contentDescription= "@string/start_button_description"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/start"
+            android:visibility="gone" />
+
+    </LinearLayout>
+    
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

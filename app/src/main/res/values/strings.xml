@@ -9,4 +9,5 @@
     <string name="select_normal_description">Select Normal</string>
     <string name="select_hard_description">Select Hard</string>
     <string name="start_button_description">เริ่มเกม</string>
+    <string name="back_button_description">ย้อนกลับ</string>
 </resources>

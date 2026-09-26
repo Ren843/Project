@@ -9,6 +9,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.ViewCompat;
@@ -18,6 +19,7 @@ import androidx.core.view.WindowInsetsControllerCompat;
 public class CategoryActivity extends AppCompatActivity {
     View btnJava, btnCpp, btnPython;
     View btnEasy, btnNormal, btnHard, btnStart;
+    View btnBackLanguage, btnBackDifficulty;
     LinearLayout languageLayout;
     LinearLayout DifficultyLayout;
 
@@ -37,15 +39,15 @@ public class CategoryActivity extends AppCompatActivity {
         btnJava = findViewById(R.id.javaButton);
         btnCpp = findViewById(R.id.cppButton);
         btnPython = findViewById(R.id.pythonButton);
+        btnBackLanguage = findViewById(R.id.backButtonLanguage);
 
         // Difficulty
         btnEasy = findViewById(R.id.easyButton);
         btnNormal = findViewById(R.id.normalButton);
         btnHard = findViewById(R.id.hardButton);
         btnStart = findViewById(R.id.startButton);
+        btnBackDifficulty = findViewById(R.id.backButtonDifficulty);
 
-        //ซ่อนปุ่มความยาก
-        
         //เลือกภาษา
         if (btnJava != null) {
             btnJava.setOnClickListener(v -> selectLanguage(GameConstants.LANG_JAVA));
@@ -56,6 +58,10 @@ public class CategoryActivity extends AppCompatActivity {
         if (btnPython != null) {
             btnPython.setOnClickListener(v -> selectLanguage(GameConstants.LANG_PYTHON));
         }
+        if (btnBackLanguage != null) {
+            btnBackLanguage.setOnClickListener(v -> finish());
+        }
+
         //เลือกความยาก
         if (btnEasy != null) {
             btnEasy.setOnClickListener(v -> selectDifficulty(GameConstants.DIFF_EASY));
@@ -66,10 +72,26 @@ public class CategoryActivity extends AppCompatActivity {
         if (btnHard != null) {
             btnHard.setOnClickListener(v -> selectDifficulty(GameConstants.DIFF_HARD));
         }
+        if (btnBackDifficulty != null) {
+            btnBackDifficulty.setOnClickListener(v -> showLanguage());
+        }
 
         if (btnStart != null) {
             btnStart.setOnClickListener(v -> startGame());
         }
+
+        //Back
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (DifficultyLayout != null && DifficultyLayout.getVisibility() == View.VISIBLE) {
+                    showLanguage();
+                } else {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+            }
+        });
 
         // ใส่แอนิเมชันให้ปุ่ม
         setupButtonsAnimation();
@@ -117,6 +139,20 @@ public class CategoryActivity extends AppCompatActivity {
         // สามารถเพิ่ม Animation ตรงนี้ได้
     }
 
+    private void showLanguage() {
+        if (DifficultyLayout != null) {
+            DifficultyLayout.setVisibility(View.GONE);
+        }
+        if (languageLayout != null) {
+            languageLayout.setVisibility(View.VISIBLE);
+        }
+        selectedLanguage = "";
+        selectedDifficulty = "";
+        if (btnStart != null) {
+            btnStart.setVisibility(View.GONE);
+        }
+    }
+
 
     private void startGame() {
         // TODO: ส่งข้อมูลไปยัง Activity ถัดไป (เช่น GameActivity)
@@ -132,12 +168,14 @@ public class CategoryActivity extends AppCompatActivity {
         setupButtonTouchAnimation(btnJava);
         setupButtonTouchAnimation(btnCpp);
         setupButtonTouchAnimation(btnPython);
+        setupButtonTouchAnimation(btnBackLanguage);
         
         // ปุ่มความยาก
         setupButtonTouchAnimation(btnEasy);
         setupButtonTouchAnimation(btnNormal);
         setupButtonTouchAnimation(btnHard);
         setupButtonTouchAnimation(btnStart);
+        setupButtonTouchAnimation(btnBackDifficulty);
 
         // แอนิเมชันลอย (Floating) Layout
         startFloatingAnimation(languageLayout, 0);

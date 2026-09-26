@@ -23,7 +23,8 @@
     <LinearLayout
         android:id="@+id/languageLayout"
         android:layout_width="232dp"
-        android:layout_height="360dp"
+        android:layout_height="wrap_content"
+        android:minHeight="360dp"
         android:background="@drawable/textbox"
         android:gravity="center"
         android:orientation="vertical"
@@ -59,17 +60,28 @@
             android:id="@+id/pythonButton"
             android:layout_width="135dp"
             android:layout_height="58dp"
+            android:layout_marginBottom="12dp"
             android:contentDescription= "@string/select_python_description"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
             android:src="@drawable/python" />
+
+        <ImageView
+            android:id="@+id/backButtonLanguage"
+            android:layout_width="135dp"
+            android:layout_height="58dp"
+            android:contentDescription="@string/back_button_description"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/back" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/difficultyLayout"
         android:layout_width="232dp"
-        android:layout_height="360dp"
+        android:layout_height="wrap_content"
+        android:minHeight="360dp"
         android:background="@drawable/textbox"
         android:gravity="center"
         android:orientation="vertical"
@@ -106,6 +118,7 @@
             android:id="@+id/hardButton"
             android:layout_width="135dp"
             android:layout_height="58dp"
+            android:layout_marginBottom="12dp"
             android:contentDescription= "@string/select_hard_description"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
@@ -115,12 +128,21 @@
             android:id="@+id/startButton"
             android:layout_width="135dp"
             android:layout_height="58dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="12dp"
             android:contentDescription= "@string/start_button_description"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
             android:src="@drawable/start"
             android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/backButtonDifficulty"
+            android:layout_width="135dp"
+            android:layout_height="58dp"
+            android:contentDescription="@string/back_button_description"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/back" />
 
     </LinearLayout>
     

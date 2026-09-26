@@ -57,8 +57,15 @@ public class MainActivity extends AppCompatActivity {
             startFloatingAnimation(btnPlay, 0);
             btnPlay.setOnClickListener(v -> {
                 Log.d("UI", "Play Button Clicked");
-                android.content.Intent intent = new android.content.Intent(MainActivity.this, CategoryActivity.class);
-                startActivity(intent);
+                // ป้องกันการกดปุ่มซ้ำขณะกำลังรอ 5 วินาที
+                btnPlay.setEnabled(false);
+
+                // Delay (2 วินาที) ก่อนเปลี่ยนหน้า
+                new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                    android.content.Intent intent = new android.content.Intent(MainActivity.this, CategoryActivity.class);
+                    startActivity(intent);
+                    btnPlay.setEnabled(true);
+                }, 2000);
             });
         }
 

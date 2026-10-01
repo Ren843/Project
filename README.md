@@ -82,13 +82,11 @@ git checkout -b feature/ชื่องานของตัวเอง
 ### ก่อนเริ่มทำงานแต่ละวัน — ดึงงานล่าสุดของ dev เข้ามาก่อน
 
 ```
-git checkout dev
-git pull origin dev
+git checkout main
+git pull origin main
 git checkout feature/ชื่องานของตัวเอง
-git merge dev
+git merge main
 ```
-
-ทำแบบนี้เพื่อให้ branch ของตัวเองอัปเดตตามงานของเพื่อนที่ merge เข้า `dev` ไปแล้ว ลดโอกาส conflict ก้อนใหญ่ตอนหลัง
 
 ### ระหว่างทำงาน — commit เป็นระยะ
 

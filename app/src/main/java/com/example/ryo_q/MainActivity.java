@@ -2,7 +2,6 @@ package com.example.ryo_q;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -16,9 +15,6 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
-/**
- * คลาส MainActivity หน้าแรกของแอปพลิเคชัน (Main Menu)
- */
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -27,18 +23,21 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        // ซ่อน Action Bar
+
+
+ //hide ActionBar
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
-        // ตั้งค่าซ่อนระบบแทร็กบาร์แถบระบบ
         WindowInsetsControllerCompat windowInsetsController =
                 WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
-        windowInsetsController.setSystemBarsBehavior(
-                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        );
+        if (windowInsetsController != null) {
+            windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
+            windowInsetsController.setSystemBarsBehavior(
+                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            );
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             v.setPadding(0, 0, 0, 0);
@@ -48,19 +47,17 @@ public class MainActivity extends AppCompatActivity {
         setupButtons();
     }
 
-    /**
-     * ตั้งค่าปุ่มกดเมนูหลัก (Play & Exit) พร้อมใส่แอนิเมชัน
-     */
+    //ปุ่ม
     private void setupButtons() {
         View btnPlay = findViewById(R.id.btnMenuPlay);
         View btnExit = findViewById(R.id.btnMenuExit);
-
+    //Animation Button Floating
         if (btnPlay != null) {
             setupButtonTouchAnimation(btnPlay);
             startFloatingAnimation(btnPlay, 0);
             btnPlay.setOnClickListener(v -> {
                 Log.d("UI", "Play Button Clicked");
-                Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
+                android.content.Intent intent = new android.content.Intent(MainActivity.this, CategoryActivity.class);
                 startActivity(intent);
             });
         }
@@ -74,12 +71,8 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
-
-    /**
-     * แอนิเมชันปุ่มกดเมื่อผู้เล่นสัมผัสหน้าจอ
-     */
-    private void setupButtonTouchAnimation(View view) {
-        if (view == null) return;
+    //Animation Button
+    private void setupButtonTouchAnimation(View view){
         view.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -97,11 +90,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * แอนิเมชันลอยตัวขึ้นลงแบบวนลูป (Floating Animation)
-     */
     private void startFloatingAnimation(View view, long delay) {
-        if (view == null) return;
         ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", 0f, -30f, 0f);
         animator.setDuration(2000);
         animator.setStartDelay(delay);
@@ -110,3 +99,6 @@ public class MainActivity extends AppCompatActivity {
         animator.start();
     }
 }
+
+
+

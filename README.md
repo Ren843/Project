@@ -82,13 +82,11 @@ git checkout -b feature/ชื่องานของตัวเอง
 ### ก่อนเริ่มทำงานแต่ละวัน — ดึงงานล่าสุดของ dev เข้ามาก่อน
 
 ```
-git checkout dev
-git pull origin dev
+git checkout main
+git pull origin main
 git checkout feature/ชื่องานของตัวเอง
-git merge dev
+git merge main
 ```
-
-ทำแบบนี้เพื่อให้ branch ของตัวเองอัปเดตตามงานของเพื่อนที่ merge เข้า `dev` ไปแล้ว ลดโอกาส conflict ก้อนใหญ่ตอนหลัง
 
 ### ระหว่างทำงาน — commit เป็นระยะ
 
@@ -106,15 +104,6 @@ git push -u origin feature/ชื่องานของตัวเอง
 ```
 
 (ครั้งแรกต้องมี `-u` ครั้งต่อไปพิมพ์แค่ `git push` ก็พอ)
-
-### เมื่องานส่วนของตัวเองเสร็จสมบูรณ์ — merge เข้า dev
-
-1. ไปที่หน้า repo บน GitHub
-2. กด **Compare & pull request** (จะขึ้นให้อัตโนมัติหลัง push)
-3. ตั้ง base เป็น `dev`, compare เป็น `feature/ชื่องานของตัวเอง`
-4. เขียนอธิบายว่าทำอะไรไปบ้าง แล้วกด Create pull request
-5. รอเพื่อนอีกอย่างน้อย 1 คนกด Approve ก่อน merge
-
 ---
 
 ## ปัญหาที่เจอบ่อย

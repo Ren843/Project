@@ -9,13 +9,4 @@
     <string name="select_normal_description">Select Normal</string>
     <string name="select_hard_description">Select Hard</string>
     <string name="start_button_description">เริ่มเกม</string>
-    <string name="game_correct">Correct!</string>
-    <string name="game_wrong">Wrong! Correct: %1$s</string>
-    <string name="game_over_score">Game Over! Score: %1$d/%2$d (%3$d Stars)</string>
-    <string name="no_questions">No questions found!</string>
-    <string name="next_question">Next Question</string>
-    <string name="robot_fixed_status">สถานะ: ซ่อมแซมเสร็จแล้ว (FIXED)</string>
-    <string name="robot_broken_status">สถานะ: ชำรุด (ตอบถูก %1$d/%2$d)</string>
-    <string name="timeout_correct_answer">หมดเวลา! คำตอบที่ถูกต้อง: %1$s</string>
-    <string name="time_out">หมดเวลา!</string>
 </resources>

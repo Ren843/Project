@@ -2,6 +2,7 @@ package com.example.ryo_q;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,19 +11,23 @@ import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.WindowCompat;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
+/**
+ * คลาส CategoryActivity หน้าเลือกหมวดหมู่ภาษาโปรแกรมและระดับความยาก
+ */
 public class CategoryActivity extends AppCompatActivity {
-    View btnJava, btnCpp, btnPython;
-    View btnEasy, btnNormal, btnHard, btnStart;
-    LinearLayout languageLayout;
-    LinearLayout DifficultyLayout;
 
-    private String selectedLanguage = "";
-    private String selectedDifficulty = "";
+    private View btnJava, btnCpp, btnPython;
+    private View btnEasy, btnNormal, btnHard, btnStart;
+    private LinearLayout languageLayout;
+    private LinearLayout difficultyLayout;
+
+    private String selectedLanguage = GameConstants.LANG_JAVA;
+    private String selectedDifficulty = GameConstants.DIFF_EASY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,22 +36,20 @@ public class CategoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category);
 
         languageLayout = findViewById(R.id.languageLayout);
-        DifficultyLayout = findViewById(R.id.difficultyLayout);
-        
-        // Language
+        difficultyLayout = findViewById(R.id.difficultyLayout);
+
+        // ปุ่มเลือกภาษาโปรแกรม
         btnJava = findViewById(R.id.javaButton);
         btnCpp = findViewById(R.id.cppButton);
         btnPython = findViewById(R.id.pythonButton);
 
-        // Difficulty
+        // ปุ่มเลือกระดับความยาก
         btnEasy = findViewById(R.id.easyButton);
         btnNormal = findViewById(R.id.normalButton);
         btnHard = findViewById(R.id.hardButton);
         btnStart = findViewById(R.id.startButton);
 
-        //ซ่อนปุ่มความยาก
-        
-        //เลือกภาษา
+        // ตั้งค่า OnClickListener สำหรับปุ่มภาษา
         if (btnJava != null) {
             btnJava.setOnClickListener(v -> selectLanguage(GameConstants.LANG_JAVA));
         }
@@ -56,7 +59,8 @@ public class CategoryActivity extends AppCompatActivity {
         if (btnPython != null) {
             btnPython.setOnClickListener(v -> selectLanguage(GameConstants.LANG_PYTHON));
         }
-        //เลือกความยาก
+
+        // ตั้งค่า OnClickListener สำหรับปุ่มความยาก
         if (btnEasy != null) {
             btnEasy.setOnClickListener(v -> selectDifficulty(GameConstants.DIFF_EASY));
         }
@@ -71,77 +75,88 @@ public class CategoryActivity extends AppCompatActivity {
             btnStart.setOnClickListener(v -> startGame());
         }
 
-        // ใส่แอนิเมชันให้ปุ่ม
+        // ตั้งค่าแอนิเมชันสำหรับปุ่มและเลย์เอาต์
         setupButtonsAnimation();
 
-        //ซ่อนแถบขาวๆ
+        // ซ่อน Action Bar และแถบระบบ
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
         WindowInsetsControllerCompat windowInsetsController =
                 WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-        if (windowInsetsController != null) {
-            windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
-            windowInsetsController.setSystemBarsBehavior(
-                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            );
-        }
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
+        windowInsetsController.setSystemBarsBehavior(
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        );
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             v.setPadding(0, 0, 0, 0);
             return insets;
         });
-
-
     }
 
+    /**
+     * เลือกภาษาโปรแกรมและเปลี่ยนไปแสดงหน้าระดับความยาก
+     * @param language ภาษาโปรแกรมที่เลือก
+     */
     private void selectLanguage(String language) {
         selectedLanguage = language;
         showDifficulty();
     }
 
+    /**
+     * เลือกระดับความยากและแสดงปุ่มเริ่มเกม
+     * @param difficulty ระดับความยากที่เลือก
+     */
     private void selectDifficulty(String difficulty) {
         selectedDifficulty = difficulty;
         if (btnStart != null) {
             btnStart.setVisibility(View.VISIBLE);
-            // เพิ่ม Animation เล็กน้อยตอนโผล่มา
             btnStart.setAlpha(0f);
             btnStart.animate().alpha(1f).setDuration(500).start();
         }
     }
 
+    /**
+     * ซ่อนส่วนเลือกภาษา และเปิดแสดงส่วนเลือกระดับความยาก
+     */
     private void showDifficulty() {
-        languageLayout.setVisibility(View.GONE);
-        DifficultyLayout.setVisibility(View.VISIBLE);
-        // สามารถเพิ่ม Animation ตรงนี้ได้
+        if (languageLayout != null) {
+            languageLayout.setVisibility(View.GONE);
+        }
+        if (difficultyLayout != null) {
+            difficultyLayout.setVisibility(View.VISIBLE);
+        }
     }
 
-
+    /**
+     * เริ่มเกมโดยเปิด GameActivity พร้อมแนบข้อมูลภาษาและความยากผ่าน Intent
+     */
     private void startGame() {
-        // TODO: ส่งข้อมูลไปยัง Activity ถัดไป (เช่น GameActivity)
-        // Intent intent = new Intent(this, GameActivity.class);
-        // intent.putExtra("language", selectedLanguage);
-        // intent.putExtra("difficulty", selectedDifficulty);
-        // startActivity(intent);
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra("language", selectedLanguage);
+        intent.putExtra("difficulty", selectedDifficulty);
+        startActivity(intent);
     }
 
-    // --- ระบบแอนิเมชันปุ่ม ---
+    // --- ระบบแอนิเมชันปุ่มและเลย์เอาต์ ---
+
     private void setupButtonsAnimation() {
-        // ปุ่มภาษา
+        // แอนิเมชันปุ่มภาษา
         setupButtonTouchAnimation(btnJava);
         setupButtonTouchAnimation(btnCpp);
         setupButtonTouchAnimation(btnPython);
-        
-        // ปุ่มความยาก
+
+        // แอนิเมชันปุ่มความยาก
         setupButtonTouchAnimation(btnEasy);
         setupButtonTouchAnimation(btnNormal);
         setupButtonTouchAnimation(btnHard);
         setupButtonTouchAnimation(btnStart);
 
-        // แอนิเมชันลอย (Floating) Layout
-        startFloatingAnimation(languageLayout, 0);
-        startFloatingAnimation(DifficultyLayout, 0);
+        // แอนิเมชันลอยแบบนุ่มนวล (Floating Animation)
+        startFloatingAnimation(languageLayout);
+        startFloatingAnimation(difficultyLayout);
     }
 
     private void setupButtonTouchAnimation(View view) {
@@ -163,15 +178,12 @@ public class CategoryActivity extends AppCompatActivity {
         });
     }
 
-    private void startFloatingAnimation(View view, long delay) {
+    private void startFloatingAnimation(View view) {
         if (view == null) return;
         ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", 0f, -20f, 0f);
         animator.setDuration(3000);
-        animator.setStartDelay(delay);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.start();
     }
 }
-
-

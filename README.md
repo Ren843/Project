@@ -9,7 +9,7 @@
 
 - `main` — เก็บเวอร์ชันที่รันได้จริงสมบูรณ์เท่านั้น ห้าม push ตรงเข้ามาที่นี่
 - `dev` — branch รวมงานระหว่างทำ ทุกคน merge งานของตัวเองเข้ามาที่นี่ก่อน
-- `feature/ชื่องาน` — branch ส่วนตัวของแต่ละคน เช่น `feature/database`, `feature/quiz-logic`, `feature/menu-ui`, `feature/battle-ui`
+- `feature/quiz-logic` — branch ระบบที่เพิ่มมาใหม่: คลาส QuizManager คุมลอจิก ตรวจคำตอบ, จับเวลาถอยหลัง (Time Limit), คิดดาว และระบบซ่อมแซมหุ่นยนต์ (Robot Repair)
 
 การไหลของงาน: `feature/*` → `dev` → `main` (merge เข้า `main` ตอนโปรเจกต์เสร็จหรือถึง milestone สำคัญเท่านั้น)
 

@@ -2,6 +2,7 @@ package com.example.ryo_q;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * คลังข้อมูล RobotRepository สำหรับบริหารจัดการและจัดเก็บข้อมูลหุ่นยนต์ทั้งหมดในระบบ
@@ -9,51 +10,69 @@ import java.util.List;
 public class RobotRepository {
 
     /**
-     * ดึงรายชื่อหุ่นยนต์ทั้งหมดที่มีในเกมพร้อมกำหนดรูปภาพทรัพยากร (R.drawable.robot)
+     * ดึงรายชื่อหุ่นยนต์ทั้งหมดที่มีในเกมพร้อมกำหนดรูปภาพ 2 สถานะ (พัง และ ซ่อมเสร็จ)
      * @return List ของ Object Robot
      */
     public static List<Robot> getAllRobots() {
         List<Robot> list = new ArrayList<>();
 
-        // หุ่นยนต์ตัวหลักของเกม Ryo-01 ใช้รูปภาพ R.drawable.robot
+        // 1. หุ่นยนต์สีฟ้า (Blue Bot - Ryo-Blue)
         list.add(new Robot(
                 1,
-                "Ryo-01",
-                "หุ่นยนต์ผู้ช่วยอัจฉริยะ วงจรประมวลผลหลักเสียหายจากไฟฟ้าช็อต",
-                R.drawable.robot,
+                "Ryo-Blue",
+                "หุ่นยนต์ล้อเลื่อนสีฟ้า ระบบสายไฟและเลนส์ประมวลผลแตกเสียหาย",
+                R.drawable.robot_blue_broken,
+                R.drawable.robot_blue_repair,
                 5
         ));
 
-        // หุ่นยนต์ตัวอื่นๆ ในระบบ
+        // 2. หุ่นยนต์สีเขียว (Green Bot - G-Mech)
         list.add(new Robot(
                 2,
-                "Q-Bot",
-                "หุ่นยนต์ตรวจสอบคุณภาพ ซิปประมวลผลคำสั่งขัดข้อง",
-                R.drawable.robot,
+                "G-Mech",
+                "หุ่นยนต์เกราะเหล็กสีเขียว แขนซ้ายขาดและวงจรภายในลัดวงจร",
+                R.drawable.robot_green_broken,
+                R.drawable.robot_green_repair,
                 5
         ));
 
+        // 3. หุ่นยนต์สีส้ม (Orange Bot - Wheel-Orange)
         list.add(new Robot(
                 3,
-                "Steel-Wing",
-                "หุ่นยนต์บินสำรวจ ระบบควบคุมการบินขัดข้อง",
-                R.drawable.robot,
+                "Wheel-Orange",
+                "หุ่นยนต์สี่ล้อสีส้ม ล้อแบนและแขนขวาหลุดร่วง",
+                R.drawable.robot_orange_broken,
+                R.drawable.robot_orange_repair,
                 5
         ));
 
+        // 4. หุ่นยนต์สีม่วง (Purple Bot - Volt-Purple)
         list.add(new Robot(
                 4,
-                "Rusty",
-                "หุ่นยนต์รุ่นเก่า หน่วยความจำทำงานผิดพลาด",
-                R.drawable.robot,
+                "Volt-Purple",
+                "หุ่นยนต์ฮิวมานอยด์สีม่วง วงจรเกราะอกและสายไฟห้อยระย้า",
+                R.drawable.robot_purple_broken,
+                R.drawable.robot_purple_repair,
                 5
         ));
 
+        // 5. หุ่นยนต์สีแดง (Red Bot - Mecha-Red)
         list.add(new Robot(
                 5,
-                "Sparky",
-                "หุ่นยนต์พลังงานไฟฟ้า ระบบแปลงสัญญาณเสียหาย",
-                R.drawable.robot,
+                "Mecha-Red",
+                "หุ่นยนต์ต่อสู้สีแดง ส่วนหัวหลุดหายและเกราะอกเสียหายหนัก",
+                R.drawable.robot_red_broken,
+                R.drawable.robot_red_repair,
+                5
+        ));
+
+        // 6. หุ่นยนต์สีเหลือง (Yellow Bot - Spark-Yellow)
+        list.add(new Robot(
+                6,
+                "Spark-Yellow",
+                "หุ่นยนต์ความเร็วสูงสีเหลือง เซ็นเซอร์ดวงตาดับและเกราะทะลุ",
+                R.drawable.robot_yellow_broken,
+                R.drawable.robot_yellow_repair,
                 5
         ));
 
@@ -75,29 +94,22 @@ public class RobotRepository {
     }
 
     /**
+     * สุ่มหุ่นยนต์ 1 ตัวจากทั้งหมด 6 สี
+     * @return วัตถุ Robot ที่ถูกสุ่มมา
+     */
+    public static Robot getRandomRobot() {
+        List<Robot> robots = getAllRobots();
+        int randomIndex = new Random().nextInt(robots.size());
+        return robots.get(randomIndex);
+    }
+
+    /**
      * ดึงหุ่นยนต์ประจำภาษาและระดับความยาก
      * @param lang ภาษาโปรแกรม (JAVA, PYTHON, CPP)
      * @param diff ระดับความยาก (EASY, NORMAL, HARD)
-     * @return วัตถุ Robot ที่กำหนดไว้สำหรับด่านนั้น
+     * @return วัตถุ Robot ที่ถูกสุ่มมาเล่นในด่านนั้น
      */
     public static Robot getRobotForCategory(String lang, String diff) {
-        List<Robot> robots = getAllRobots();
-        int baseIndex = 0;
-
-        if (GameConstants.LANG_PYTHON.equalsIgnoreCase(lang)) {
-            baseIndex = 1;
-        } else if (GameConstants.LANG_CPP.equalsIgnoreCase(lang)) {
-            baseIndex = 2;
-        }
-
-        int offset = 0;
-        if (GameConstants.DIFF_NORMAL.equalsIgnoreCase(diff)) {
-            offset = 1;
-        } else if (GameConstants.DIFF_HARD.equalsIgnoreCase(diff)) {
-            offset = 2;
-        }
-
-        int finalIndex = (baseIndex + offset) % robots.size();
-        return robots.get(finalIndex);
+        return getRandomRobot();
     }
 }

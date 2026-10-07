@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * คลาส Robot ตัวละครหุ่นยนต์ในเกมที่ผู้เล่นต้องซ่อมแซม
- * รองรับ Serializable เพื่อให้สามารถส่ง Object ข้อมูลผ่าน Intent ระหว่าง Activity ได้
+ * รองรับการเก็บรูปภาพ 2 เวอร์ชัน (รูปตอนชำรุด และรูปตอนซ่อมเสร็จ)
  */
 public class Robot implements Serializable {
 
@@ -21,33 +21,41 @@ public class Robot implements Serializable {
     private final String name;           // ชื่อของหุ่นยนต์
     private String description;          // คำอธิบาย/รายละเอียดประวัติของหุ่นยนต์
     private String status;               // เก็บสถานะปัจจุบัน ("BROKEN" หรือ "FIXED")
-    private int imageResId;              // ไอดีของทรัพยากรรูปภาพหุ่นยนต์ (เช่น R.drawable.robot)
+    private int brokenImageResId;        // ไอดีทรัพยากรรูปภาพหุ่นยนต์ตอนพัง/ชำรุด
+    private int fixedImageResId;         // ไอดีทรัพยากรรูปภาพหุ่นยนต์ตอนซ่อมเสร็จ
     private int requiredCorrectCount;    // จำนวนข้อที่ต้องตอบถูกทั้งหมดในการซ่อมแซม
     private int currentCorrectCount;     // จำนวนข้อที่ตอบถูกสะสมในปัจจุบัน
 
     /**
-     * คอนสตรักเตอร์สร้างหุ่นยนต์ใหม่แบบพื้นฐาน
-     * @param robotId รหัสประจำตัว
-     * @param name ชื่อหุ่นยนต์
-     * @param imageResId ทรัพยากรรูปภาพ (R.drawable.xxx)
+     * คอนสตรักเตอร์สร้างหุ่นยนต์แบบ 1 รูปภาพ (รองรับโค้ดเก่า)
      */
     public Robot(int robotId, String name, int imageResId) {
-        this(robotId, name, "หุ่นยนต์ที่ต้องการซ่อมแซมวงจร", imageResId, 5);
+        this(robotId, name, imageResId, imageResId);
     }
 
     /**
-     * คอนสตรักเตอร์แบบสมบูรณ์
-     * @param robotId รหัสประจำตัว
-     * @param name ชื่อหุ่นยนต์
-     * @param description รายละเอียดหุ่นยนต์
-     * @param imageResId ทรัพยากรรูปภาพ
-     * @param requiredCorrectCount จำนวนข้อที่ต้องตอบถูกเพื่อซ่อม
+     * คอนสตรักเตอร์สร้างหุ่นยนต์พร้อมรูปภาพ 2 เวอร์ชัน (พัง และ ซ่อมเสร็จ)
+     */
+    public Robot(int robotId, String name, int brokenImageResId, int fixedImageResId) {
+        this(robotId, name, "หุ่นยนต์ที่ต้องการซ่อมแซมวงจร", brokenImageResId, fixedImageResId, 5);
+    }
+
+    /**
+     * คอนสตรักเตอร์รองรับรูปแบบ 1 รูปภาพพร้อมรายละเอียด
      */
     public Robot(int robotId, String name, String description, int imageResId, int requiredCorrectCount) {
+        this(robotId, name, description, imageResId, imageResId, requiredCorrectCount);
+    }
+
+    /**
+     * คอนสตรักเตอร์แบบสมบูรณ์รองรับรูปภาพ 2 เวอร์ชัน (พัง และ ซ่อมเสร็จ)
+     */
+    public Robot(int robotId, String name, String description, int brokenImageResId, int fixedImageResId, int requiredCorrectCount) {
         this.robotId = robotId;
         this.name = name;
         this.description = description;
-        this.imageResId = imageResId;
+        this.brokenImageResId = brokenImageResId;
+        this.fixedImageResId = fixedImageResId;
         this.requiredCorrectCount = requiredCorrectCount;
         this.currentCorrectCount = 0;
         this.status = STATUS_BROKEN; // เริ่มต้นให้สถานะเป็นชำรุด (BROKEN)
@@ -79,6 +87,14 @@ public class Robot implements Serializable {
         return STATUS_FIXED.equals(this.status);
     }
 
+    /**
+     * ดึงไอดีรูปภาพประจำสถานะปัจจุบัน (คืนค่ารูปตอนซ่อมเสร็จหากซ่อมแล้ว คืนค่ารูปพังหากยังชำรุด)
+     * @return ทรัพยากรรูปภาพ R.drawable.xxx
+     */
+    public int getImageResId() {
+        return isFixed() ? fixedImageResId : brokenImageResId;
+    }
+
     // ==========================================
     // Getter & Setter Methods
     // ==========================================
@@ -103,12 +119,20 @@ public class Robot implements Serializable {
         return status;
     }
 
-    public int getImageResId() {
-        return imageResId;
+    public int getBrokenImageResId() {
+        return brokenImageResId;
     }
 
-    public void setImageResId(int imageResId) {
-        this.imageResId = imageResId;
+    public void setBrokenImageResId(int brokenImageResId) {
+        this.brokenImageResId = brokenImageResId;
+    }
+
+    public int getFixedImageResId() {
+        return fixedImageResId;
+    }
+
+    public void setFixedImageResId(int fixedImageResId) {
+        this.fixedImageResId = fixedImageResId;
     }
 
     public int getRequiredCorrectCount() {

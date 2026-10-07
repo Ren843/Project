@@ -26,6 +26,12 @@
         <activity
             android:name=".CategoryActivity"
             android:exported="false"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".GameActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustResize" />
     </application>
 

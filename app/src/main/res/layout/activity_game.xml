@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GameActivity">
+
+    <!-- ภาพพื้นหลังฉากเกม -->
+    <ImageView
+        android:id="@+id/bgGame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- ============================================================== -->
+    <!-- กล่องแสดงข้อความโจทย์ฝั่งซ้าย                                        -->
+    <!-- ============================================================== -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/questionBoxContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/optionsBoxContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.49">
+
+        <!-- รูปภาพกรอบเหลือง/ดำ -->
+        <ImageView
+            android:id="@+id/bgQuestionBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitXY"
+            android:src="@drawable/textbox" />
+
+        <!-- Guidelines ล็อคขอบเขตพื้นที่สีดำฝั่งซ้ายแบบเปอร์เซ็นต์แม่นยำ 100% -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/glTopLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.22" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/glBottomLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.82" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/glStartLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.20" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/glEndLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.80" />
+
+        <!-- เนื้อหาโจทย์ ถูกล็อกให้อยู่เฉพาะภายใน Guidelines สีดำ 100% -->
+        <LinearLayout
+            android:id="@+id/questionBox"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/glBottomLeft"
+            app:layout_constraintEnd_toStartOf="@+id/glEndLeft"
+            app:layout_constraintStart_toEndOf="@+id/glStartLeft"
+            app:layout_constraintTop_toBottomOf="@+id/glTopLeft">
+
+            <!-- หัวข้อโจทย์และเวลาถอยหลัง -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvHeader"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:text="JAVA - EASY | ข้อที่ 1/10" />
+
+                <!-- ตัวแสดงเวลาถอยหลัง อยู่บนพื้นหลังดำ ชัดเจน 100% -->
+                <TextView
+                    android:id="@+id/tvTimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFD700"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:text="⏱️ 60s" />
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="6dp"
+                android:layout_weight="1"
+                android:fillViewport="true">
+
+                <TextView
+                    android:id="@+id/tvCodeSnippet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:textColor="#00FFCC"
+                    android:textSize="12sp"
+                    tools:text="String s = &quot;Bot&quot;;\nif (s == &quot;Bot&quot;) {\n    repair();\n}" />
+            </ScrollView>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ============================================================== -->
+    <!-- ฝั่งขวา: ตัวละครและตัวเลือกคำตอบ                                     -->
+    <!-- ============================================================== -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/optionsBoxContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/questionBoxContainer"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.49">
+
+        <!-- รูปภาพกรอบเหลือง/ดำ -->
+        <ImageView
+            android:id="@+id/bgOptionsBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitXY"
+            android:src="@drawable/textbox" />
+
+        <!-- Guidelines ล็อคขอบเขตพื้นที่สีดำฝั่งขวาแบบเปอร์เซ็นต์แม่นยำ 100% -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/glTopRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.22" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/glBottomRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.82" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/glStartRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.20" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/glEndRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.80" />
+
+        <!-- เนื้อหาฝั่งขวา ถูกล็อกให้อยู่เฉพาะภายใน Guidelines สีดำ 100% -->
+        <LinearLayout
+            android:id="@+id/optionsBox"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/glBottomRight"
+            app:layout_constraintEnd_toStartOf="@+id/glEndRight"
+            app:layout_constraintStart_toEndOf="@+id/glStartRight"
+            app:layout_constraintTop_toBottomOf="@+id/glTopRight">
+
+            <!-- ส่วนแสดงตัวละครหุ่นยนต์ -->
+            <LinearLayout
+                android:id="@+id/robotContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="2dp">
+
+                <ImageView
+                    android:id="@+id/ivRobot"
+                    android:layout_width="32dp"
+                    android:layout_height="38dp"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/robot" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvRobotName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        tools:text="Ryo-01" />
+
+                    <TextView
+                        android:id="@+id/tvRobotStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FF6666"
+                        android:textSize="11sp"
+                        tools:text="สถานะ: ชำรุด (BROKEN)" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ปุ่มเลือกคำตอบทั้ง 3 ข้อ อยู่ภายในพื้นที่สีดำ ไม่ทะลุกรอบเหลือง -->
+            <Button
+                android:id="@+id/btnOption0"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:textSize="11sp"
+                tools:text="Option 1" />
+
+            <Button
+                android:id="@+id/btnOption1"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginBottom="2dp"
+                android:textSize="11sp"
+                tools:text="Option 2" />
+
+            <Button
+                android:id="@+id/btnOption2"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginBottom="2dp"
+                android:textSize="11sp"
+                tools:text="Option 3" />
+
+            <!-- ข้อความแจ้งผลลัพธ์คำตอบ -->
+            <TextView
+                android:id="@+id/tvFeedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                tools:text="ถูกต้อง!" />
+
+            <!-- ปุ่มข้อถัดไป -->
+            <Button
+                android:id="@+id/btnNext"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="2dp"
+                android:text="@string/next_question"
+                android:textSize="11sp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

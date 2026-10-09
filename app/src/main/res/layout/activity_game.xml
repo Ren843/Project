@@ -49,28 +49,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.22" />
+            app:layout_constraintGuide_percent="0.18" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/glBottomLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.82" />
+            app:layout_constraintGuide_percent="0.84" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/glStartLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.20" />
+            app:layout_constraintGuide_percent="0.18" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/glEndLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.80" />
+            app:layout_constraintGuide_percent="0.82" />
 
         <!-- เนื้อหาโจทย์ ถูกล็อกให้อยู่เฉพาะภายใน Guidelines สีดำ 100% -->
         <LinearLayout
@@ -159,28 +159,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.22" />
+            app:layout_constraintGuide_percent="0.18" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/glBottomRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.82" />
+            app:layout_constraintGuide_percent="0.84" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/glStartRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.20" />
+            app:layout_constraintGuide_percent="0.18" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/glEndRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.80" />
+            app:layout_constraintGuide_percent="0.82" />
 
         <!-- เนื้อหาฝั่งขวา ถูกล็อกให้อยู่เฉพาะภายใน Guidelines สีดำ 100% -->
         <LinearLayout
@@ -205,8 +205,8 @@
 
                 <ImageView
                     android:id="@+id/ivRobot"
-                    android:layout_width="32dp"
-                    android:layout_height="38dp"
+                    android:layout_width="28dp"
+                    android:layout_height="34dp"
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitCenter"
                     android:src="@drawable/robot" />
@@ -222,7 +222,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#FFFFFF"
-                        android:textSize="12sp"
+                        android:textSize="11sp"
                         android:textStyle="bold"
                         tools:text="Ryo-01" />
 
@@ -236,53 +236,101 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- ปุ่มเลือกคำตอบทั้ง 3 ข้อ อยู่ภายในพื้นที่สีดำ ไม่ทะลุกรอบเหลือง -->
-            <Button
-                android:id="@+id/btnOption0"
+            <!-- ScrollView ครอบส่วนปุ่มตัวเลือกและเฉลย เพื่อให้อัปเดตสเกลพื้นที่ภายในได้โดยไม่ดันปุ่ม Next ตกขอบ -->
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:textSize="11sp"
-                tools:text="Option 1" />
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fillViewport="true">
 
-            <Button
-                android:id="@+id/btnOption1"
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:layout_marginBottom="2dp"
-                android:textSize="11sp"
-                tools:text="Option 2" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnOption2"
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:layout_marginBottom="2dp"
-                android:textSize="11sp"
-                tools:text="Option 3" />
+                    <!-- ปุ่มเลือกคำตอบทั้ง 3 ข้อ รองรับคำตอบยาว/หลายบรรทัด/ย่อตัวอักษรอัตโนมัติ -->
+                    <Button
+                        android:id="@+id/btnOption0"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="32dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:textAllCaps="false"
+                        android:textSize="11sp"
+                        android:paddingStart="6dp"
+                        android:paddingEnd="6dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="8sp"
+                        app:autoSizeMaxTextSize="11sp"
+                        app:autoSizeStepGranularity="1sp"
+                        tools:text="Option 1" />
 
-            <!-- ข้อความแจ้งผลลัพธ์คำตอบ -->
-            <TextView
-                android:id="@+id/tvFeedback"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="#FFFFFF"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                android:visibility="invisible"
-                tools:text="ถูกต้อง!" />
+                    <Button
+                        android:id="@+id/btnOption1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="32dp"
+                        android:layout_marginBottom="2dp"
+                        android:textAllCaps="false"
+                        android:textSize="11sp"
+                        android:paddingStart="6dp"
+                        android:paddingEnd="6dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="8sp"
+                        app:autoSizeMaxTextSize="11sp"
+                        app:autoSizeStepGranularity="1sp"
+                        tools:text="Option 2" />
 
-            <!-- ปุ่มข้อถัดไป -->
+                    <Button
+                        android:id="@+id/btnOption2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="32dp"
+                        android:layout_marginBottom="2dp"
+                        android:textAllCaps="false"
+                        android:textSize="11sp"
+                        android:paddingStart="6dp"
+                        android:paddingEnd="6dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="8sp"
+                        app:autoSizeMaxTextSize="11sp"
+                        app:autoSizeStepGranularity="1sp"
+                        tools:text="Option 3" />
+
+                    <!-- ข้อความแจ้งผลลัพธ์คำตอบ/เฉลย -->
+                    <TextView
+                        android:id="@+id/tvFeedback"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:gravity="center"
+                        android:maxLines="3"
+                        android:ellipsize="end"
+                        android:textColor="#FFFFFF"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:visibility="invisible"
+                        tools:text="ถูกต้อง!" />
+                </LinearLayout>
+            </ScrollView>
+
+            <!-- ปุ่มข้อถัดไป อยู่คงที่ด้านล่างสุดของกรอบสีดำเสมอ ไม่โดนดันตกขอบ -->
             <Button
                 android:id="@+id/btnNext"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="32dp"
                 android:layout_marginTop="2dp"
                 android:text="@string/next_question"
                 android:textSize="11sp"
-                android:visibility="gone" />
+                android:visibility="invisible" />
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

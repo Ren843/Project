@@ -11,8 +11,8 @@
 <color name="red_accent">#BA0900</color>
 <color name="gold_accent_dark">#D89900</color>
 <color name="text_primary">#FFFFFF</color>
-<color name="text_secondary">#9AA5B8</color>
-    <color name="card_bg_glass">#991B2A45</color>     <!-- โปร่งแสงราว 60% -->
+<color name="text_secondary">#FFFFFF</color>
+    <color name="card_bg_glass">#CC1e133d</color>     <!-- โปร่งแสงราว 80% -->
     <color name="card_bg_glass_selected">#B31B2A45</color> <!-- ตอนเลือก เข้มขึ้นนิดนึง -->
     <color name="correct_color">#4CAF50</color>
     <color name="wrong_color">#E53935</color>

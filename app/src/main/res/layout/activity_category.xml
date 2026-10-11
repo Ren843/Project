@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/categorybackground"
+    android:background="@drawable/gameb"
     android:fillViewport="true"
     tools:context=".CategoryActivity">
 

@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         View btnExit = findViewById(R.id.btnMenuExit);
         //Animation Button Floating
         if (btnPlay != null) {
+            setupButtonTouchAnimation(btnPlay);
             btnPlay.setOnClickListener(v -> {
                 Log.d("UI", "Play Button Clicked");
                 android.content.Intent intent = new android.content.Intent(MainActivity.this, CategoryActivity.class);
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (btnExit != null) {
+            setupButtonTouchAnimation(btnExit);
             btnExit.setOnClickListener(v -> {
                 Log.d("UI", "Exit Button Clicked");
                 finish();

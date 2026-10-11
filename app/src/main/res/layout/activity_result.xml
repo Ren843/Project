@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/blur"
+    android:background="@drawable/bgg"
     android:fillViewport="true">
 
     <LinearLayout
@@ -16,7 +16,7 @@
             android:id="@+id/resultTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Robot Repaired!"
+            android:text="Code Sovled!!"
             android:textColor="@color/text_primary"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -58,6 +58,25 @@
             android:textSize="14sp" />
 
         <LinearLayout
+            android:id="@+id/btnPlayAgain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_card_button_gold"
+            android:contentDescription="@null"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Play Again"
+                android:textColor="@color/bg_dark_navy"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/btnReview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,25 +91,6 @@
                 android:layout_height="wrap_content"
                 android:text="Review Answers"
                 android:textColor="@color/text_primary"
-                android:textStyle="bold"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/btnPlayAgain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@drawable/bg_card_button_gold"
-            android:layout_marginTop="12dp"
-            android:contentDescription="@null">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Play Again"
-                android:textColor="@color/bg_dark_navy"
                 android:textStyle="bold"
                 android:textSize="16sp" />
         </LinearLayout>

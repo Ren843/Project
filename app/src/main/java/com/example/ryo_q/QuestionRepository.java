@@ -281,7 +281,7 @@ public class QuestionRepository {
                 2, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
         // 2. ตรวจสอบวิธีการวนลูปดึงข้อมูลทั้ง Key และ Value จาก Dictionary
-        list.add(new Question("2. ตรวจสอบวิธีการวนลูปดึงข้อมูลทั้ง Key และ Value จาก Dictionary",
+        list.add(new Question("2. ตรวจสอบวิธีการวนลูปดึงข้อมูลทั้ง Key และ Value จาก Dictionary ",
                 "for k, v in d:\n    print(v)",
                 new String[]{"for k, v in d.items():", "for k, v in d.values():", "for k, v in d.keys():"},
                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));

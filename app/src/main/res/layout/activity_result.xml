@@ -1,113 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
     android:background="@drawable/blur"
-    android:padding="24dp">
-
-    <TextView
-        android:id="@+id/resultTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Robot Repaired!"
-        android:textColor="@color/text_primary"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+    android:fillViewport="true">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp">
-
-        <ImageView
-            android:id="@+id/star1"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="8dp"
-
-            android:contentDescription="@null" />
-
-        <ImageView
-            android:id="@+id/star2"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-
-            android:layout_marginEnd="8dp"
-            android:contentDescription="@null" />
-
-        <ImageView
-            android:id="@+id/star3"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-
-            android:contentDescription="@null" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/correctText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="Correct: 0 / 10"
-        android:textColor="@color/text_secondary"
-        android:textSize="14sp" />
-    <LinearLayout
-        android:id="@+id/btnReview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:gravity="center"
-        android:background="@drawable/bg_card_button"
-        android:layout_marginTop="16dp"
-        android:contentDescription="@null">
+        android:padding="20dp">
 
         <TextView
+            android:id="@+id/resultTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Review Answers"
+            android:text="Robot Repaired!"
             android:textColor="@color/text_primary"
-            android:textStyle="bold"
-            android:textSize="16sp" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/btnPlayAgain"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:background="@drawable/bg_card_button_gold"
-        android:layout_marginTop="32dp"
-        android:contentDescription="@null">
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Play Again"
-            android:textColor="@color/bg_dark_navy"
-            android:textStyle="bold"
-            android:textSize="16sp" />
-    </LinearLayout>
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
 
-    <LinearLayout
-        android:id="@+id/btnExitHome"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:background="@drawable/bg_card_button"
-        android:layout_marginTop="12dp"
-        android:contentDescription="@null">
+            <ImageView
+                android:id="@+id/star1"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@null" />
+
+            <ImageView
+                android:id="@+id/star2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@null" />
+
+            <ImageView
+                android:id="@+id/star3"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@null" />
+        </LinearLayout>
 
         <TextView
+            android:id="@+id/correctText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Home"
-            android:textColor="@color/text_primary"
-            android:textStyle="bold"
-            android:textSize="16sp" />
+            android:layout_marginTop="12dp"
+            android:text="Correct: 0 / 10"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:id="@+id/btnReview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/bg_card_button"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@null">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Review Answers"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnPlayAgain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/bg_card_button_gold"
+            android:layout_marginTop="12dp"
+            android:contentDescription="@null">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Play Again"
+                android:textColor="@color/bg_dark_navy"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnExitHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/bg_card_button"
+            android:layout_marginTop="12dp"
+            android:contentDescription="@null">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

@@ -26,7 +26,7 @@ public class Question implements Serializable {
 
     // คอนสตรักเตอร์แบบมีข้อความโจทย์
     public Question(String questionText, String codeSnippet, String[] options, int correctAnswerIndex, String language, String difficulty) {
-        this.questionText = questionText;
+        this.questionText = cleanQuestionText(questionText);
         this.codeSnippet = codeSnippet;
         this.options = options;
         this.correctAnswerIndex = correctAnswerIndex;
@@ -45,7 +45,15 @@ public class Question implements Serializable {
     }
 
     // Getter Methods
-    public String getQuestionText() { return questionText; }
+    public String getQuestionText() {
+        return cleanQuestionText(questionText);
+    }
+
+    private String cleanQuestionText(String text) {
+        if (text == null) return null;
+        // ลบเลขข้อนำหน้า เช่น "1. ", "10. ", " 2. "
+        return text.replaceAll("^\\s*\\d+\\.\\s*", "").trim();
+    }
     public String getCodeSnippet() { return codeSnippet; }
     
     public String[] getOptions() { return options; }
@@ -71,5 +79,24 @@ public class Question implements Serializable {
             return options[correctAnswerIndex];
         }
         return " ";
+    }
+
+    // สุ่มสลับตัวเลือกคำตอบ (Options) และอัปเดต index ของคำตอบที่ถูกต้อง
+    public void shuffleOptions() {
+        if (options == null || options.length <= 1) return;
+
+        String correctOption = getCorrectAnswerText();
+
+        java.util.List<String> optionList = new java.util.ArrayList<>(java.util.Arrays.asList(options));
+        java.util.Collections.shuffle(optionList);
+
+        this.options = optionList.toArray(new String[0]);
+
+        for (int i = 0; i < this.options.length; i++) {
+            if (this.options[i].equals(correctOption)) {
+                this.correctAnswerIndex = i;
+                break;
+            }
+        }
     }
 }

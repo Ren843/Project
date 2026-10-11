@@ -6,7 +6,7 @@ public class GameConstants {
     // หมวดภาษาโปรแกรม
     public static final String LANG_JAVA = "JAVA";
     public static final String LANG_PYTHON = "PYTHON";
-    public static final String LANG_CPP = "CPP";
+    public static final String LANG_C = "C";
 
     // ระดับความยาก
     public static final String DIFF_EASY = "EASY";

@@ -108,7 +108,7 @@
                 android:background="@drawable/bg_card_button"
                 android:padding="8dp"
                 android:layout_marginEnd="6dp"
-                android:contentDescription="@string/select_cpp_description">
+                android:contentDescription="@string/select_c_description">
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -117,7 +117,7 @@
                     <ImageView
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:src="@drawable/cpp"
+                        android:src="@drawable/c"
                         android:contentDescription="@null" />
 
                     <ImageView
@@ -134,7 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="C++"
+                    android:text="C"
                     android:textColor="@color/text_primary"
                     android:textStyle="bold"
                     android:textSize="14sp" />
@@ -142,7 +142,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Powerful for system programming"
+                    android:text="Programming that requires direct access to hardware."
                     android:textColor="@color/text_secondary"
                     android:textSize="9sp"
                     android:gravity="center" />

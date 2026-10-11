@@ -1,7 +1,7 @@
 package com.example.ryo_q;
 
-import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class QuizManager {
@@ -13,6 +13,18 @@ public class QuizManager {
     //โหลดโจทย์ตามภาษา ความยาก
     public void startGame(String language, String difficulty) {
         questionList = QuestionRepository.getQuestions(language, difficulty);
+        Collections.shuffle(questionList); // สุ่มลำดับข้อสอบแบบ Random
+
+        // จำกัดให้เล่นรอบละไม่เกิน 10 ข้อ
+        if (questionList.size() > 10) {
+            questionList = new ArrayList<>(questionList.subList(0, 10));
+        }
+
+        // สุ่มสลับตัวเลือกคำตอบ (ช้อยส์) ในแต่ละข้อ
+        for (Question q : questionList) {
+            q.shuffleOptions();
+        }
+
         selectedAnswers.clear();
         currentIndex = 0;
         corentCount = 0;

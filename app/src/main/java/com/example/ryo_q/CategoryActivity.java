@@ -62,7 +62,7 @@ public class CategoryActivity extends AppCompatActivity {
             btnJava.setOnClickListener(v -> selectLanguage(GameConstants.LANG_JAVA));
         }
         if (btnCpp != null) {
-            btnCpp.setOnClickListener(v -> selectLanguage(GameConstants.LANG_CPP));
+            btnCpp.setOnClickListener(v -> selectLanguage(GameConstants.LANG_C));
         }
         if (btnPython != null) {
             btnPython.setOnClickListener(v -> selectLanguage(GameConstants.LANG_PYTHON));
@@ -113,7 +113,7 @@ public class CategoryActivity extends AppCompatActivity {
         if (language.equals(GameConstants.LANG_JAVA)) {
             if (btnJava != null) btnJava.setBackgroundResource(R.drawable.bg_card_button_selected);
             if (javaCheck != null) javaCheck.setVisibility(View.VISIBLE);
-        } else if (language.equals(GameConstants.LANG_CPP)) {
+        } else if (language.equals(GameConstants.LANG_C)) {
             if (btnCpp != null) btnCpp.setBackgroundResource(R.drawable.bg_card_button_selected);
             if (cppCheck != null) cppCheck.setVisibility(View.VISIBLE);
         } else if (language.equals(GameConstants.LANG_PYTHON)) {

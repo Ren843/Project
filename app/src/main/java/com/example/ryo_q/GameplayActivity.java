@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class GameplayActivity extends AppCompatActivity {
 
-    private static final long QUESTION_TIME_MS = 30000; // 30 วินาทีต่อข้อ
+    private static final long QUESTION_TIME_MS = 20000; // 20 วินาทีต่อข้อ
 
     private QuizManager quizManager;
     private CountDownTimer countDownTimer;

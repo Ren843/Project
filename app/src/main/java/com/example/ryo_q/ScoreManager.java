@@ -39,7 +39,7 @@ public class ScoreManager {
     public static int getTotalStars(Context context) {
         SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         int total = 0;
-        String[] languages = {GameConstants.LANG_JAVA, GameConstants.LANG_PYTHON, GameConstants.LANG_CPP};
+        String[] languages = {GameConstants.LANG_JAVA, GameConstants.LANG_PYTHON, GameConstants.LANG_C};
         String[] difficulties = {GameConstants.DIFF_EASY, GameConstants.DIFF_NORMAL, GameConstants.DIFF_HARD};
 
         for (String lang : languages) {

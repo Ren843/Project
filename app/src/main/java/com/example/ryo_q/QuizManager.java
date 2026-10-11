@@ -7,7 +7,7 @@ import java.util.List;
 public class QuizManager {
     private List<Question> questionList;
     private int currentIndex;
-    private int corentCount;
+    private int correctCount;
     private List<Integer> selectedAnswers = new ArrayList<>();
 
     //โหลดโจทย์ตามภาษา ความยาก
@@ -27,7 +27,7 @@ public class QuizManager {
 
         selectedAnswers.clear();
         currentIndex = 0;
-        corentCount = 0;
+        correctCount = 0;
     }
 
     //ดึงคำถาม   null ถ้าโจทย์หมด
@@ -62,7 +62,7 @@ public class QuizManager {
     }
 
     public int getCorrectCount() {
-        return corentCount;
+        return correctCount;
     }
 
     // คืนรายการคำถามทั้งหมดที่เล่นไปในด่านนี้ (สำหรับหน้าเฉลย)
@@ -79,17 +79,16 @@ public class QuizManager {
     //ตรวจคำตอบ คืนtrueถ้าถูก
     public boolean checkAnswer(int selectedIndex) {
         Question current = getCurrentQuestion();
-        if (current == null) {
-            return false;
-        }
-        selectedAnswers.add(selectedIndex); // บันทึกคำตอบที่เลือกไว้
+        if (current == null) return false;
+
+        // ข้อนี้ตอบไปแล้ว (selectedAnswers มีครบถึง currentIndex) ให้ข้ามไป
+        if (selectedAnswers.size() > currentIndex) return false;
+
+        selectedAnswers.add(selectedIndex);
         boolean correct = current.isCorrect(selectedIndex);
-        if (correct) {
-            corentCount++;
-        }
+        if (correct) correctCount++;   // เปลี่ยนชื่อจาก corentCount
         return correct;
     }
-
     // แปลงเวลาเป็นดาว 0-3
     public int calculateStars(long timeRemainingMs /*เวลาที่เหลือตอนตอบถูก*/, long totalTimeMs/*เวลาเริ่มของข้อนั้น*/) {
         if (totalTimeMs <= 0 || timeRemainingMs <= 0) {

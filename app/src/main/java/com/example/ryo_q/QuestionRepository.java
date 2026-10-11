@@ -3,14 +3,14 @@ package com.example.ryo_q;
 import java.util.ArrayList;
 import java.util.List;
 
- // คลาส QuestionRepository ทำหน้าที่เป็นคลังเก็บข้อมูลคำถามทั้งหมดในเกม
- // โดยจัดการแยกโจทย์ตามภาษาโปรแกรมและระดับความยาก
+// คลาส QuestionRepository ทำหน้าที่เป็นคลังเก็บข้อมูลคำถามทั้งหมดในเกม
+// โดยจัดการแยกโจทย์ตามภาษาโปรแกรมและระดับความยาก
 public class QuestionRepository {
 
-     // ดึงรายการคำถามที่กรองตามภาษาและระดับความยาก
-     // @param lang ภาษาโปรแกรม (แนะนำให้ใช้จาก GameConstants เช่น GameConstants.LANG_JAVA)
-     // @param diff ระดับความยาก (แนะนำให้ใช้จาก GameConstants เช่น GameConstants.DIFF_EASY)
-     // @return List ของ Object Question ที่ตรงตามเงื่อนไข
+    // ดึงรายการคำถามที่กรองตามภาษาและระดับความยาก
+    // @param lang ภาษาโปรแกรม (แนะนำให้ใช้จาก GameConstants เช่น GameConstants.LANG_JAVA)
+    // @param diff ระดับความยาก (แนะนำให้ใช้จาก GameConstants เช่น GameConstants.DIFF_EASY)
+    // @return List ของ Object Question ที่ตรงตามเงื่อนไข
     public static List<Question> getQuestions(String lang, String diff) {
         List<Question> filteredList = new ArrayList<>();
         for (Question q : getAllQuestions()) {
@@ -22,8 +22,8 @@ public class QuestionRepository {
         return filteredList;
     }
 
-     // คลังรวบรวมโจทย์ทั้งหมดในระบบ (เป็นฐานข้อมูลแบบ Hardcode)
-     // @return List ของคำถามทั้งหมดที่มีในเกม
+    // คลังรวบรวมโจทย์ทั้งหมดในระบบ (เป็นฐานข้อมูลแบบ Hardcode)
+    // @return List ของคำถามทั้งหมดที่มีในเกม
     private static List<Question> getAllQuestions() {
         List<Question> list = new ArrayList<>();
 
@@ -334,1525 +334,1525 @@ public class QuestionRepository {
         return list;
     }
 
-     // =====================================================================
-     // ระดับกลาง (DIFF_NORMAL) 50 ข้อ
-     // =====================================================================
-     public static void addNormal(List<Question> list) {
-
-         // บั๊ก: เรียก method บน null (NullPointerException) | เฉลย: เช็ค s != null ก่อนด้วย ternary
-         list.add(new Question("1. ตรวจสอบการป้องกัน NullPointerException ก่อนเรียก method",
-                 "String s = null;\nint n = s.length();",
-                 new String[]{"int n = (s != null) ? s.length() : 0;", "int n = s?.length();", "int n = s.length() ?: 0;"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: ชื่อ Run ไม่ตรงกับ run() ใน A ทำให้ @Override ใช้ไม่ได้ | เฉลย: void run() {}
-         list.add(new Question("2. ตรวจสอบการ Override method ให้ชื่อและ parameter ตรงกับคลาสแม่",
-                 "class A { void run() {} }\nclass B extends A {\n @Override\n void Run() {}\n}",
-                 new String[]{"void run(int x) {}", "void run() {}", "void RUN() {}"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: method ของ interface ต้องเป็น public | เฉลย: public void fly() {}
-         list.add(new Question("3. ตรวจสอบการ implements interface (method ต้องเป็น public)",
-                 "interface Fly { void fly(); }\nclass Bird implements Fly {\n void fly() {}\n}",
-                 new String[]{"void fly() {}", "public int fly() {}", "public void fly() {}"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: catch Exception มาก่อน IOException ทำให้ catch หลังไม่มีวันถึง | เฉลย: จับ IOException ก่อน Exception
-         list.add(new Question("4. ตรวจสอบลำดับ catch ของ Exception (ตัวเฉพาะต้องมาก่อนตัวทั่วไป)",
-                 "try {\n risky();\n} catch (Exception e) {\n} catch (IOException e) {\n}",
-                 new String[]{"catch (IOException e) {\n} catch (Exception e) {", "catch (Exception | IOException e) {", "catch (Throwable e) {\n} catch (Exception e) {"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: Generics ใช้ primitive (int) ไม่ได้ | เฉลย: ArrayList<Integer>
-         list.add(new Question("5. ตรวจสอบการใช้ Generics กับชนิดข้อมูลพื้นฐาน (ต้องใช้ Wrapper class)",
-                 "ArrayList<int> list = new ArrayList<>();",
-                 new String[]{"ArrayList<Int> list = new ArrayList<>();", "ArrayList<Integer> list = new ArrayList<>();", "ArrayList list<int> = new ArrayList<>();"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: map.get() คืน null แล้ว unbox เป็น int จะพัง | เฉลย: map.getOrDefault("x", 0)
-         list.add(new Question("6. ตรวจสอบการอ่านค่าจาก HashMap เมื่อ key อาจไม่มีอยู่ (null unboxing)",
-                 "int v = map.get(\"x\"); // key \"x\" อาจไม่มี",
-                 new String[]{"int v = map.get(\"x\") || 0;", "int v = map.find(\"x\", 0);", "int v = map.getOrDefault(\"x\", 0);"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: super(...) ต้องเป็นบรรทัดแรกใน Constructor | เฉลย: ย้าย super(5) ขึ้นก่อน println
-         list.add(new Question("7. ตรวจสอบตำแหน่งการเรียก super(...) ใน Constructor (ต้องเป็นบรรทัดแรก)",
-                 "class B extends A {\n B() {\n  System.out.println(1);\n  super(5);\n }\n}",
-                 new String[]{"B() {\n super(5);\n System.out.println(1);\n}", "B() {\n this.super(5);\n}", "B() {\n A(5);\n}"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: static method เข้าถึง field แบบ instance ไม่ได้ | เฉลย: ทำให้ score เป็น static
-         list.add(new Question("8. ตรวจสอบ static method ที่เข้าถึงตัวแปร instance",
-                 "class G {\n int score;\n static void add() { score++; }\n}",
-                 new String[]{"int static score;", "static int score;", "final int score;"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: String ไม่มี method append() | เฉลย: ใช้ StringBuilder
-         list.add(new Question("9. ตรวจสอบการต่อข้อความด้วย append() (String ไม่มี method นี้)",
-                 "String s = \"a\";\ns.append(\"b\");",
-                 new String[]{"String s = new String(\"a\");\ns.append(\"b\");", "String s = \"a\";\ns = s.add(\"b\");", "StringBuilder s = new StringBuilder(\"a\");\ns.append(\"b\");"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: Integer เทียบด้วย == เป็นการเทียบ reference | เฉลย: a.equals(b)
-         list.add(new Question("10. ตรวจสอบการเปรียบเทียบ Integer object ด้วย == (ค่าเกิน 127 จะไม่เท่ากัน)",
-                 "Integer a = 1000, b = 1000;\nif (a == b) {\n same();\n}",
-                 new String[]{"if (a.equals(b)) {", "if (a === b) {", "if (a.compare(b)) {"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: new abstract class ตรง ๆ ไม่ได้ | เฉลย: สร้างจากคลาสลูก new Circle()
-         list.add(new Question("11. ตรวจสอบการสร้าง object จาก abstract class",
-                 "abstract class Shape {}\nclass Circle extends Shape {}\nShape s = new Shape();",
-                 new String[]{"Shape s = Shape.create();", "Shape s = new Circle();", "Shape s = (Shape) new Object();"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: checked exception ต้องประกาศ throws | เฉลย: void read() throws IOException
-         list.add(new Question("12. ตรวจสอบการประกาศ checked exception ที่ method ต้อง throws",
-                 "void read() {\n throw new IOException(\"err\");\n}",
-                 new String[]{"void read() throw IOException {", "void read() catch IOException {", "void read() throws IOException {"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: b = a แค่ชี้ array เดียวกัน ไม่ได้คัดลอก | เฉลย: Arrays.copyOf(a, a.length)
-         list.add(new Question("13. ตรวจสอบการคัดลอก Array ให้เป็นสำเนาแยกอิสระ",
-                 "int[] a = {1, 2, 3};\nint[] b = a; // ต้องการสำเนาที่แยกจากกัน",
-                 new String[]{"int[] b = Arrays.copyOf(a, a.length);", "int[] b = new a;", "int[] b = copy(a);"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: Collections.sort ต้องการ Comparable | เฉลย: implements Comparable<Robot> + compareTo
-         list.add(new Question("14. ตรวจสอบการเรียง List ของ object ที่กำหนดเอง (ต้อง implements Comparable)",
-                 "Collections.sort(robots); // Robot ไม่ได้ implements Comparable",
-                 new String[]{"class Robot extends Comparable {}", "class Robot implements Comparable<Robot> {\n public int compareTo(Robot o) { return id - o.id; }\n}", "class Robot implements Sortable {}"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: id = id กำหนดค่าให้ parameter ตัวเอง (shadowing) | เฉลย: this.id = id;
-         list.add(new Question("15. ตรวจสอบการตั้งชื่อ parameter ซ้ำกับ field (shadowing)",
-                 "class R {\n int id;\n R(int id) {\n  id = id;\n }\n}",
-                 new String[]{"R.id = id;", "self.id = id;", "this.id = id;"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: equals(Robot) เป็น overload ไม่ใช่ override | เฉลย: equals(Object o)
-         list.add(new Question("16. ตรวจสอบการ Override method equals ให้ signature ถูกต้อง",
-                 "public boolean equals(Robot r) {\n return id == r.id;\n}",
-                 new String[]{"public boolean equals(Object o) {", "public bool equals(Object o) {", "public boolean equal(Object o) {"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: ต้อง downcast จาก Animal เป็น Dog | เฉลย: (Dog) a
-         list.add(new Question("17. ตรวจสอบการแปลงชนิด object จากคลาสแม่เป็นคลาสลูก (downcast)",
-                 "Animal a = new Dog();\nDog d = a;",
-                 new String[]{"Dog d = a.toDog();", "Dog d = (Dog) a;", "Dog d = new a;"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: ลืมปิดทรัพยากร | เฉลย: try-with-resources
-         list.add(new Question("18. ตรวจสอบการปิดทรัพยากรอัตโนมัติด้วย try-with-resources",
-                 "Scanner sc = new Scanner(System.in);\ntry {\n sc.nextLine();\n}\n// ลืมปิด sc",
-                 new String[]{"try Scanner sc = new Scanner(System.in) {", "using (Scanner sc = new Scanner(System.in)) {", "try (Scanner sc = new Scanner(System.in)) {"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: varargs ต้องเขียน int... (จุดสามจุดหลังชนิด) | เฉลย: int... nums
-         list.add(new Question("19. ตรวจสอบรูปแบบ varargs (จำนวน parameter ไม่จำกัด)",
-                 "static int sum(int nums...) {\n int t = 0;\n for (int n : nums) t += n;\n return t;\n}",
-                 new String[]{"static int sum(int... nums) {", "static int sum(...int nums) {", "static int sum(int[] nums...) {"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: char + int ได้ int ต้อง cast กลับ | เฉลย: (char) (c + 1)
-         list.add(new Question("20. ตรวจสอบการบวกเลขกับ char แล้วกำหนดกลับให้ char",
-                 "char c = 'a';\nc = c + 1;",
-                 new String[]{"c = c + '1';", "c = (char) (c + 1);", "c = c + 1.0;"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: lambda แก้ local variable ภายนอกไม่ได้ | เฉลย: ใช้ array 1 ช่อง int[] count = {0}
-         list.add(new Question("21. ตรวจสอบการแก้ค่าตัวแปรภายนอกใน lambda (ต้องเป็น effectively final)",
-                 "int count = 0;\nlist.forEach(x -> count++);",
-                 new String[]{"list.forEach(x -> this.count);", "final count = 0;\nlist.forEach(x -> count++);", "int[] count = {0};\nlist.forEach(x -> count[0]++);"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: List<String> ไม่ใช่ subtype ของ List<Object> | เฉลย: List<?>
-         list.add(new Question("22. ตรวจสอบการกำหนด List<Object> ด้วย ArrayList<String> (Generics ไม่รองรับ inheritance)",
-                 "List<Object> objs = new ArrayList<String>();",
-                 new String[]{"List<?> objs = new ArrayList<String>();", "List<Object> objs = new ArrayList<String>() {};", "List<Object> objs = (List<Object>) new ArrayList<String>();"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: method ใน interface ที่มี body ต้องเป็น default | เฉลย: default void hi()
-         list.add(new Question("23. ตรวจสอบการเขียน method ที่มี body ใน interface",
-                 "interface A {\n void hi() { System.out.println(\"hi\"); }\n}",
-                 new String[]{"final void hi() { System.out.println(\"hi\"); }", "default void hi() { System.out.println(\"hi\"); }", "static void hi(); { System.out.println(\"hi\"); }"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: List.of() สร้าง list ที่แก้ไขไม่ได้ | เฉลย: new ArrayList<>(List.of(1, 2))
-         list.add(new Question("24. ตรวจสอบการเพิ่มข้อมูลลงใน List ที่สร้างจาก List.of() (immutable)",
-                 "List<Integer> l = List.of(1, 2);\nl.add(3); // UnsupportedOperationException",
-                 new String[]{"List<Integer> l = List.mutable(1, 2);\nl.add(3);", "List<Integer> l = List.of(1, 2);\nl.addAll(3);", "List<Integer> l = new ArrayList<>(List.of(1, 2));\nl.add(3);"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: private เข้าถึงจากนอกคลาสไม่ได้ | เฉลย: เพิ่ม getter getX()
-         list.add(new Question("25. ตรวจสอบการเข้าถึง private field จากคลาสอื่น",
-                 "class A { private int x; }\nclass B {\n int f(A a) { return a.x; }\n}",
-                 new String[]{"เพิ่ม public int getX() { return x; } ใน A แล้วเรียก a.getX()", "เปลี่ยนเป็น a->x", "ใส่ final ให้คลาส B"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: run() ไม่ได้สร้าง thread ใหม่ | เฉลย: t.start()
-         list.add(new Question("26. ตรวจสอบการสั่งให้ Thread เริ่มทำงานแบบขนาน",
-                 "Thread t = new Thread(task);\nt.run(); // รันใน thread เดิม ไม่ได้ขนาน",
-                 new String[]{"t.begin();", "t.start();", "t.execute();"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: a * b ล้นเป็น int ก่อนแปลงเป็น long | เฉลย: (long) a * b
-         list.add(new Question("27. ตรวจสอบการคูณ int สองตัวแล้วล้น (overflow) ก่อนกำหนดให้ long",
-                 "int a = 100000, b = 100000;\nlong sum = a * b;",
-                 new String[]{"long sum = (long) (a * b);", "long sum = a * b * 1L;", "long sum = (long) a * b;"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: case ของ enum ใช้ชื่อค่าตรง ๆ | เฉลย: case UP:
-         list.add(new Question("28. ตรวจสอบการเขียน case ของ switch ที่ใช้กับ enum",
-                 "enum Dir { UP, DOWN }\nswitch (d) {\n case Dir.UP: go(); break;\n}",
-                 new String[]{"case UP: go(); break;", "case 'UP': go(); break;", "case \"UP\": go(); break;"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: Stream ต้องมี terminal operation | เฉลย: collect(Collectors.toList())
-         list.add(new Question("29. ตรวจสอบการใช้ Stream filter ที่ต้องมี terminal operation",
-                 "List<Integer> ev = list.stream().filter(x -> x % 2 == 0);",
-                 new String[]{"List<Integer> ev = list.stream().filter(x -> x % 2 == 0).get();", "List<Integer> ev = list.stream().filter(x -> x % 2 == 0).collect(Collectors.toList());", "List<Integer> ev = list.stream().filter(x -> x % 2 == 0).toArray();"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: Optional.of(null) จะ throw NPE | เฉลย: Optional.ofNullable(null)
-         list.add(new Question("30. ตรวจสอบการสร้าง Optional จากค่าที่อาจเป็น null",
-                 "Optional<String> o = Optional.of(null); // NullPointerException",
-                 new String[]{"Optional<String> o = Optional.empty(null);", "Optional<String> o = new Optional<>(null);", "Optional<String> o = Optional.ofNullable(null);"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: %d ใช้กับทศนิยมไม่ได้ | เฉลย: %.1f
-         list.add(new Question("31. ตรวจสอบรูปแบบ format ให้ตรงกับชนิดข้อมูลทศนิยม",
-                 "String s = String.format(\"%d\", 3.5); // IllegalFormatConversionException",
-                 new String[]{"String s = String.format(\"%.1f\", 3.5);", "String s = String.format(\"%s\" 3.5);", "String s = String.format(3.5, \"%d\");"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: remove(1) ลบตาม index ไม่ใช่ตามค่า | เฉลย: remove(Integer.valueOf(1))
-         list.add(new Question("32. ตรวจสอบการลบสมาชิกที่เป็นค่า (ไม่ใช่ index) ออกจาก List<Integer>",
-                 "List<Integer> l = new ArrayList<>(List.of(10, 20, 1));\nl.remove(1); // ต้องการลบ \"ค่า 1\" ไม่ใช่ index 1",
-                 new String[]{"l.remove((int) 1);", "l.remove(Integer.valueOf(1));", "l.removeValue(1);"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: inner class ต้องมี object ของ Outer ก่อน | เฉลย: new Outer().new Inner()
-         list.add(new Question("33. ตรวจสอบการสร้าง inner class (non-static) จากภายนอกคลาส",
-                 "class Outer { class Inner {} }\nInner i = new Inner(); // ใน static main",
-                 new String[]{"Inner i = Outer.new Inner();", "Inner i = new Outer.Inner();", "Outer.Inner i = new Outer().new Inner();"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: class extends หลาย interface ไม่ได้ | เฉลย: implements A, B
-         list.add(new Question("34. ตรวจสอบการสืบทอดหลาย interface พร้อมกัน",
-                 "interface A {}\ninterface B {}\nclass C extends A, B {}",
-                 new String[]{"class C implements A, B {}", "class C inherits A, B {}", "class C extends A implements B {}"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: Comparator ต้องคืน int ไม่ใช่ boolean | เฉลย: a.hp - b.hp
-         list.add(new Question("35. ตรวจสอบการเขียน Comparator แบบ lambda เพื่อเรียงตามค่า hp",
-                 "list.sort((a, b) -> a.hp > b.hp);",
-                 new String[]{"list.sort(a, b -> a.hp - b.hp);", "list.sort((a, b) -> a.hp - b.hp);", "list.sort((a, b) => a.hp - b.hp);"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: String วน for-each ตรง ๆ ไม่ได้ | เฉลย: "abc".toCharArray()
-         list.add(new Question("36. ตรวจสอบการวนอ่านทีละตัวอักษรของ String",
-                 "for (char c : \"abc\") {\n print(c);\n}",
-                 new String[]{"for (char c in \"abc\") {", "for (String c : \"abc\") {", "for (char c : \"abc\".toCharArray()) {"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: Math.round(double) คืน long | เฉลย: (int) Math.round(2.5)
-         list.add(new Question("37. ตรวจสอบชนิดข้อมูลที่ Math.round(double) คืนค่า",
-                 "int r = Math.round(2.5); // possible lossy conversion from long",
-                 new String[]{"int r = (int) Math.round(2.5);", "int r = Math.round(2.5) as int;", "int r = Math.rint(2.5);"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: local variable ต้องกำหนดค่าก่อนใช้ | เฉลย: int x = 0;
-         list.add(new Question("38. ตรวจสอบการใช้ตัวแปร local ที่ยังไม่ได้กำหนดค่าเริ่มต้น",
-                 "int x;\nif (flag) x = 1;\nSystem.out.println(x);",
-                 new String[]{"int x = null;\nif (flag) x = 1;\nSystem.out.println(x);", "int x = 0;\nif (flag) x = 1;\nSystem.out.println(x);", "int x?;\nif (flag) x = 1;\nSystem.out.println(x);"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: ต้อง return ทุกเส้นทาง | เฉลย: เพิ่ม return 0;
-         list.add(new Question("39. ตรวจสอบ method ที่ไม่ return ค่าในทุกเส้นทางของโค้ด",
-                 "int f(int n) {\n if (n > 0) return 1;\n}",
-                 new String[]{"void f(int n) {\n if (n > 0) return 1;\n}", "int f(int n) {\n if (n > 0) return 1;\n else return;\n}", "int f(int n) {\n if (n > 0) return 1;\n return 0;\n}"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: String เป็น immutable ต้องรับค่าใหม่ | เฉลย: s = s.toUpperCase();
-         list.add(new Question("40. ตรวจสอบความไม่เปลี่ยนแปลงของ String (immutable)",
-                 "String s = \"abc\";\ns.toUpperCase();\nSystem.out.println(s); // ต้องการ ABC",
-                 new String[]{"s = s.toUpperCase();", "s.toUpperCase(s);", "s.upper();"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // ---------- ข้อ 41-50 ----------
-
-         // บั๊ก: String ไม่มี method reverse() | เฉลย: StringBuilder(...).reverse().toString()
-         list.add(new Question("41. ตรวจสอบการกลับด้านข้อความ (String ไม่มี reverse())",
-                 "String r = \"abc\".reverse();",
-                 new String[]{"String r = Reverse.of(\"abc\");", "String r = new StringBuilder(\"abc\").reverse().toString();", "String r = \"abc\".reversed();"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: get(0) บน list ว่างเกิด IndexOutOfBoundsException | เฉลย: เช็ค isEmpty() ก่อน
-         list.add(new Question("42. ตรวจสอบการอ่านค่าจาก List ที่ว่างอยู่ (IndexOutOfBoundsException)",
-                 "List<String> l = new ArrayList<>();\nString s = l.get(0);",
-                 new String[]{"String s = l.get(-1);", "String s = l.first();", "String s = l.isEmpty() ? null : l.get(0);"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: cast String เป็น Integer ตรง ๆ | เฉลย: เช็ค instanceof ก่อน cast
-         list.add(new Question("43. ตรวจสอบการ cast ที่ทำให้เกิด ClassCastException",
-                 "Object o = \"hi\";\nInteger n = (Integer) o;",
-                 new String[]{"if (o instanceof Integer) {\n Integer n = (Integer) o;\n}", "Integer n = (int) o.toString();", "Integer n = Integer(o);"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: Map ใช้ for-each ตรง ๆ ไม่ได้ | เฉลย: map.keySet()
-         list.add(new Question("44. ตรวจสอบการวนอ่าน key ของ Map",
-                 "Map<String, Integer> map = new HashMap<>();\nfor (String k : map) {\n print(k);\n}",
-                 new String[]{"for (String k : map.values()) {", "for (String k : map.keySet()) {", "for (String k : map.keys()) {"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: overload ที่ต่างกันแค่ return type ไม่ได้ | เฉลย: เปลี่ยนชนิด parameter เป็น double
-         list.add(new Question("45. ตรวจสอบการ Overload method (ต้องต่างกันที่ parameter ไม่ใช่แค่ return type)",
-                 "int f(int a) { return a; }\ndouble f(int a) { return a; }",
-                 new String[]{"int f(int a) { return a; }\nint f(int a) { return a * 2; }", "int f(int a) { return a; }\nvoid f(int a) {}", "int f(int a) { return a; }\ndouble f(double a) { return a; }"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: final method ถูก override ไม่ได้ | เฉลย: เอา final ออกจาก go() ใน A
-         list.add(new Question("46. ตรวจสอบการ Override method ที่ถูกประกาศเป็น final",
-                 "class A { final void go() {} }\nclass B extends A {\n void go() {}\n}",
-                 new String[]{"class A { void go() {}  }\nclass B extends A {\n void go() {}\n}", "class A { final void go() {} }\nclass B extends A {\n final void go() {}\n}", "class A { static void go() {} }\nclass B extends A {\n void go() {}\n}"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: ไม่มี constructor ที่รับ String | เฉลย: เพิ่ม MyEx(String m) { super(m); }
-         list.add(new Question("47. ตรวจสอบการสร้าง Custom Exception ที่รับข้อความ",
-                 "class MyEx extends Exception {}\nthrow new MyEx(\"err\");",
-                 new String[]{"class MyEx extends Exception { MyEx() { super(\"err\"); } }", "class MyEx extends Exception {\n MyEx(String m) { super(m); }\n}", "class MyEx implements Exception {}"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: total เป็น instance field แต่ละ object จึงนับแยกกัน | เฉลย: static int total
-         list.add(new Question("48. ตรวจสอบการนับจำนวน object ที่ถูกสร้างทั้งหมด",
-                 "class C {\n int total = 0;\n C() { total++; } // ต้องการนับ object ทั้งหมด\n}",
-                 new String[]{"final int total = 0;", "int total = 0;\nstatic C() { total++; }", "static int total = 0;"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: List ไม่มี method ตัดค่าซ้ำ | เฉลย: new HashSet<>(l)
-         list.add(new Question("49. ตรวจสอบการตัดค่าซ้ำออกจาก List",
-                 "List<Integer> l = List.of(1, 1, 2);\n// ต้องการให้เหลือ 1, 2",
-                 new String[]{"Set<Integer> s = new HashSet<>(l);", "Set<Integer> s = l.distinct();", "List<Integer> s = l.unique();"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-
-         // บั๊ก: . ใน regex คือตัวอักษรใดก็ได้ | เฉลย: split("\\.")
-         list.add(new Question("50. ตรวจสอบการแยกข้อความด้วย split (regex)",
-                 "String[] p = \"a.b\".split(\".\"); // ได้ array ว่าง",
-                 new String[]{"String[] p = \"a.b\".split('.');", "String[] p = \"a.b\".split(\"\\\\.\");", "String[] p = \"a.b\".splitAt(\".\");"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
-     }
-
-     // =====================================================================
-     // ระดับยาก (DIFF_HARD) 50 ข้อ
-     // =====================================================================
-     public static void addHard(List<Question> list) {
-
-         // บั๊ก: Singleton ไม่ปลอดภัยเมื่อหลาย thread | เฉลย: volatile + synchronized แบบ double-checked
-         list.add(new Question("1. ตรวจสอบการสร้าง Singleton ให้ปลอดภัยเมื่อมีหลาย Thread (Double-Checked Locking)",
-                 "private static Singleton inst;\nstatic Singleton get() {\n if (inst == null) inst = new Singleton(); // หลาย thread สร้างซ้ำได้\n return inst;\n}",
-                 new String[]{"private static volatile Singleton inst;\nstatic Singleton get() {\n if (inst == null) {\n  synchronized (Singleton.class) {\n   if (inst == null) inst = new Singleton();\n  }\n }\n return inst;\n}", "private static transient Singleton inst;\nstatic Singleton get() {\n if (inst == null) inst = new Singleton();\n return inst;\n}", "private static final Singleton inst = null;\nstatic Singleton get() {\n return inst;\n}"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: count++ ไม่ atomic เกิด race condition | เฉลย: AtomicInteger.incrementAndGet()
-         list.add(new Question("2. ตรวจสอบ Race Condition เมื่อหลาย Thread เพิ่มค่าตัวนับพร้อมกัน",
-                 "int count = 0;\n// 2 threads ทำ count++ พร้อมกัน ผลลัพธ์ไม่ตรงตามจริง",
-                 new String[]{"volatile int count = 0;\ncount++;", "AtomicInteger count = new AtomicInteger();\ncount.incrementAndGet();", "int count = 0;\ncount = count + 1;"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: ล็อก a, b สลับลำดับกันทำให้ deadlock | เฉลย: ล็อกด้วยลำดับเดียวกัน a ก่อน b
-         list.add(new Question("3. ตรวจสอบการเกิด Deadlock จากการล็อกสองตัวสลับลำดับกัน",
-                 "Thread1: synchronized (a) { synchronized (b) { work(); } }\nThread2: synchronized (b) { synchronized (a) { work(); } }",
-                 new String[]{"Thread2: synchronized (b) { synchronized (a) { work(); a.wait(); } }", "Thread2: synchronized (a.hashCode()) { work(); }", "Thread2: synchronized (a) { synchronized (b) { work(); } }"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: override equals แต่ไม่ override hashCode | เฉลย: เพิ่ม hashCode() ที่สอดคล้องกับ id
-         list.add(new Question("4. ตรวจสอบสัญญาระหว่าง equals() และ hashCode() เมื่อใช้กับ HashSet",
-                 "class P {\n int id;\n public boolean equals(Object o) { return o instanceof P p && p.id == id; }\n}\nSet<P> s = new HashSet<>(); // เก็บ P ซ้ำได้",
-                 new String[]{"public int hashCode() { return Integer.hashCode(id); }", "public long hashCode() { return id; }", "public int hashCode() { return (int) (Math.random() * 100); }"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: static cache โตไม่หยุด (memory leak) | เฉลย: WeakHashMap
-         list.add(new Question("5. ตรวจสอบ Memory Leak จาก cache แบบ static ที่โตขึ้นเรื่อย ๆ",
-                 "static List<Object> cache = new ArrayList<>();\nvoid load() {\n cache.add(new byte[1_000_000]); // memory leak\n}",
-                 new String[]{"System.gc(); // เรียกทุกครั้งหลัง add", "static Map<String, Object> cache = new WeakHashMap<>();", "static final List<Object> cache = null;"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: ArrayList ไม่ thread-safe เมื่อเขียนใน parallel stream | เฉลย: collect(Collectors.toList())
-         list.add(new Question("6. ตรวจสอบการเขียน List จากหลาย Thread ใน parallel stream",
-                 "List<Integer> out = new ArrayList<>();\nIntStream.range(0, 1000).parallel().forEach(out::add); // ข้อมูลหาย/พัง",
-                 new String[]{"IntStream.range(0, 1000).parallel().peek(out::add).count();", "out = Collections.unmodifiableList(out);", "List<Integer> out = IntStream.range(0, 1000).parallel().boxed().collect(Collectors.toList());"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: new T[] ไม่ได้เพราะ type erasure | เฉลย: (T[]) new Object[10]
-         list.add(new Question("7. ตรวจสอบการสร้าง Generic Array (Java ห้าม new T[])",
-                 "class Box<T> {\n T[] arr = new T[10];\n}",
-                 new String[]{"T[] arr = (T[]) new Object[10];", "T[] arr = new T<10>();", "T[] arr = T.newArray(10);"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: PECS: ผู้ผลิต extends / ผู้บริโภค super | เฉลย: List<? super T> dst, List<? extends T> src
-         list.add(new Question("8. ตรวจสอบการใช้ Wildcard ตามหลัก PECS (Producer Extends, Consumer Super)",
-                 "void copy(List<Number> dst, List<Integer> src)\n// ต้องการให้ copy ได้ยืดหยุ่นกับชนิดย่อย/ชนิดแม่",
-                 new String[]{"void copy(List<?> dst, List<?> src)", "<T> void copy(List<? super T> dst, List<? extends T> src)", "<T> void copy(List<T extends Number> dst, List<T> src)"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: recursion ไม่มี base case (StackOverflowError) | เฉลย: n <= 1 ? 1 : n * fact(n - 1)
-         list.add(new Question("9. ตรวจสอบ Recursion ที่ไม่มีเงื่อนไขหยุด (StackOverflowError)",
-                 "int fact(int n) {\n return n * fact(n - 1); // StackOverflowError\n}",
-                 new String[]{"int fact(int n) {\n return n * fact(n);\n}", "int fact(int n) {\n if (n == 0) return 0;\n return n * fact(n - 1);\n}", "int fact(int n) {\n return n <= 1 ? 1 : n * fact(n - 1);\n}"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: "P:" + this เรียก toString() วนไม่รู้จบ | เฉลย: ใช้ field เช่น id
-         list.add(new Question("10. ตรวจสอบ toString() ที่เรียกตัวเองวนไม่รู้จบ",
-                 "public String toString() {\n return \"P:\" + this;\n}",
-                 new String[]{"return \"P:\" + id;", "return \"P:\" + toString();", "return \"P:\" + super;"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: ต้องการ immutable class | เฉลย: final class + private final field + ไม่มี setter
-         list.add(new Question("11. ตรวจสอบการออกแบบคลาสแบบ Immutable",
-                 "class Pt { public int x; } // ต้องการคลาสที่เปลี่ยนค่าไม่ได้หลังสร้าง",
-                 new String[]{"class Pt { private int x; void setX(int x) { this.x = x; } }", "final class Pt {\n private final int x;\n Pt(int x) { this.x = x; }\n int getX() { return x; }\n}", "class Pt { static int x; }"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: return ใน finally ทับค่า return ของ try | เฉลย: ใช้ finally แค่ cleanup
-         list.add(new Question("12. ตรวจสอบ return ใน finally ที่กลบค่า return ของ try",
-                 "int f() {\n try { return 1; }\n finally { return 2; } // ผลลัพธ์คือ 2 เสมอ\n}",
-                 new String[]{"int f() {\n try { return 1; }\n catch (Exception e) { return 2; }\n finally { return 2; }\n}", "int f() {\n return 1;\n finally { }\n}", "int f() {\n try { return 1; }\n finally { cleanup(); }\n}"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: Comparator ไม่คืน 0 เมื่อค่าเท่ากัน | เฉลย: Integer.compare(a, b)
-         list.add(new Question("13. ตรวจสอบ Comparator ที่ผิดสัญญา (ไม่คืน 0 เมื่อค่าเท่ากัน)",
-                 "list.sort((a, b) -> a > b ? 1 : -1); // IllegalArgumentException: Comparison method violates its general contract",
-                 new String[]{"list.sort((a, b) -> Integer.compare(a, b));", "list.sort((a, b) -> a > b ? 1 : 0);", "list.sort((a, b) -> a - b > 0);"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: ใช้ y ก่อนถูกกำหนดค่า (ได้ค่า default 0) | เฉลย: ย้าย y ขึ้นก่อน x
-         list.add(new Question("14. ตรวจสอบลำดับการกำหนดค่า static ที่ใช้ตัวแปรก่อนถูกกำหนดค่า",
-                 "class A {\n static int x = A.y + 1;\n static int y = 5;\n} // x ได้ 1 ไม่ใช่ 6",
-                 new String[]{"static int x = A.y + 1;\nstatic int y = 5;", "static int y = 5;\nstatic int x = y + 1;", "static int x = this.y + 1;\nstatic int y = 5;"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: catch InterruptedException แล้วเงียบ | เฉลย: Thread.currentThread().interrupt()
-         list.add(new Question("15. ตรวจสอบการจัดการ InterruptedException อย่างถูกต้อง",
-                 "try {\n Thread.sleep(1000);\n} catch (InterruptedException e) {\n // ignore\n}",
-                 new String[]{"catch (InterruptedException e) {\n e = null;\n}", "catch (InterruptedException e) {\n Thread.sleep(0);\n}", "catch (InterruptedException e) {\n Thread.currentThread().interrupt();\n}"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: thread pool ไม่ shutdown โปรแกรมไม่จบ | เฉลย: ex.shutdown()
-         list.add(new Question("16. ตรวจสอบ ExecutorService ที่ไม่ปิดทำให้โปรแกรมไม่จบ",
-                 "ExecutorService ex = Executors.newFixedThreadPool(4);\nex.submit(task);\n// โปรแกรมไม่ยอมจบการทำงาน",
-                 new String[]{"ex.submit(task);\nex.shutdown();", "ex.submit(task);\nex.stop();", "ex.submit(task).cancel();"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: CompletableFuture ต้องรอผลด้วย join()/get() | เฉลย: f.join()
-         list.add(new Question("17. ตรวจสอบการรอผลลัพธ์จาก CompletableFuture",
-                 "CompletableFuture<String> f = CompletableFuture.supplyAsync(() -> load());\nString s = f;",
-                 new String[]{"String s = f.value;", "String s = f.join();", "String s = (String) f;"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: SimpleDateFormat ไม่ thread-safe | เฉลย: ThreadLocal<SimpleDateFormat>
-         list.add(new Question("18. ตรวจสอบการใช้ SimpleDateFormat ร่วมกันหลาย Thread (ไม่ thread-safe)",
-                 "static SimpleDateFormat fmt = new SimpleDateFormat(\"yyyy\"); // ใช้ร่วมกันทุก thread",
-                 new String[]{"static volatile SimpleDateFormat fmt = new SimpleDateFormat(\"yyyy\");", "static final SimpleDateFormat fmt = new SimpleDateFormat(\"yyyy\");", "static final ThreadLocal<SimpleDateFormat> fmt =\n ThreadLocal.withInitial(() -> new SimpleDateFormat(\"yyyy\"));"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: clone() ของ array 2 มิติเป็นแบบตื้น | เฉลย: clone ทีละแถว
-         list.add(new Question("19. ตรวจสอบการคัดลอก Array 2 มิติแบบ Deep Copy",
-                 "int[][] b = a.clone(); // ต้องการ deep copy แต่แถวยังใช้ร่วมกัน",
-                 new String[]{"int[][] b = new int[a.length][];\nfor (int i = 0; i < a.length; i++) b[i] = a[i].clone();", "int[][] b = Arrays.copyOf(a, a.length);", "int[][] b = (int[][]) a;"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: Thread ไม่ Serializable | เฉลย: transient Thread t;
-         list.add(new Question("20. ตรวจสอบ NotSerializableException จาก field ที่ไม่รองรับ Serializable",
-                 "class Bot implements Serializable {\n Thread t; // NotSerializableException\n}",
-                 new String[]{"volatile Thread t;", "transient Thread t;", "final Thread t;"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: double เทียบด้วย == คลาดเคลื่อน | เฉลย: Math.abs(d - 0.3) < 1e-9
-         list.add(new Question("21. ตรวจสอบการเปรียบเทียบเลขทศนิยม double ที่คลาดเคลื่อน",
-                 "double d = 0.1 + 0.2;\nif (d == 0.3) {\n pass();\n}",
-                 new String[]{"if (d.equals(0.3)) {", "if ((float) d == 0.3) {", "if (Math.abs(d - 0.3) < 1e-9) {"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: double ไม่เหมาะกับเงิน | เฉลย: BigDecimal สร้างจาก String
-         list.add(new Question("22. ตรวจสอบการคำนวณเงินที่ต้องแม่นยำ (ห้ามใช้ double/float)",
-                 "double total = 0.1 * 3; // ใช้กับเงิน ต้องการความแม่นยำ",
-                 new String[]{"BigDecimal total = new BigDecimal(\"0.1\").multiply(BigDecimal.valueOf(3));", "BigDecimal total = new BigDecimal(0.1).multiply(BigDecimal.valueOf(3));", "float total = 0.1f * 3;"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: & มี precedence ต่ำกว่า == | เฉลย: ใส่วงเล็บ (flags & MASK) == MASK
-         list.add(new Question("23. ตรวจสอบลำดับความสำคัญของตัวดำเนินการระดับบิต (bitwise precedence)",
-                 "if (flags & MASK == MASK) {\n go();\n}",
-                 new String[]{"if (flags && MASK == MASK) {", "if ((flags & MASK) == MASK) {", "if (flags & (MASK == MASK)) {"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: เรียก method ก่อนเช็ค null | เฉลย: obj != null && obj.isReady()
-         list.add(new Question("24. ตรวจสอบ Short-circuit ที่ทำให้เกิด NullPointerException",
-                 "if (obj.isReady() & obj != null) {\n run();\n}",
-                 new String[]{"if (obj.isReady() && obj != null) {", "if (obj != null & obj.isReady()) {", "if (obj != null && obj.isReady()) {"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: break ออกได้แค่ลูปใน | เฉลย: break outer;
-         list.add(new Question("25. ตรวจสอบการออกจากลูปซ้อนหลายชั้นพร้อมกันด้วย Label",
-                 "outer:\nfor (int i = 0; i < n; i++) {\n for (int j = 0; j < n; j++) {\n  if (x) break; // ออกได้แค่ลูปใน\n }\n}",
-                 new String[]{"if (x) break outer;", "if (x) exit;", "if (x) break 2;"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: Java เป็น pass-by-value เปลี่ยน reference ไม่มีผลกับ caller | เฉลย: แก้ state ของ object เดิม r.reset()
-         list.add(new Question("26. ตรวจสอบความเข้าใจ Java เป็น pass-by-value (เปลี่ยน reference ใน method ไม่ส่งผลกับผู้เรียก)",
-                 "void reset(Robot r) {\n r = new Robot(); // caller ไม่เห็นการเปลี่ยนแปลง\n}",
-                 new String[]{"void reset(ref Robot r) {\n r = new Robot();\n}", "void reset(Robot r) {\n r.reset(); // แก้ state ของ object เดิม\n}", "void reset(Robot& r) {\n r = new Robot();\n}"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: HashMap ไม่ thread-safe | เฉลย: ConcurrentHashMap
-         list.add(new Question("27. ตรวจสอบการเลือก Map ที่ปลอดภัยเมื่อหลาย Thread เขียนพร้อมกัน",
-                 "Map<String, Integer> m = new HashMap<>(); // หลาย thread เขียนพร้อมกัน",
-                 new String[]{"Map<String, Integer> m = new TreeMap<>();", "Map<String, Integer> m = new LinkedHashMap<>();", "Map<String, Integer> m = new ConcurrentHashMap<>();"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: wait() ต้องอยู่ใน synchronized | เฉลย: synchronized + while (!ready)
-         list.add(new Question("28. ตรวจสอบการเรียก wait() นอก synchronized (IllegalMonitorStateException)",
-                 "lock.wait(); // IllegalMonitorStateException",
-                 new String[]{"synchronized (lock) {\n while (!ready) lock.wait();\n}", "if (!ready) lock.wait();", "lock.sleep();"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: Stream ใช้ซ้ำหลัง terminal operation ไม่ได้ | เฉลย: สร้าง stream ใหม่จาก list
-         list.add(new Question("29. ตรวจสอบการใช้ Stream ซ้ำหลังถูกใช้ไปแล้ว",
-                 "Stream<String> s = list.stream();\ns.forEach(System.out::println);\nlong n = s.count(); // IllegalStateException",
-                 new String[]{"s.reset();\nlong n = s.count();", "list.stream().forEach(System.out::println);\nlong n = list.stream().count();", "s.rewind();\nlong n = s.count();"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: default method ชนกันจาก 2 interface | เฉลย: A.super.hi()
-         list.add(new Question("30. ตรวจสอบการแก้ปัญหา default method ชนกันจากสอง interface (Diamond Problem)",
-                 "interface A { default void hi() {} }\ninterface B { default void hi() {} }\nclass C implements A, B {} // compile error",
-                 new String[]{"class C implements A, B {\n public void hi() { super.hi(); }\n}", "class C implements A, B {\n default void hi() {}\n}", "class C implements A, B {\n public void hi() { A.super.hi(); }\n}"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: instanceof + cast ซ้ำซ้อน | เฉลย: pattern matching: instanceof String s
-         list.add(new Question("31. ตรวจสอบ Pattern Matching ของ instanceof (Java 16+) เพื่อลดการ cast ซ้ำ",
-                 "if (o instanceof String) {\n String s = (String) o;\n print(s);\n}",
-                 new String[]{"if (o instanceof String s) {\n print(s);\n}", "if (o is String s) {\n print(s);\n}", "if (o instanceof String as s) {\n print(s);\n}"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: คลาสข้อมูลต้องเขียนโค้ดซ้ำมาก | เฉลย: record Point(int x, int y) {}
-         list.add(new Question("32. ตรวจสอบการใช้ record (Java 16+) แทนคลาสข้อมูลที่ต้องเขียนซ้ำซ้อน",
-                 "class Point {\n final int x, y;\n // constructor, getters, equals, hashCode, toString...\n}",
-                 new String[]{"data class Point(int x, int y)", "record Point(int x, int y) {}", "struct Point { int x; int y; }"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: switch แบบเก่ายาวและต้องใช้ break | เฉลย: switch expression ด้วย ->
-         list.add(new Question("33. ตรวจสอบการใช้ switch expression (Java 14+) ที่คืนค่าได้",
-                 "String r;\nswitch (d) {\n case 1: r = \"a\"; break;\n default: r = \"b\";\n}",
-                 new String[]{"String r = switch d { 1 => \"a\"; _ => \"b\"; };", "String r = switch (d) {\n case 1: \"a\";\n default: \"b\";\n};", "String r = switch (d) {\n case 1 -> \"a\";\n default -> \"b\";\n};"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: T ไม่มี compareTo | เฉลย: <T extends Comparable<T>>
-         list.add(new Question("34. ตรวจสอบการกำหนดขอบเขตของ Generic ให้เรียก compareTo ได้",
-                 "<T> T max(T a, T b) {\n return a.compareTo(b) > 0 ? a : b;\n}",
-                 new String[]{"<T extends Comparable<T>> T max(T a, T b) {", "<T implements Comparable<T>> T max(T a, T b) {", "<T super Comparable<T>> T max(T a, T b) {"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: try-with-resources ต้อง implements AutoCloseable | เฉลย: implements AutoCloseable + public close()
-         list.add(new Question("35. ตรวจสอบการทำให้คลาสใช้กับ try-with-resources ได้",
-                 "class Res { void close() {} }\ntry (Res r = new Res()) {\n use(r);\n}",
-                 new String[]{"class Res extends AutoCloseable {\n public void close() {}\n}", "class Res implements AutoCloseable {\n public void close() {}\n}", "class Res implements Closing {\n public void close() {}\n}"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: String += ในลูป สร้าง object ใหม่ทุกรอบ | เฉลย: StringBuilder.append()
-         list.add(new Question("36. ตรวจสอบการต่อ String ในลูปจำนวนมากที่ช้าและกิน memory",
-                 "String s = \"\";\nfor (int i = 0; i < 100000; i++) {\n s += i; // ช้าและกิน memory\n}",
-                 new String[]{"String s = \"\";\nfor (int i = 0; i < 100000; i++) s = s.concat(\"\" + i);", "StringBuffer s = \"\";\nfor (int i = 0; i < 100000; i++) s.append(i);", "StringBuilder sb = new StringBuilder();\nfor (int i = 0; i < 100000; i++) sb.append(i);"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: binarySearch ต้องใช้กับ array ที่เรียงแล้ว | เฉลย: Arrays.sort(a) ก่อน
-         list.add(new Question("37. ตรวจสอบเงื่อนไขก่อนใช้ Binary Search (ข้อมูลต้องเรียงลำดับก่อน)",
-                 "int idx = Arrays.binarySearch(a, key); // a ยังไม่เรียงลำดับ ผลลัพธ์ผิด",
-                 new String[]{"Arrays.sort(a);\nint idx = Arrays.binarySearch(a, key);", "int idx = Arrays.binarySearch(a, key, true);", "Arrays.unsorted(a);\nint idx = Arrays.binarySearch(a, key);"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: key ที่ mutable ทำให้ hashCode เปลี่ยนหลัง put | เฉลย: ใช้ key immutable เช่น List.of(1)
-         list.add(new Question("38. ตรวจสอบการใช้ key ที่เปลี่ยนค่าได้ใน HashMap (hashCode เปลี่ยนหลัง put)",
-                 "Map<List<Integer>, String> m = new HashMap<>();\nList<Integer> k = new ArrayList<>(List.of(1));\nm.put(k, \"a\");\nk.add(2);\nm.get(k); // ได้ null",
-                 new String[]{"m.put(k, \"a\");\nm.rehash();", "List<Integer> k = List.of(1);\nm.put(k, \"a\");\nm.get(k);", "k = k.clone();\nm.get(k);"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: for-each ของ PriorityQueue ไม่รับประกันลำดับ | เฉลย: poll() ทีละตัว
-         list.add(new Question("39. ตรวจสอบการอ่านค่าจาก PriorityQueue ให้เรียงจากน้อยไปมาก (การวนด้วย for ไม่รับประกันลำดับ)",
-                 "PriorityQueue<Integer> pq = new PriorityQueue<>(List.of(5, 1, 3));\nfor (int x : pq) System.out.println(x); // ลำดับไม่เรียง",
-                 new String[]{"for (int x : pq.sorted()) System.out.println(x);", "pq.sort();\nfor (int x : pq) System.out.println(x);", "while (!pq.isEmpty()) System.out.println(pq.poll());"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: setDaemon ต้องเรียกก่อน start() | เฉลย: t.setDaemon(true); t.start();
-         list.add(new Question("40. ตรวจสอบลำดับการตั้งค่า Daemon Thread (ต้องตั้งก่อน start)",
-                 "Thread t = new Thread(task);\nt.start();\nt.setDaemon(true); // IllegalThreadStateException",
-                 new String[]{"t.setDaemon(true);\nt.start();", "t.start();\nt.daemon = true;", "t.setPriority(Thread.MAX_PRIORITY);\nt.start();"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // ---------- ข้อ 41-50 ----------
-
-         // บั๊ก: ค่าที่เปลี่ยนใน thread อื่นอาจไม่ถูกมองเห็น (visibility) | เฉลย: volatile boolean
-         list.add(new Question("41. ตรวจสอบ flag หยุดการทำงานที่อีก Thread เปลี่ยนค่าแล้วลูปไม่เห็น",
-                 "boolean running = true;\nwhile (running) {\n work();\n} // อีก thread ตั้ง running = false แต่ลูปไม่หยุด",
-                 new String[]{"final boolean running = true;", "volatile boolean running = true;", "transient boolean running = true;"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: key ซ้ำทำให้ toMap โยน exception | เฉลย: ใส่ merge function Integer::sum
-         list.add(new Question("42. ตรวจสอบ Collectors.toMap เมื่อมี key ซ้ำ (IllegalStateException)",
-                 "Map<String, Integer> m = list.stream()\n .collect(Collectors.toMap(x -> x.name, x -> x.hp));",
-                 new String[]{"Map<String, Integer> m = list.stream()\n .collect(Collectors.toMap(x -> x.name));", "Map<String, Integer> m = list.stream()\n .collect(Collectors.toMap(x -> x.name, x -> x.hp, null));", "Map<String, Integer> m = list.stream()\n .collect(Collectors.toMap(x -> x.name, x -> x.hp, Integer::sum));"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: static member ใช้ type parameter ของ instance ไม่ได้ | เฉลย: ทำให้เป็น instance field
-         list.add(new Question("43. ตรวจสอบการใช้ type parameter ของคลาสกับ static field",
-                 "class Box<T> {\n static T value; // compile error\n}",
-                 new String[]{"T value; // เปลี่ยนเป็น instance field", "static <T> T value;", "static T<> value;"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: exception ทำให้ข้าม unlock() | เฉลย: try { ... } finally { lock.unlock(); }
-         list.add(new Question("44. ตรวจสอบการปลดล็อกเมื่อเกิด Exception (ReentrantLock)",
-                 "lock.lock();\nwork(); // ถ้า work() throw ล็อกจะค้าง\nlock.unlock();",
-                 new String[]{"lock.lock();\nwork();\nlock.unlock();", "lock.lock();\ntry {\n work();\n} finally {\n lock.unlock();\n}", "lock.lock();\ntry {\n work();\n} catch (Exception e) {\n lock.unlock();\n}"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: คืน reference ของ list จริงทำให้แก้ไขจากภายนอกได้ | เฉลย: Collections.unmodifiableList(m)
-         list.add(new Question("45. ตรวจสอบการคืน collection ภายในคลาสโดยไม่ป้องกันการแก้ไขจากภายนอก",
-                 "class Team {\n private List<String> m = new ArrayList<>();\n List<String> getM() { return m; } // ภายนอกแก้ไขได้\n}",
-                 new String[]{"List<String> getM() { return m.clone(); }", "List<String> getM() { return final m; }", "List<String> getM() { return Collections.unmodifiableList(m); }"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: map() ไม่ทำให้ list ซ้อนแบนลง | เฉลย: flatMap(List::stream)
-         list.add(new Question("46. ตรวจสอบการรวม List ซ้อน List ให้เป็น List เดียว",
-                 "List<List<Integer>> n = ...;\nList<Integer> f = n.stream().map(l -> l).collect(Collectors.toList());",
-                 new String[]{"List<Integer> f = n.stream().flatMap(List::stream).collect(Collectors.toList());", "List<Integer> f = n.stream().flat().collect(Collectors.toList());", "List<Integer> f = n.stream().map(List::stream).collect(Collectors.toList());"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: ไม่รอ thread ให้จบ | เฉลย: t1.join(); t2.join();
-         list.add(new Question("47. ตรวจสอบการรอให้ Thread ทำงานเสร็จก่อนพิมพ์ผล",
-                 "t1.start();\nt2.start();\nSystem.out.println(\"done\"); // พิมพ์ก่อน thread จบ",
-                 new String[]{"t1.start();\nt2.start();\nt1.stop();\nt2.stop();\nSystem.out.println(\"done\");", "t1.start();\nt2.start();\nt1.join();\nt2.join();\nSystem.out.println(\"done\");", "t1.run();\nt2.start();\nSystem.out.println(\"done\");"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: int หารด้วย 0 throw exception ส่วน double ได้ Infinity | เฉลย: ใช้ 5.0 / 0
-         list.add(new Question("48. ตรวจสอบการหารด้วยศูนย์ของจำนวนเต็มและทศนิยม",
-                 "int r = 5 / 0; // ArithmeticException",
-                 new String[]{"int r = 5 / 0.0;", "double r = 5 / 0;", "double r = 5.0 / 0; // ได้ Infinity ไม่ throw"},
-                 2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: record ไม่มีการตรวจค่าตอนสร้าง | เฉลย: compact constructor Age { ... throw ... }
-         list.add(new Question("49. ตรวจสอบการตรวจค่าใน record ด้วย compact constructor",
-                 "record Age(int v) {} // ต้องการห้ามค่าติดลบ",
-                 new String[]{"record Age(int v) {\n Age {\n  if (v < 0) throw new IllegalArgumentException();\n }\n}", "record Age(int v) {\n void set(int v) { if (v < 0) return; }\n}", "record Age(int v) {\n Age(int v) { if (v < 0) return; }\n}"},
-                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-         // บั๊ก: exception ใน async ไม่ถูกจัดการ | เฉลย: .exceptionally(e -> 0)
-         list.add(new Question("50. ตรวจสอบการจัดการ Exception ใน CompletableFuture",
-                 "CompletableFuture.supplyAsync(() -> 1 / 0)\n .thenAccept(System.out::println); // exception ถูกกลืนเงียบ ๆ",
-                 new String[]{"CompletableFuture.supplyAsync(() -> 1 / 0)\n .thenAccept(System.out::println)\n .catch(e -> 0);", "CompletableFuture.supplyAsync(() -> 1 / 0)\n .exceptionally(e -> 0)\n .thenAccept(System.out::println);", "CompletableFuture.supplyAsync(() -> 1 / 0)\n .thenAccept(System.out::println)\n .finally(() -> {});"},
-                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
-
-
-         // EASY
+    // =====================================================================
+    // ระดับกลาง (DIFF_NORMAL) 50 ข้อ
+    // =====================================================================
+    public static void addNormal(List<Question> list) {
+
+        // บั๊ก: เรียก method บน null (NullPointerException) | เฉลย: เช็ค s != null ก่อนด้วย ternary
+        list.add(new Question("1. ตรวจสอบการป้องกัน NullPointerException ก่อนเรียก method",
+                "String s = null;\nint n = s.length();",
+                new String[]{"int n = (s != null) ? s.length() : 0;", "int n = s?.length();", "int n = s.length() ?: 0;"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: ชื่อ Run ไม่ตรงกับ run() ใน A ทำให้ @Override ใช้ไม่ได้ | เฉลย: void run() {}
+        list.add(new Question("2. ตรวจสอบการ Override method ให้ชื่อและ parameter ตรงกับคลาสแม่",
+                "class A { void run() {} }\nclass B extends A {\n @Override\n void Run() {}\n}",
+                new String[]{"void run(int x) {}", "void run() {}", "void RUN() {}"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: method ของ interface ต้องเป็น public | เฉลย: public void fly() {}
+        list.add(new Question("3. ตรวจสอบการ implements interface (method ต้องเป็น public)",
+                "interface Fly { void fly(); }\nclass Bird implements Fly {\n void fly() {}\n}",
+                new String[]{"void fly() {}", "public int fly() {}", "public void fly() {}"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: catch Exception มาก่อน IOException ทำให้ catch หลังไม่มีวันถึง | เฉลย: จับ IOException ก่อน Exception
+        list.add(new Question("4. ตรวจสอบลำดับ catch ของ Exception (ตัวเฉพาะต้องมาก่อนตัวทั่วไป)",
+                "try {\n risky();\n} catch (Exception e) {\n} catch (IOException e) {\n}",
+                new String[]{"catch (IOException e) {\n} catch (Exception e) {", "catch (Exception | IOException e) {", "catch (Throwable e) {\n} catch (Exception e) {"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: Generics ใช้ primitive (int) ไม่ได้ | เฉลย: ArrayList<Integer>
+        list.add(new Question("5. ตรวจสอบการใช้ Generics กับชนิดข้อมูลพื้นฐาน (ต้องใช้ Wrapper class)",
+                "ArrayList<int> list = new ArrayList<>();",
+                new String[]{"ArrayList<Int> list = new ArrayList<>();", "ArrayList<Integer> list = new ArrayList<>();", "ArrayList list<int> = new ArrayList<>();"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: map.get() คืน null แล้ว unbox เป็น int จะพัง | เฉลย: map.getOrDefault("x", 0)
+        list.add(new Question("6. ตรวจสอบการอ่านค่าจาก HashMap เมื่อ key อาจไม่มีอยู่ (null unboxing)",
+                "int v = map.get(\"x\"); // key \"x\" อาจไม่มี",
+                new String[]{"int v = map.get(\"x\") || 0;", "int v = map.find(\"x\", 0);", "int v = map.getOrDefault(\"x\", 0);"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: super(...) ต้องเป็นบรรทัดแรกใน Constructor | เฉลย: ย้าย super(5) ขึ้นก่อน println
+        list.add(new Question("7. ตรวจสอบตำแหน่งการเรียก super(...) ใน Constructor (ต้องเป็นบรรทัดแรก)",
+                "class B extends A {\n B() {\n  System.out.println(1);\n  super(5);\n }\n}",
+                new String[]{"B() {\n super(5);\n System.out.println(1);\n}", "B() {\n this.super(5);\n}", "B() {\n A(5);\n}"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: static method เข้าถึง field แบบ instance ไม่ได้ | เฉลย: ทำให้ score เป็น static
+        list.add(new Question("8. ตรวจสอบ static method ที่เข้าถึงตัวแปร instance",
+                "class G {\n int score;\n static void add() { score++; }\n}",
+                new String[]{"int static score;", "static int score;", "final int score;"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: String ไม่มี method append() | เฉลย: ใช้ StringBuilder
+        list.add(new Question("9. ตรวจสอบการต่อข้อความด้วย append() (String ไม่มี method นี้)",
+                "String s = \"a\";\ns.append(\"b\");",
+                new String[]{"String s = new String(\"a\");\ns.append(\"b\");", "String s = \"a\";\ns = s.add(\"b\");", "StringBuilder s = new StringBuilder(\"a\");\ns.append(\"b\");"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: Integer เทียบด้วย == เป็นการเทียบ reference | เฉลย: a.equals(b)
+        list.add(new Question("10. ตรวจสอบการเปรียบเทียบ Integer object ด้วย == (ค่าเกิน 127 จะไม่เท่ากัน)",
+                "Integer a = 1000, b = 1000;\nif (a == b) {\n same();\n}",
+                new String[]{"if (a.equals(b)) {", "if (a === b) {", "if (a.compare(b)) {"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: new abstract class ตรง ๆ ไม่ได้ | เฉลย: สร้างจากคลาสลูก new Circle()
+        list.add(new Question("11. ตรวจสอบการสร้าง object จาก abstract class",
+                "abstract class Shape {}\nclass Circle extends Shape {}\nShape s = new Shape();",
+                new String[]{"Shape s = Shape.create();", "Shape s = new Circle();", "Shape s = (Shape) new Object();"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: checked exception ต้องประกาศ throws | เฉลย: void read() throws IOException
+        list.add(new Question("12. ตรวจสอบการประกาศ checked exception ที่ method ต้อง throws",
+                "void read() {\n throw new IOException(\"err\");\n}",
+                new String[]{"void read() throw IOException {", "void read() catch IOException {", "void read() throws IOException {"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: b = a แค่ชี้ array เดียวกัน ไม่ได้คัดลอก | เฉลย: Arrays.copyOf(a, a.length)
+        list.add(new Question("13. ตรวจสอบการคัดลอก Array ให้เป็นสำเนาแยกอิสระ",
+                "int[] a = {1, 2, 3};\nint[] b = a; // ต้องการสำเนาที่แยกจากกัน",
+                new String[]{"int[] b = Arrays.copyOf(a, a.length);", "int[] b = new a;", "int[] b = copy(a);"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: Collections.sort ต้องการ Comparable | เฉลย: implements Comparable<Robot> + compareTo
+        list.add(new Question("14. ตรวจสอบการเรียง List ของ object ที่กำหนดเอง (ต้อง implements Comparable)",
+                "Collections.sort(robots); // Robot ไม่ได้ implements Comparable",
+                new String[]{"class Robot extends Comparable {}", "class Robot implements Comparable<Robot> {\n public int compareTo(Robot o) { return id - o.id; }\n}", "class Robot implements Sortable {}"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: id = id กำหนดค่าให้ parameter ตัวเอง (shadowing) | เฉลย: this.id = id;
+        list.add(new Question("15. ตรวจสอบการตั้งชื่อ parameter ซ้ำกับ field (shadowing)",
+                "class R {\n int id;\n R(int id) {\n  id = id;\n }\n}",
+                new String[]{"R.id = id;", "self.id = id;", "this.id = id;"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: equals(Robot) เป็น overload ไม่ใช่ override | เฉลย: equals(Object o)
+        list.add(new Question("16. ตรวจสอบการ Override method equals ให้ signature ถูกต้อง",
+                "public boolean equals(Robot r) {\n return id == r.id;\n}",
+                new String[]{"public boolean equals(Object o) {", "public bool equals(Object o) {", "public boolean equal(Object o) {"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: ต้อง downcast จาก Animal เป็น Dog | เฉลย: (Dog) a
+        list.add(new Question("17. ตรวจสอบการแปลงชนิด object จากคลาสแม่เป็นคลาสลูก (downcast)",
+                "Animal a = new Dog();\nDog d = a;",
+                new String[]{"Dog d = a.toDog();", "Dog d = (Dog) a;", "Dog d = new a;"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: ลืมปิดทรัพยากร | เฉลย: try-with-resources
+        list.add(new Question("18. ตรวจสอบการปิดทรัพยากรอัตโนมัติด้วย try-with-resources",
+                "Scanner sc = new Scanner(System.in);\ntry {\n sc.nextLine();\n}\n// ลืมปิด sc",
+                new String[]{"try Scanner sc = new Scanner(System.in) {", "using (Scanner sc = new Scanner(System.in)) {", "try (Scanner sc = new Scanner(System.in)) {"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: varargs ต้องเขียน int... (จุดสามจุดหลังชนิด) | เฉลย: int... nums
+        list.add(new Question("19. ตรวจสอบรูปแบบ varargs (จำนวน parameter ไม่จำกัด)",
+                "static int sum(int nums...) {\n int t = 0;\n for (int n : nums) t += n;\n return t;\n}",
+                new String[]{"static int sum(int... nums) {", "static int sum(...int nums) {", "static int sum(int[] nums...) {"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: char + int ได้ int ต้อง cast กลับ | เฉลย: (char) (c + 1)
+        list.add(new Question("20. ตรวจสอบการบวกเลขกับ char แล้วกำหนดกลับให้ char",
+                "char c = 'a';\nc = c + 1;",
+                new String[]{"c = c + '1';", "c = (char) (c + 1);", "c = c + 1.0;"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: lambda แก้ local variable ภายนอกไม่ได้ | เฉลย: ใช้ array 1 ช่อง int[] count = {0}
+        list.add(new Question("21. ตรวจสอบการแก้ค่าตัวแปรภายนอกใน lambda (ต้องเป็น effectively final)",
+                "int count = 0;\nlist.forEach(x -> count++);",
+                new String[]{"list.forEach(x -> this.count);", "final count = 0;\nlist.forEach(x -> count++);", "int[] count = {0};\nlist.forEach(x -> count[0]++);"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: List<String> ไม่ใช่ subtype ของ List<Object> | เฉลย: List<?>
+        list.add(new Question("22. ตรวจสอบการกำหนด List<Object> ด้วย ArrayList<String> (Generics ไม่รองรับ inheritance)",
+                "List<Object> objs = new ArrayList<String>();",
+                new String[]{"List<?> objs = new ArrayList<String>();", "List<Object> objs = new ArrayList<String>() {};", "List<Object> objs = (List<Object>) new ArrayList<String>();"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: method ใน interface ที่มี body ต้องเป็น default | เฉลย: default void hi()
+        list.add(new Question("23. ตรวจสอบการเขียน method ที่มี body ใน interface",
+                "interface A {\n void hi() { System.out.println(\"hi\"); }\n}",
+                new String[]{"final void hi() { System.out.println(\"hi\"); }", "default void hi() { System.out.println(\"hi\"); }", "static void hi(); { System.out.println(\"hi\"); }"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: List.of() สร้าง list ที่แก้ไขไม่ได้ | เฉลย: new ArrayList<>(List.of(1, 2))
+        list.add(new Question("24. ตรวจสอบการเพิ่มข้อมูลลงใน List ที่สร้างจาก List.of() (immutable)",
+                "List<Integer> l = List.of(1, 2);\nl.add(3); // UnsupportedOperationException",
+                new String[]{"List<Integer> l = List.mutable(1, 2);\nl.add(3);", "List<Integer> l = List.of(1, 2);\nl.addAll(3);", "List<Integer> l = new ArrayList<>(List.of(1, 2));\nl.add(3);"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: private เข้าถึงจากนอกคลาสไม่ได้ | เฉลย: เพิ่ม getter getX()
+        list.add(new Question("25. ตรวจสอบการเข้าถึง private field จากคลาสอื่น",
+                "class A { private int x; }\nclass B {\n int f(A a) { return a.x; }\n}",
+                new String[]{"เพิ่ม public int getX() { return x; } ใน A แล้วเรียก a.getX()", "เปลี่ยนเป็น a->x", "ใส่ final ให้คลาส B"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: run() ไม่ได้สร้าง thread ใหม่ | เฉลย: t.start()
+        list.add(new Question("26. ตรวจสอบการสั่งให้ Thread เริ่มทำงานแบบขนาน",
+                "Thread t = new Thread(task);\nt.run(); // รันใน thread เดิม ไม่ได้ขนาน",
+                new String[]{"t.begin();", "t.start();", "t.execute();"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: a * b ล้นเป็น int ก่อนแปลงเป็น long | เฉลย: (long) a * b
+        list.add(new Question("27. ตรวจสอบการคูณ int สองตัวแล้วล้น (overflow) ก่อนกำหนดให้ long",
+                "int a = 100000, b = 100000;\nlong sum = a * b;",
+                new String[]{"long sum = (long) (a * b);", "long sum = a * b * 1L;", "long sum = (long) a * b;"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: case ของ enum ใช้ชื่อค่าตรง ๆ | เฉลย: case UP:
+        list.add(new Question("28. ตรวจสอบการเขียน case ของ switch ที่ใช้กับ enum",
+                "enum Dir { UP, DOWN }\nswitch (d) {\n case Dir.UP: go(); break;\n}",
+                new String[]{"case UP: go(); break;", "case 'UP': go(); break;", "case \"UP\": go(); break;"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: Stream ต้องมี terminal operation | เฉลย: collect(Collectors.toList())
+        list.add(new Question("29. ตรวจสอบการใช้ Stream filter ที่ต้องมี terminal operation",
+                "List<Integer> ev = list.stream().filter(x -> x % 2 == 0);",
+                new String[]{"List<Integer> ev = list.stream().filter(x -> x % 2 == 0).get();", "List<Integer> ev = list.stream().filter(x -> x % 2 == 0).collect(Collectors.toList());", "List<Integer> ev = list.stream().filter(x -> x % 2 == 0).toArray();"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: Optional.of(null) จะ throw NPE | เฉลย: Optional.ofNullable(null)
+        list.add(new Question("30. ตรวจสอบการสร้าง Optional จากค่าที่อาจเป็น null",
+                "Optional<String> o = Optional.of(null); // NullPointerException",
+                new String[]{"Optional<String> o = Optional.empty(null);", "Optional<String> o = new Optional<>(null);", "Optional<String> o = Optional.ofNullable(null);"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: %d ใช้กับทศนิยมไม่ได้ | เฉลย: %.1f
+        list.add(new Question("31. ตรวจสอบรูปแบบ format ให้ตรงกับชนิดข้อมูลทศนิยม",
+                "String s = String.format(\"%d\", 3.5); // IllegalFormatConversionException",
+                new String[]{"String s = String.format(\"%.1f\", 3.5);", "String s = String.format(\"%s\" 3.5);", "String s = String.format(3.5, \"%d\");"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: remove(1) ลบตาม index ไม่ใช่ตามค่า | เฉลย: remove(Integer.valueOf(1))
+        list.add(new Question("32. ตรวจสอบการลบสมาชิกที่เป็นค่า (ไม่ใช่ index) ออกจาก List<Integer>",
+                "List<Integer> l = new ArrayList<>(List.of(10, 20, 1));\nl.remove(1); // ต้องการลบ \"ค่า 1\" ไม่ใช่ index 1",
+                new String[]{"l.remove((int) 1);", "l.remove(Integer.valueOf(1));", "l.removeValue(1);"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: inner class ต้องมี object ของ Outer ก่อน | เฉลย: new Outer().new Inner()
+        list.add(new Question("33. ตรวจสอบการสร้าง inner class (non-static) จากภายนอกคลาส",
+                "class Outer { class Inner {} }\nInner i = new Inner(); // ใน static main",
+                new String[]{"Inner i = Outer.new Inner();", "Inner i = new Outer.Inner();", "Outer.Inner i = new Outer().new Inner();"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: class extends หลาย interface ไม่ได้ | เฉลย: implements A, B
+        list.add(new Question("34. ตรวจสอบการสืบทอดหลาย interface พร้อมกัน",
+                "interface A {}\ninterface B {}\nclass C extends A, B {}",
+                new String[]{"class C implements A, B {}", "class C inherits A, B {}", "class C extends A implements B {}"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: Comparator ต้องคืน int ไม่ใช่ boolean | เฉลย: a.hp - b.hp
+        list.add(new Question("35. ตรวจสอบการเขียน Comparator แบบ lambda เพื่อเรียงตามค่า hp",
+                "list.sort((a, b) -> a.hp > b.hp);",
+                new String[]{"list.sort(a, b -> a.hp - b.hp);", "list.sort((a, b) -> a.hp - b.hp);", "list.sort((a, b) => a.hp - b.hp);"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: String วน for-each ตรง ๆ ไม่ได้ | เฉลย: "abc".toCharArray()
+        list.add(new Question("36. ตรวจสอบการวนอ่านทีละตัวอักษรของ String",
+                "for (char c : \"abc\") {\n print(c);\n}",
+                new String[]{"for (char c in \"abc\") {", "for (String c : \"abc\") {", "for (char c : \"abc\".toCharArray()) {"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: Math.round(double) คืน long | เฉลย: (int) Math.round(2.5)
+        list.add(new Question("37. ตรวจสอบชนิดข้อมูลที่ Math.round(double) คืนค่า",
+                "int r = Math.round(2.5); // possible lossy conversion from long",
+                new String[]{"int r = (int) Math.round(2.5);", "int r = Math.round(2.5) as int;", "int r = Math.rint(2.5);"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: local variable ต้องกำหนดค่าก่อนใช้ | เฉลย: int x = 0;
+        list.add(new Question("38. ตรวจสอบการใช้ตัวแปร local ที่ยังไม่ได้กำหนดค่าเริ่มต้น",
+                "int x;\nif (flag) x = 1;\nSystem.out.println(x);",
+                new String[]{"int x = null;\nif (flag) x = 1;\nSystem.out.println(x);", "int x = 0;\nif (flag) x = 1;\nSystem.out.println(x);", "int x?;\nif (flag) x = 1;\nSystem.out.println(x);"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: ต้อง return ทุกเส้นทาง | เฉลย: เพิ่ม return 0;
+        list.add(new Question("39. ตรวจสอบ method ที่ไม่ return ค่าในทุกเส้นทางของโค้ด",
+                "int f(int n) {\n if (n > 0) return 1;\n}",
+                new String[]{"void f(int n) {\n if (n > 0) return 1;\n}", "int f(int n) {\n if (n > 0) return 1;\n else return;\n}", "int f(int n) {\n if (n > 0) return 1;\n return 0;\n}"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: String เป็น immutable ต้องรับค่าใหม่ | เฉลย: s = s.toUpperCase();
+        list.add(new Question("40. ตรวจสอบความไม่เปลี่ยนแปลงของ String (immutable)",
+                "String s = \"abc\";\ns.toUpperCase();\nSystem.out.println(s); // ต้องการ ABC",
+                new String[]{"s = s.toUpperCase();", "s.toUpperCase(s);", "s.upper();"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // ---------- ข้อ 41-50 ----------
+
+        // บั๊ก: String ไม่มี method reverse() | เฉลย: StringBuilder(...).reverse().toString()
+        list.add(new Question("41. ตรวจสอบการกลับด้านข้อความ (String ไม่มี reverse())",
+                "String r = \"abc\".reverse();",
+                new String[]{"String r = Reverse.of(\"abc\");", "String r = new StringBuilder(\"abc\").reverse().toString();", "String r = \"abc\".reversed();"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: get(0) บน list ว่างเกิด IndexOutOfBoundsException | เฉลย: เช็ค isEmpty() ก่อน
+        list.add(new Question("42. ตรวจสอบการอ่านค่าจาก List ที่ว่างอยู่ (IndexOutOfBoundsException)",
+                "List<String> l = new ArrayList<>();\nString s = l.get(0);",
+                new String[]{"String s = l.get(-1);", "String s = l.first();", "String s = l.isEmpty() ? null : l.get(0);"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: cast String เป็น Integer ตรง ๆ | เฉลย: เช็ค instanceof ก่อน cast
+        list.add(new Question("43. ตรวจสอบการ cast ที่ทำให้เกิด ClassCastException",
+                "Object o = \"hi\";\nInteger n = (Integer) o;",
+                new String[]{"if (o instanceof Integer) {\n Integer n = (Integer) o;\n}", "Integer n = (int) o.toString();", "Integer n = Integer(o);"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: Map ใช้ for-each ตรง ๆ ไม่ได้ | เฉลย: map.keySet()
+        list.add(new Question("44. ตรวจสอบการวนอ่าน key ของ Map",
+                "Map<String, Integer> map = new HashMap<>();\nfor (String k : map) {\n print(k);\n}",
+                new String[]{"for (String k : map.values()) {", "for (String k : map.keySet()) {", "for (String k : map.keys()) {"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: overload ที่ต่างกันแค่ return type ไม่ได้ | เฉลย: เปลี่ยนชนิด parameter เป็น double
+        list.add(new Question("45. ตรวจสอบการ Overload method (ต้องต่างกันที่ parameter ไม่ใช่แค่ return type)",
+                "int f(int a) { return a; }\ndouble f(int a) { return a; }",
+                new String[]{"int f(int a) { return a; }\nint f(int a) { return a * 2; }", "int f(int a) { return a; }\nvoid f(int a) {}", "int f(int a) { return a; }\ndouble f(double a) { return a; }"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: final method ถูก override ไม่ได้ | เฉลย: เอา final ออกจาก go() ใน A
+        list.add(new Question("46. ตรวจสอบการ Override method ที่ถูกประกาศเป็น final",
+                "class A { final void go() {} }\nclass B extends A {\n void go() {}\n}",
+                new String[]{"class A { void go() {}  }\nclass B extends A {\n void go() {}\n}", "class A { final void go() {} }\nclass B extends A {\n final void go() {}\n}", "class A { static void go() {} }\nclass B extends A {\n void go() {}\n}"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: ไม่มี constructor ที่รับ String | เฉลย: เพิ่ม MyEx(String m) { super(m); }
+        list.add(new Question("47. ตรวจสอบการสร้าง Custom Exception ที่รับข้อความ",
+                "class MyEx extends Exception {}\nthrow new MyEx(\"err\");",
+                new String[]{"class MyEx extends Exception { MyEx() { super(\"err\"); } }", "class MyEx extends Exception {\n MyEx(String m) { super(m); }\n}", "class MyEx implements Exception {}"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: total เป็น instance field แต่ละ object จึงนับแยกกัน | เฉลย: static int total
+        list.add(new Question("48. ตรวจสอบการนับจำนวน object ที่ถูกสร้างทั้งหมด",
+                "class C {\n int total = 0;\n C() { total++; } // ต้องการนับ object ทั้งหมด\n}",
+                new String[]{"final int total = 0;", "int total = 0;\nstatic C() { total++; }", "static int total = 0;"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: List ไม่มี method ตัดค่าซ้ำ | เฉลย: new HashSet<>(l)
+        list.add(new Question("49. ตรวจสอบการตัดค่าซ้ำออกจาก List",
+                "List<Integer> l = List.of(1, 1, 2);\n// ต้องการให้เหลือ 1, 2",
+                new String[]{"Set<Integer> s = new HashSet<>(l);", "Set<Integer> s = l.distinct();", "List<Integer> s = l.unique();"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+
+        // บั๊ก: . ใน regex คือตัวอักษรใดก็ได้ | เฉลย: split("\\.")
+        list.add(new Question("50. ตรวจสอบการแยกข้อความด้วย split (regex)",
+                "String[] p = \"a.b\".split(\".\"); // ได้ array ว่าง",
+                new String[]{"String[] p = \"a.b\".split('.');", "String[] p = \"a.b\".split(\"\\\\.\");", "String[] p = \"a.b\".splitAt(\".\");"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
+    }
+
+    // =====================================================================
+    // ระดับยาก (DIFF_HARD) 50 ข้อ
+    // =====================================================================
+    public static void addHard(List<Question> list) {
+
+        // บั๊ก: Singleton ไม่ปลอดภัยเมื่อหลาย thread | เฉลย: volatile + synchronized แบบ double-checked
+        list.add(new Question("1. ตรวจสอบการสร้าง Singleton ให้ปลอดภัยเมื่อมีหลาย Thread (Double-Checked Locking)",
+                "private static Singleton inst;\nstatic Singleton get() {\n if (inst == null) inst = new Singleton(); // หลาย thread สร้างซ้ำได้\n return inst;\n}",
+                new String[]{"private static volatile Singleton inst;\nstatic Singleton get() {\n if (inst == null) {\n  synchronized (Singleton.class) {\n   if (inst == null) inst = new Singleton();\n  }\n }\n return inst;\n}", "private static transient Singleton inst;\nstatic Singleton get() {\n if (inst == null) inst = new Singleton();\n return inst;\n}", "private static final Singleton inst = null;\nstatic Singleton get() {\n return inst;\n}"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: count++ ไม่ atomic เกิด race condition | เฉลย: AtomicInteger.incrementAndGet()
+        list.add(new Question("2. ตรวจสอบ Race Condition เมื่อหลาย Thread เพิ่มค่าตัวนับพร้อมกัน",
+                "int count = 0;\n// 2 threads ทำ count++ พร้อมกัน ผลลัพธ์ไม่ตรงตามจริง",
+                new String[]{"volatile int count = 0;\ncount++;", "AtomicInteger count = new AtomicInteger();\ncount.incrementAndGet();", "int count = 0;\ncount = count + 1;"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: ล็อก a, b สลับลำดับกันทำให้ deadlock | เฉลย: ล็อกด้วยลำดับเดียวกัน a ก่อน b
+        list.add(new Question("3. ตรวจสอบการเกิด Deadlock จากการล็อกสองตัวสลับลำดับกัน",
+                "Thread1: synchronized (a) { synchronized (b) { work(); } }\nThread2: synchronized (b) { synchronized (a) { work(); } }",
+                new String[]{"Thread2: synchronized (b) { synchronized (a) { work(); a.wait(); } }", "Thread2: synchronized (a.hashCode()) { work(); }", "Thread2: synchronized (a) { synchronized (b) { work(); } }"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: override equals แต่ไม่ override hashCode | เฉลย: เพิ่ม hashCode() ที่สอดคล้องกับ id
+        list.add(new Question("4. ตรวจสอบสัญญาระหว่าง equals() และ hashCode() เมื่อใช้กับ HashSet",
+                "class P {\n int id;\n public boolean equals(Object o) { return o instanceof P p && p.id == id; }\n}\nSet<P> s = new HashSet<>(); // เก็บ P ซ้ำได้",
+                new String[]{"public int hashCode() { return Integer.hashCode(id); }", "public long hashCode() { return id; }", "public int hashCode() { return (int) (Math.random() * 100); }"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: static cache โตไม่หยุด (memory leak) | เฉลย: WeakHashMap
+        list.add(new Question("5. ตรวจสอบ Memory Leak จาก cache แบบ static ที่โตขึ้นเรื่อย ๆ",
+                "static List<Object> cache = new ArrayList<>();\nvoid load() {\n cache.add(new byte[1_000_000]); // memory leak\n}",
+                new String[]{"System.gc(); // เรียกทุกครั้งหลัง add", "static Map<String, Object> cache = new WeakHashMap<>();", "static final List<Object> cache = null;"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: ArrayList ไม่ thread-safe เมื่อเขียนใน parallel stream | เฉลย: collect(Collectors.toList())
+        list.add(new Question("6. ตรวจสอบการเขียน List จากหลาย Thread ใน parallel stream",
+                "List<Integer> out = new ArrayList<>();\nIntStream.range(0, 1000).parallel().forEach(out::add); // ข้อมูลหาย/พัง",
+                new String[]{"IntStream.range(0, 1000).parallel().peek(out::add).count();", "out = Collections.unmodifiableList(out);", "List<Integer> out = IntStream.range(0, 1000).parallel().boxed().collect(Collectors.toList());"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: new T[] ไม่ได้เพราะ type erasure | เฉลย: (T[]) new Object[10]
+        list.add(new Question("7. ตรวจสอบการสร้าง Generic Array (Java ห้าม new T[])",
+                "class Box<T> {\n T[] arr = new T[10];\n}",
+                new String[]{"T[] arr = (T[]) new Object[10];", "T[] arr = new T<10>();", "T[] arr = T.newArray(10);"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: PECS: ผู้ผลิต extends / ผู้บริโภค super | เฉลย: List<? super T> dst, List<? extends T> src
+        list.add(new Question("8. ตรวจสอบการใช้ Wildcard ตามหลัก PECS (Producer Extends, Consumer Super)",
+                "void copy(List<Number> dst, List<Integer> src)\n// ต้องการให้ copy ได้ยืดหยุ่นกับชนิดย่อย/ชนิดแม่",
+                new String[]{"void copy(List<?> dst, List<?> src)", "<T> void copy(List<? super T> dst, List<? extends T> src)", "<T> void copy(List<T extends Number> dst, List<T> src)"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: recursion ไม่มี base case (StackOverflowError) | เฉลย: n <= 1 ? 1 : n * fact(n - 1)
+        list.add(new Question("9. ตรวจสอบ Recursion ที่ไม่มีเงื่อนไขหยุด (StackOverflowError)",
+                "int fact(int n) {\n return n * fact(n - 1); // StackOverflowError\n}",
+                new String[]{"int fact(int n) {\n return n * fact(n);\n}", "int fact(int n) {\n if (n == 0) return 0;\n return n * fact(n - 1);\n}", "int fact(int n) {\n return n <= 1 ? 1 : n * fact(n - 1);\n}"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: "P:" + this เรียก toString() วนไม่รู้จบ | เฉลย: ใช้ field เช่น id
+        list.add(new Question("10. ตรวจสอบ toString() ที่เรียกตัวเองวนไม่รู้จบ",
+                "public String toString() {\n return \"P:\" + this;\n}",
+                new String[]{"return \"P:\" + id;", "return \"P:\" + toString();", "return \"P:\" + super;"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: ต้องการ immutable class | เฉลย: final class + private final field + ไม่มี setter
+        list.add(new Question("11. ตรวจสอบการออกแบบคลาสแบบ Immutable",
+                "class Pt { public int x; } // ต้องการคลาสที่เปลี่ยนค่าไม่ได้หลังสร้าง",
+                new String[]{"class Pt { private int x; void setX(int x) { this.x = x; } }", "final class Pt {\n private final int x;\n Pt(int x) { this.x = x; }\n int getX() { return x; }\n}", "class Pt { static int x; }"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: return ใน finally ทับค่า return ของ try | เฉลย: ใช้ finally แค่ cleanup
+        list.add(new Question("12. ตรวจสอบ return ใน finally ที่กลบค่า return ของ try",
+                "int f() {\n try { return 1; }\n finally { return 2; } // ผลลัพธ์คือ 2 เสมอ\n}",
+                new String[]{"int f() {\n try { return 1; }\n catch (Exception e) { return 2; }\n finally { return 2; }\n}", "int f() {\n return 1;\n finally { }\n}", "int f() {\n try { return 1; }\n finally { cleanup(); }\n}"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: Comparator ไม่คืน 0 เมื่อค่าเท่ากัน | เฉลย: Integer.compare(a, b)
+        list.add(new Question("13. ตรวจสอบ Comparator ที่ผิดสัญญา (ไม่คืน 0 เมื่อค่าเท่ากัน)",
+                "list.sort((a, b) -> a > b ? 1 : -1); // IllegalArgumentException: Comparison method violates its general contract",
+                new String[]{"list.sort((a, b) -> Integer.compare(a, b));", "list.sort((a, b) -> a > b ? 1 : 0);", "list.sort((a, b) -> a - b > 0);"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: ใช้ y ก่อนถูกกำหนดค่า (ได้ค่า default 0) | เฉลย: ย้าย y ขึ้นก่อน x
+        list.add(new Question("14. ตรวจสอบลำดับการกำหนดค่า static ที่ใช้ตัวแปรก่อนถูกกำหนดค่า",
+                "class A {\n static int x = A.y + 1;\n static int y = 5;\n} // x ได้ 1 ไม่ใช่ 6",
+                new String[]{"static int x = A.y + 1;\nstatic int y = 5;", "static int y = 5;\nstatic int x = y + 1;", "static int x = this.y + 1;\nstatic int y = 5;"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: catch InterruptedException แล้วเงียบ | เฉลย: Thread.currentThread().interrupt()
+        list.add(new Question("15. ตรวจสอบการจัดการ InterruptedException อย่างถูกต้อง",
+                "try {\n Thread.sleep(1000);\n} catch (InterruptedException e) {\n // ignore\n}",
+                new String[]{"catch (InterruptedException e) {\n e = null;\n}", "catch (InterruptedException e) {\n Thread.sleep(0);\n}", "catch (InterruptedException e) {\n Thread.currentThread().interrupt();\n}"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: thread pool ไม่ shutdown โปรแกรมไม่จบ | เฉลย: ex.shutdown()
+        list.add(new Question("16. ตรวจสอบ ExecutorService ที่ไม่ปิดทำให้โปรแกรมไม่จบ",
+                "ExecutorService ex = Executors.newFixedThreadPool(4);\nex.submit(task);\n// โปรแกรมไม่ยอมจบการทำงาน",
+                new String[]{"ex.submit(task);\nex.shutdown();", "ex.submit(task);\nex.stop();", "ex.submit(task).cancel();"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: CompletableFuture ต้องรอผลด้วย join()/get() | เฉลย: f.join()
+        list.add(new Question("17. ตรวจสอบการรอผลลัพธ์จาก CompletableFuture",
+                "CompletableFuture<String> f = CompletableFuture.supplyAsync(() -> load());\nString s = f;",
+                new String[]{"String s = f.value;", "String s = f.join();", "String s = (String) f;"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: SimpleDateFormat ไม่ thread-safe | เฉลย: ThreadLocal<SimpleDateFormat>
+        list.add(new Question("18. ตรวจสอบการใช้ SimpleDateFormat ร่วมกันหลาย Thread (ไม่ thread-safe)",
+                "static SimpleDateFormat fmt = new SimpleDateFormat(\"yyyy\"); // ใช้ร่วมกันทุก thread",
+                new String[]{"static volatile SimpleDateFormat fmt = new SimpleDateFormat(\"yyyy\");", "static final SimpleDateFormat fmt = new SimpleDateFormat(\"yyyy\");", "static final ThreadLocal<SimpleDateFormat> fmt =\n ThreadLocal.withInitial(() -> new SimpleDateFormat(\"yyyy\"));"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: clone() ของ array 2 มิติเป็นแบบตื้น | เฉลย: clone ทีละแถว
+        list.add(new Question("19. ตรวจสอบการคัดลอก Array 2 มิติแบบ Deep Copy",
+                "int[][] b = a.clone(); // ต้องการ deep copy แต่แถวยังใช้ร่วมกัน",
+                new String[]{"int[][] b = new int[a.length][];\nfor (int i = 0; i < a.length; i++) b[i] = a[i].clone();", "int[][] b = Arrays.copyOf(a, a.length);", "int[][] b = (int[][]) a;"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: Thread ไม่ Serializable | เฉลย: transient Thread t;
+        list.add(new Question("20. ตรวจสอบ NotSerializableException จาก field ที่ไม่รองรับ Serializable",
+                "class Bot implements Serializable {\n Thread t; // NotSerializableException\n}",
+                new String[]{"volatile Thread t;", "transient Thread t;", "final Thread t;"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: double เทียบด้วย == คลาดเคลื่อน | เฉลย: Math.abs(d - 0.3) < 1e-9
+        list.add(new Question("21. ตรวจสอบการเปรียบเทียบเลขทศนิยม double ที่คลาดเคลื่อน",
+                "double d = 0.1 + 0.2;\nif (d == 0.3) {\n pass();\n}",
+                new String[]{"if (d.equals(0.3)) {", "if ((float) d == 0.3) {", "if (Math.abs(d - 0.3) < 1e-9) {"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: double ไม่เหมาะกับเงิน | เฉลย: BigDecimal สร้างจาก String
+        list.add(new Question("22. ตรวจสอบการคำนวณเงินที่ต้องแม่นยำ (ห้ามใช้ double/float)",
+                "double total = 0.1 * 3; // ใช้กับเงิน ต้องการความแม่นยำ",
+                new String[]{"BigDecimal total = new BigDecimal(\"0.1\").multiply(BigDecimal.valueOf(3));", "BigDecimal total = new BigDecimal(0.1).multiply(BigDecimal.valueOf(3));", "float total = 0.1f * 3;"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: & มี precedence ต่ำกว่า == | เฉลย: ใส่วงเล็บ (flags & MASK) == MASK
+        list.add(new Question("23. ตรวจสอบลำดับความสำคัญของตัวดำเนินการระดับบิต (bitwise precedence)",
+                "if (flags & MASK == MASK) {\n go();\n}",
+                new String[]{"if (flags && MASK == MASK) {", "if ((flags & MASK) == MASK) {", "if (flags & (MASK == MASK)) {"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: เรียก method ก่อนเช็ค null | เฉลย: obj != null && obj.isReady()
+        list.add(new Question("24. ตรวจสอบ Short-circuit ที่ทำให้เกิด NullPointerException",
+                "if (obj.isReady() & obj != null) {\n run();\n}",
+                new String[]{"if (obj.isReady() && obj != null) {", "if (obj != null & obj.isReady()) {", "if (obj != null && obj.isReady()) {"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: break ออกได้แค่ลูปใน | เฉลย: break outer;
+        list.add(new Question("25. ตรวจสอบการออกจากลูปซ้อนหลายชั้นพร้อมกันด้วย Label",
+                "outer:\nfor (int i = 0; i < n; i++) {\n for (int j = 0; j < n; j++) {\n  if (x) break; // ออกได้แค่ลูปใน\n }\n}",
+                new String[]{"if (x) break outer;", "if (x) exit;", "if (x) break 2;"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: Java เป็น pass-by-value เปลี่ยน reference ไม่มีผลกับ caller | เฉลย: แก้ state ของ object เดิม r.reset()
+        list.add(new Question("26. ตรวจสอบความเข้าใจ Java เป็น pass-by-value (เปลี่ยน reference ใน method ไม่ส่งผลกับผู้เรียก)",
+                "void reset(Robot r) {\n r = new Robot(); // caller ไม่เห็นการเปลี่ยนแปลง\n}",
+                new String[]{"void reset(ref Robot r) {\n r = new Robot();\n}", "void reset(Robot r) {\n r.reset(); // แก้ state ของ object เดิม\n}", "void reset(Robot& r) {\n r = new Robot();\n}"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: HashMap ไม่ thread-safe | เฉลย: ConcurrentHashMap
+        list.add(new Question("27. ตรวจสอบการเลือก Map ที่ปลอดภัยเมื่อหลาย Thread เขียนพร้อมกัน",
+                "Map<String, Integer> m = new HashMap<>(); // หลาย thread เขียนพร้อมกัน",
+                new String[]{"Map<String, Integer> m = new TreeMap<>();", "Map<String, Integer> m = new LinkedHashMap<>();", "Map<String, Integer> m = new ConcurrentHashMap<>();"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: wait() ต้องอยู่ใน synchronized | เฉลย: synchronized + while (!ready)
+        list.add(new Question("28. ตรวจสอบการเรียก wait() นอก synchronized (IllegalMonitorStateException)",
+                "lock.wait(); // IllegalMonitorStateException",
+                new String[]{"synchronized (lock) {\n while (!ready) lock.wait();\n}", "if (!ready) lock.wait();", "lock.sleep();"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: Stream ใช้ซ้ำหลัง terminal operation ไม่ได้ | เฉลย: สร้าง stream ใหม่จาก list
+        list.add(new Question("29. ตรวจสอบการใช้ Stream ซ้ำหลังถูกใช้ไปแล้ว",
+                "Stream<String> s = list.stream();\ns.forEach(System.out::println);\nlong n = s.count(); // IllegalStateException",
+                new String[]{"s.reset();\nlong n = s.count();", "list.stream().forEach(System.out::println);\nlong n = list.stream().count();", "s.rewind();\nlong n = s.count();"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: default method ชนกันจาก 2 interface | เฉลย: A.super.hi()
+        list.add(new Question("30. ตรวจสอบการแก้ปัญหา default method ชนกันจากสอง interface (Diamond Problem)",
+                "interface A { default void hi() {} }\ninterface B { default void hi() {} }\nclass C implements A, B {} // compile error",
+                new String[]{"class C implements A, B {\n public void hi() { super.hi(); }\n}", "class C implements A, B {\n default void hi() {}\n}", "class C implements A, B {\n public void hi() { A.super.hi(); }\n}"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: instanceof + cast ซ้ำซ้อน | เฉลย: pattern matching: instanceof String s
+        list.add(new Question("31. ตรวจสอบ Pattern Matching ของ instanceof (Java 16+) เพื่อลดการ cast ซ้ำ",
+                "if (o instanceof String) {\n String s = (String) o;\n print(s);\n}",
+                new String[]{"if (o instanceof String s) {\n print(s);\n}", "if (o is String s) {\n print(s);\n}", "if (o instanceof String as s) {\n print(s);\n}"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: คลาสข้อมูลต้องเขียนโค้ดซ้ำมาก | เฉลย: record Point(int x, int y) {}
+        list.add(new Question("32. ตรวจสอบการใช้ record (Java 16+) แทนคลาสข้อมูลที่ต้องเขียนซ้ำซ้อน",
+                "class Point {\n final int x, y;\n // constructor, getters, equals, hashCode, toString...\n}",
+                new String[]{"data class Point(int x, int y)", "record Point(int x, int y) {}", "struct Point { int x; int y; }"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: switch แบบเก่ายาวและต้องใช้ break | เฉลย: switch expression ด้วย ->
+        list.add(new Question("33. ตรวจสอบการใช้ switch expression (Java 14+) ที่คืนค่าได้",
+                "String r;\nswitch (d) {\n case 1: r = \"a\"; break;\n default: r = \"b\";\n}",
+                new String[]{"String r = switch d { 1 => \"a\"; _ => \"b\"; };", "String r = switch (d) {\n case 1: \"a\";\n default: \"b\";\n};", "String r = switch (d) {\n case 1 -> \"a\";\n default -> \"b\";\n};"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: T ไม่มี compareTo | เฉลย: <T extends Comparable<T>>
+        list.add(new Question("34. ตรวจสอบการกำหนดขอบเขตของ Generic ให้เรียก compareTo ได้",
+                "<T> T max(T a, T b) {\n return a.compareTo(b) > 0 ? a : b;\n}",
+                new String[]{"<T extends Comparable<T>> T max(T a, T b) {", "<T implements Comparable<T>> T max(T a, T b) {", "<T super Comparable<T>> T max(T a, T b) {"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: try-with-resources ต้อง implements AutoCloseable | เฉลย: implements AutoCloseable + public close()
+        list.add(new Question("35. ตรวจสอบการทำให้คลาสใช้กับ try-with-resources ได้",
+                "class Res { void close() {} }\ntry (Res r = new Res()) {\n use(r);\n}",
+                new String[]{"class Res extends AutoCloseable {\n public void close() {}\n}", "class Res implements AutoCloseable {\n public void close() {}\n}", "class Res implements Closing {\n public void close() {}\n}"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: String += ในลูป สร้าง object ใหม่ทุกรอบ | เฉลย: StringBuilder.append()
+        list.add(new Question("36. ตรวจสอบการต่อ String ในลูปจำนวนมากที่ช้าและกิน memory",
+                "String s = \"\";\nfor (int i = 0; i < 100000; i++) {\n s += i; // ช้าและกิน memory\n}",
+                new String[]{"String s = \"\";\nfor (int i = 0; i < 100000; i++) s = s.concat(\"\" + i);", "StringBuffer s = \"\";\nfor (int i = 0; i < 100000; i++) s.append(i);", "StringBuilder sb = new StringBuilder();\nfor (int i = 0; i < 100000; i++) sb.append(i);"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: binarySearch ต้องใช้กับ array ที่เรียงแล้ว | เฉลย: Arrays.sort(a) ก่อน
+        list.add(new Question("37. ตรวจสอบเงื่อนไขก่อนใช้ Binary Search (ข้อมูลต้องเรียงลำดับก่อน)",
+                "int idx = Arrays.binarySearch(a, key); // a ยังไม่เรียงลำดับ ผลลัพธ์ผิด",
+                new String[]{"Arrays.sort(a);\nint idx = Arrays.binarySearch(a, key);", "int idx = Arrays.binarySearch(a, key, true);", "Arrays.unsorted(a);\nint idx = Arrays.binarySearch(a, key);"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: key ที่ mutable ทำให้ hashCode เปลี่ยนหลัง put | เฉลย: ใช้ key immutable เช่น List.of(1)
+        list.add(new Question("38. ตรวจสอบการใช้ key ที่เปลี่ยนค่าได้ใน HashMap (hashCode เปลี่ยนหลัง put)",
+                "Map<List<Integer>, String> m = new HashMap<>();\nList<Integer> k = new ArrayList<>(List.of(1));\nm.put(k, \"a\");\nk.add(2);\nm.get(k); // ได้ null",
+                new String[]{"m.put(k, \"a\");\nm.rehash();", "List<Integer> k = List.of(1);\nm.put(k, \"a\");\nm.get(k);", "k = k.clone();\nm.get(k);"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: for-each ของ PriorityQueue ไม่รับประกันลำดับ | เฉลย: poll() ทีละตัว
+        list.add(new Question("39. ตรวจสอบการอ่านค่าจาก PriorityQueue ให้เรียงจากน้อยไปมาก (การวนด้วย for ไม่รับประกันลำดับ)",
+                "PriorityQueue<Integer> pq = new PriorityQueue<>(List.of(5, 1, 3));\nfor (int x : pq) System.out.println(x); // ลำดับไม่เรียง",
+                new String[]{"for (int x : pq.sorted()) System.out.println(x);", "pq.sort();\nfor (int x : pq) System.out.println(x);", "while (!pq.isEmpty()) System.out.println(pq.poll());"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: setDaemon ต้องเรียกก่อน start() | เฉลย: t.setDaemon(true); t.start();
+        list.add(new Question("40. ตรวจสอบลำดับการตั้งค่า Daemon Thread (ต้องตั้งก่อน start)",
+                "Thread t = new Thread(task);\nt.start();\nt.setDaemon(true); // IllegalThreadStateException",
+                new String[]{"t.setDaemon(true);\nt.start();", "t.start();\nt.daemon = true;", "t.setPriority(Thread.MAX_PRIORITY);\nt.start();"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // ---------- ข้อ 41-50 ----------
+
+        // บั๊ก: ค่าที่เปลี่ยนใน thread อื่นอาจไม่ถูกมองเห็น (visibility) | เฉลย: volatile boolean
+        list.add(new Question("41. ตรวจสอบ flag หยุดการทำงานที่อีก Thread เปลี่ยนค่าแล้วลูปไม่เห็น",
+                "boolean running = true;\nwhile (running) {\n work();\n} // อีก thread ตั้ง running = false แต่ลูปไม่หยุด",
+                new String[]{"final boolean running = true;", "volatile boolean running = true;", "transient boolean running = true;"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: key ซ้ำทำให้ toMap โยน exception | เฉลย: ใส่ merge function Integer::sum
+        list.add(new Question("42. ตรวจสอบ Collectors.toMap เมื่อมี key ซ้ำ (IllegalStateException)",
+                "Map<String, Integer> m = list.stream()\n .collect(Collectors.toMap(x -> x.name, x -> x.hp));",
+                new String[]{"Map<String, Integer> m = list.stream()\n .collect(Collectors.toMap(x -> x.name));", "Map<String, Integer> m = list.stream()\n .collect(Collectors.toMap(x -> x.name, x -> x.hp, null));", "Map<String, Integer> m = list.stream()\n .collect(Collectors.toMap(x -> x.name, x -> x.hp, Integer::sum));"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: static member ใช้ type parameter ของ instance ไม่ได้ | เฉลย: ทำให้เป็น instance field
+        list.add(new Question("43. ตรวจสอบการใช้ type parameter ของคลาสกับ static field",
+                "class Box<T> {\n static T value; // compile error\n}",
+                new String[]{"T value; // เปลี่ยนเป็น instance field", "static <T> T value;", "static T<> value;"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: exception ทำให้ข้าม unlock() | เฉลย: try { ... } finally { lock.unlock(); }
+        list.add(new Question("44. ตรวจสอบการปลดล็อกเมื่อเกิด Exception (ReentrantLock)",
+                "lock.lock();\nwork(); // ถ้า work() throw ล็อกจะค้าง\nlock.unlock();",
+                new String[]{"lock.lock();\nwork();\nlock.unlock();", "lock.lock();\ntry {\n work();\n} finally {\n lock.unlock();\n}", "lock.lock();\ntry {\n work();\n} catch (Exception e) {\n lock.unlock();\n}"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: คืน reference ของ list จริงทำให้แก้ไขจากภายนอกได้ | เฉลย: Collections.unmodifiableList(m)
+        list.add(new Question("45. ตรวจสอบการคืน collection ภายในคลาสโดยไม่ป้องกันการแก้ไขจากภายนอก",
+                "class Team {\n private List<String> m = new ArrayList<>();\n List<String> getM() { return m; } // ภายนอกแก้ไขได้\n}",
+                new String[]{"List<String> getM() { return m.clone(); }", "List<String> getM() { return final m; }", "List<String> getM() { return Collections.unmodifiableList(m); }"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: map() ไม่ทำให้ list ซ้อนแบนลง | เฉลย: flatMap(List::stream)
+        list.add(new Question("46. ตรวจสอบการรวม List ซ้อน List ให้เป็น List เดียว",
+                "List<List<Integer>> n = ...;\nList<Integer> f = n.stream().map(l -> l).collect(Collectors.toList());",
+                new String[]{"List<Integer> f = n.stream().flatMap(List::stream).collect(Collectors.toList());", "List<Integer> f = n.stream().flat().collect(Collectors.toList());", "List<Integer> f = n.stream().map(List::stream).collect(Collectors.toList());"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: ไม่รอ thread ให้จบ | เฉลย: t1.join(); t2.join();
+        list.add(new Question("47. ตรวจสอบการรอให้ Thread ทำงานเสร็จก่อนพิมพ์ผล",
+                "t1.start();\nt2.start();\nSystem.out.println(\"done\"); // พิมพ์ก่อน thread จบ",
+                new String[]{"t1.start();\nt2.start();\nt1.stop();\nt2.stop();\nSystem.out.println(\"done\");", "t1.start();\nt2.start();\nt1.join();\nt2.join();\nSystem.out.println(\"done\");", "t1.run();\nt2.start();\nSystem.out.println(\"done\");"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: int หารด้วย 0 throw exception ส่วน double ได้ Infinity | เฉลย: ใช้ 5.0 / 0
+        list.add(new Question("48. ตรวจสอบการหารด้วยศูนย์ของจำนวนเต็มและทศนิยม",
+                "int r = 5 / 0; // ArithmeticException",
+                new String[]{"int r = 5 / 0.0;", "double r = 5 / 0;", "double r = 5.0 / 0; // ได้ Infinity ไม่ throw"},
+                2, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: record ไม่มีการตรวจค่าตอนสร้าง | เฉลย: compact constructor Age { ... throw ... }
+        list.add(new Question("49. ตรวจสอบการตรวจค่าใน record ด้วย compact constructor",
+                "record Age(int v) {} // ต้องการห้ามค่าติดลบ",
+                new String[]{"record Age(int v) {\n Age {\n  if (v < 0) throw new IllegalArgumentException();\n }\n}", "record Age(int v) {\n void set(int v) { if (v < 0) return; }\n}", "record Age(int v) {\n Age(int v) { if (v < 0) return; }\n}"},
+                0, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+        // บั๊ก: exception ใน async ไม่ถูกจัดการ | เฉลย: .exceptionally(e -> 0)
+        list.add(new Question("50. ตรวจสอบการจัดการ Exception ใน CompletableFuture",
+                "CompletableFuture.supplyAsync(() -> 1 / 0)\n .thenAccept(System.out::println); // exception ถูกกลืนเงียบ ๆ",
+                new String[]{"CompletableFuture.supplyAsync(() -> 1 / 0)\n .thenAccept(System.out::println)\n .catch(e -> 0);", "CompletableFuture.supplyAsync(() -> 1 / 0)\n .exceptionally(e -> 0)\n .thenAccept(System.out::println);", "CompletableFuture.supplyAsync(() -> 1 / 0)\n .thenAccept(System.out::println)\n .finally(() -> {});"},
+                1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
+
+
+        // EASY
 // 1. การใช้งานตัวพิมพ์ใหญ่-เล็กของค่า Boolean
-         list.add(new Question("1. การใช้งานตัวพิมพ์ใหญ่-เล็กของค่า Boolean",
-                 "while true:\n    break",
-                 new String[]{"while True:\n    break", "while(true):", "do while True:"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        list.add(new Question("1. การใช้งานตัวพิมพ์ใหญ่-เล็กของค่า Boolean",
+                "while true:\n    break",
+                new String[]{"while True:\n    break", "while(true):", "do while True:"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 2. การใช้อินเดนเทชัน (Indentation) ในฟังก์ชัน
-         list.add(new Question("2. การใช้อินเดนเทชัน (Indentation) ในฟังก์ชัน",
-                 "def repair():\nprint('Repairing')",
-                 new String[]{"def repair():\n    print('Repairing')", "def repair(): print('Repairing');", "repair(): print('Repairing')"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 2. การใช้อินเดนเทชัน (Indentation) ในฟังก์ชัน
+        list.add(new Question("2. การใช้อินเดนเทชัน (Indentation) ในฟังก์ชัน",
+                "def repair():\nprint('Repairing')",
+                new String[]{"def repair():\n    print('Repairing')", "def repair(): print('Repairing');", "repair(): print('Repairing')"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 3. การพิมพ์ข้อความรวมกับตัวเลขด้วยการแปลงประเภทข้อมูล
-         list.add(new Question("3. การพิมพ์ข้อความรวมกับตัวเลขด้วยการแปลงประเภทข้อมูล",
-                 "print(\"Bot \" + 1)",
-                 new String[]{"print(\"Bot \" . 1)", "print(\"Bot \" + str(1))", "print(\"Bot \" & 1)"},
-                 1, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 3. การพิมพ์ข้อความรวมกับตัวเลขด้วยการแปลงประเภทข้อมูล
+        list.add(new Question("3. การพิมพ์ข้อความรวมกับตัวเลขด้วยการแปลงประเภทข้อมูล",
+                "print(\"Bot \" + 1)",
+                new String[]{"print(\"Bot \" . 1)", "print(\"Bot \" + str(1))", "print(\"Bot \" & 1)"},
+                1, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 4. การประกาศฟังก์ชันด้วยคีย์เวิร์ด def และเครื่องหมายโคลอน
-         list.add(new Question("4. การประกาศฟังก์ชันด้วยคีย์เวิร์ด def และเครื่องหมายโคลอน",
-                 "def repair()\n    pass",
-                 new String[]{"function repair():", "def repair;", "def repair():\n    pass"},
-                 2, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 4. การประกาศฟังก์ชันด้วยคีย์เวิร์ด def และเครื่องหมายโคลอน
+        list.add(new Question("4. การประกาศฟังก์ชันด้วยคีย์เวิร์ด def และเครื่องหมายโคลอน",
+                "def repair()\n    pass",
+                new String[]{"function repair():", "def repair;", "def repair():\n    pass"},
+                2, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 5. การเปรียบเทียบเงื่อนไขด้วยเครื่องหมายเท่ากับสองตัว
-         list.add(new Question("5. การเปรียบเทียบเงื่อนไขด้วยเครื่องหมายเท่ากับสองตัว",
-                 "if x = 5:\n    print('Fixing')",
-                 new String[]{"if x == 5:", "if x === 5:", "if (x = 5):"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 5. การเปรียบเทียบเงื่อนไขด้วยเครื่องหมายเท่ากับสองตัว
+        list.add(new Question("5. การเปรียบเทียบเงื่อนไขด้วยเครื่องหมายเท่ากับสองตัว",
+                "if x = 5:\n    print('Fixing')",
+                new String[]{"if x == 5:", "if x === 5:", "if (x = 5):"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 6. การใช้งานคำสั่งพิมพ์ข้อความออกหน้าจอ print
-         list.add(new Question("6. การใช้งานคำสั่งพิมพ์ข้อความออกหน้าจอ print",
-                 "echo(\"Hello Bot\")",
-                 new String[]{"print(\"Hello Bot\")", "printf(\"Hello Bot\")", "Console.WriteLine(\"Hello Bot\")"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 6. การใช้งานคำสั่งพิมพ์ข้อความออกหน้าจอ print
+        list.add(new Question("6. การใช้งานคำสั่งพิมพ์ข้อความออกหน้าจอ print",
+                "echo(\"Hello Bot\")",
+                new String[]{"print(\"Hello Bot\")", "printf(\"Hello Bot\")", "Console.WriteLine(\"Hello Bot\")"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 7. การรับค่าจากผู้ใช้ผ่านฟังก์ชัน input
-         list.add(new Question("7. การรับค่าจากผู้ใช้ผ่านฟังก์ชัน input",
-                 "num = input(\"Enter: \")\nprint(num + 5)",
-                 new String[]{"num = int(input(\"Enter: \"))\nprint(num + 5)", "num = input(\"Enter: \")\nprint(int(num + 5))", "num = input(\"Enter: \").toInt()\nprint(num + 5)"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 7. การรับค่าจากผู้ใช้ผ่านฟังก์ชัน input
+        list.add(new Question("7. การรับค่าจากผู้ใช้ผ่านฟังก์ชัน input",
+                "num = input(\"Enter: \")\nprint(num + 5)",
+                new String[]{"num = int(input(\"Enter: \"))\nprint(num + 5)", "num = input(\"Enter: \")\nprint(int(num + 5))", "num = input(\"Enter: \").toInt()\nprint(num + 5)"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 8. การประกาศตัวแปรสตริงด้วยเครื่องหมายคำพูดคู่หรือเดี่ยว
-         list.add(new Question("8. การประกาศตัวแปรสตริงด้วยเครื่องหมายคำพูดคู่หรือเดี่ยว",
-                 "msg = 'It's a robot'",
-                 new String[]{"msg = \"It's a robot\"", "msg = 'It\"s a robot'", "msg = It's a robot"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 8. การประกาศตัวแปรสตริงด้วยเครื่องหมายคำพูดคู่หรือเดี่ยว
+        list.add(new Question("8. การประกาศตัวแปรสตริงด้วยเครื่องหมายคำพูดคู่หรือเดี่ยว",
+                "msg = 'It's a robot'",
+                new String[]{"msg = \"It's a robot\"", "msg = 'It\"s a robot'", "msg = It's a robot"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 9. การใช้งานตัวดำเนินการหารเอาเศษ (Modulo)
-         list.add(new Question("9. การใช้งานตัวดำเนินการหารเอาเศษ (Modulo)",
-                 "remainder = 5 %% 2",
-                 new String[]{"remainder = 5 % 2", "remainder = mod(5, 2)", "remainder = 5 mod 2"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 9. การใช้งานตัวดำเนินการหารเอาเศษ (Modulo)
+        list.add(new Question("9. การใช้งานตัวดำเนินการหารเอาเศษ (Modulo)",
+                "remainder = 5 %% 2",
+                new String[]{"remainder = 5 % 2", "remainder = mod(5, 2)", "remainder = 5 mod 2"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 10. การสร้างลิสต์ (List) ข้อมูลพื้นฐาน
-         list.add(new Question("10. การสร้างลิสต์ (List) ข้อมูลพื้นฐาน",
-                 "items = {1, 2, 3}",
-                 new String[]{"items = [1, 2, 3]", "items = (1, 2, 3)", "items = <1, 2, 3>"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 10. การสร้างลิสต์ (List) ข้อมูลพื้นฐาน
+        list.add(new Question("10. การสร้างลิสต์ (List) ข้อมูลพื้นฐาน",
+                "items = {1, 2, 3}",
+                new String[]{"items = [1, 2, 3]", "items = (1, 2, 3)", "items = <1, 2, 3>"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 11. การเข้าถึงสมาชิกตัวแรกของลิสต์ด้วย Index 0
-         list.add(new Question("11. การเข้าถึงสมาชิกตัวแรกของลิสต์ด้วย Index 0",
-                 "items = [10, 20, 30]\nval = items(0)",
-                 new String[]{"val = items[0]", "val = items.first()", "val = items{0}"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 11. การเข้าถึงสมาชิกตัวแรกของลิสต์ด้วย Index 0
+        list.add(new Question("11. การเข้าถึงสมาชิกตัวแรกของลิสต์ด้วย Index 0",
+                "items = [10, 20, 30]\nval = items(0)",
+                new String[]{"val = items[0]", "val = items.first()", "val = items{0}"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 12. การใช้ลูป for วนซ้ำผ่านช่วงตัวเลข range()
-         list.add(new Question("12. การใช้ลูป for วนซ้ำผ่านช่วงตัวเลข range()",
-                 "for i in range(0, 5)\n    print(i)",
-                 new String[]{"for i in range(0, 5):\n    print(i)", "for (int i=0; i<5; i++)", "for i = 0 to 5:"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 12. การใช้ลูป for วนซ้ำผ่านช่วงตัวเลข range()
+        list.add(new Question("12. การใช้ลูป for วนซ้ำผ่านช่วงตัวเลข range()",
+                "for i in range(0, 5)\n    print(i)",
+                new String[]{"for i in range(0, 5):\n    print(i)", "for (int i=0; i<5; i++)", "for i = 0 to 5:"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 13. การใช้ลูป while เงื่อนไขพื้นฐาน
-         list.add(new Question("13. การใช้ลูป while เงื่อนไขพื้นฐาน",
-                 "while x < 5\n    x += 1",
-                 new String[]{"while x < 5:\n    x += 1", "while (x < 5) do", "while [x < 5]:"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 13. การใช้ลูป while เงื่อนไขพื้นฐาน
+        list.add(new Question("13. การใช้ลูป while เงื่อนไขพื้นฐาน",
+                "while x < 5\n    x += 1",
+                new String[]{"while x < 5:\n    x += 1", "while (x < 5) do", "while [x < 5]:"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 14. คำสั่งหยุดการทำงานของลูปทันที (break)
-         list.add(new Question("14. คำสั่งหยุดการทำงานของลูปทันที (break)",
-                 "while True:\n    stop",
-                 new String[]{"break", "exit", "return"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 14. คำสั่งหยุดการทำงานของลูปทันที (break)
+        list.add(new Question("14. คำสั่งหยุดการทำงานของลูปทันที (break)",
+                "while True:\n    stop",
+                new String[]{"break", "exit", "return"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 15. คำสั่งข้ามรอบปัจจุบันไปรอบถัดไป (continue)
-         list.add(new Question("15. คำสั่งข้ามรอบปัจจุบันไปรอบถัดไป (continue)",
-                 "for i in range(5):\n    skip",
-                 new String[]{"continue", "next", "pass"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 15. คำสั่งข้ามรอบปัจจุบันไปรอบถัดไป (continue)
+        list.add(new Question("15. คำสั่งข้ามรอบปัจจุบันไปรอบถัดไป (continue)",
+                "for i in range(5):\n    skip",
+                new String[]{"continue", "next", "pass"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 16. ตั้งชื่อตัวแปรทับฟังก์ชันที่มีอยู่แล้ว (Built-in Name Shadowing)
-         list.add(new Question("16. ตั้งชื่อตัวแปรทับฟังก์ชันที่มีอยู่แล้ว (Built-in Name Shadowing)",
-                 "len = 10\nprint(len(\"Bot\"))",
-                 new String[]{"length = 10\nprint(len(\"Bot\"))", "len = 10\nprint(length(\"Bot\"))", "del len\nlen = 10\nprint(len(\"Bot\"))"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 16. ตั้งชื่อตัวแปรทับฟังก์ชันที่มีอยู่แล้ว (Built-in Name Shadowing)
+        list.add(new Question("16. ตั้งชื่อตัวแปรทับฟังก์ชันที่มีอยู่แล้ว (Built-in Name Shadowing)",
+                "len = 10\nprint(len(\"Bot\"))",
+                new String[]{"length = 10\nprint(len(\"Bot\"))", "len = 10\nprint(length(\"Bot\"))", "del len\nlen = 10\nprint(len(\"Bot\"))"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 17. การใช้คอมเมนต์บรรทัดเดียวด้วยเครื่องหมายชาร์ป (#)
-         list.add(new Question("17. การใช้คอมเมนต์บรรทัดเดียวด้วยเครื่องหมายชาร์ป (#)",
-                 "// Comment line",
-                 new String[]{"# Comment line", "/* Comment line */", "-- Comment line"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 17. การใช้คอมเมนต์บรรทัดเดียวด้วยเครื่องหมายชาร์ป (#)
+        list.add(new Question("17. การใช้คอมเมนต์บรรทัดเดียวด้วยเครื่องหมายชาร์ป (#)",
+                "// Comment line",
+                new String[]{"# Comment line", "/* Comment line */", "-- Comment line"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 18. การตรวจสอบสมาชิกด้วยโอเปอเรเตอร์ in
-         list.add(new Question("18. การตรวจสอบสมาชิกด้วยโอเปอเรเตอร์ in",
-                 "if 1 has [1, 2, 3]:",
-                 new String[]{"if 1 in [1, 2, 3]:", "if 1 exists [1, 2, 3]:", "if contains(1, [1, 2, 3]):"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 18. การตรวจสอบสมาชิกด้วยโอเปอเรเตอร์ in
+        list.add(new Question("18. การตรวจสอบสมาชิกด้วยโอเปอเรเตอร์ in",
+                "if 1 has [1, 2, 3]:",
+                new String[]{"if 1 in [1, 2, 3]:", "if 1 exists [1, 2, 3]:", "if contains(1, [1, 2, 3]):"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 19. การต่อสตริงข้อความด้วยเครื่องหมายบวก (+)
-         list.add(new Question("19. การต่อสตริงข้อความด้วยเครื่องหมายบวก (+)",
-                 "msg = \"Hello\" . \"Bot\"",
-                 new String[]{"msg = \"Hello\" + \"Bot\"", "msg = \"Hello\" & \"Bot\"", "msg = concat(\"Hello\", \"Bot\")"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 19. การต่อสตริงข้อความด้วยเครื่องหมายบวก (+)
+        list.add(new Question("19. การต่อสตริงข้อความด้วยเครื่องหมายบวก (+)",
+                "msg = \"Hello\" . \"Bot\"",
+                new String[]{"msg = \"Hello\" + \"Bot\"", "msg = \"Hello\" & \"Bot\"", "msg = concat(\"Hello\", \"Bot\")"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 20. การหาความยาวของลิสต์หรือสตริงด้วยฟังก์ชัน len()
-         list.add(new Question("20. การหาความยาวของลิสต์หรือสตริงด้วยฟังก์ชัน len()",
-                 "size = [1, 2, 3].length()",
-                 new String[]{"size = len([1, 2, 3])", "size = size([1, 2, 3])", "size = count([1, 2, 3])"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 20. การหาความยาวของลิสต์หรือสตริงด้วยฟังก์ชัน len()
+        list.add(new Question("20. การหาความยาวของลิสต์หรือสตริงด้วยฟังก์ชัน len()",
+                "size = [1, 2, 3].length()",
+                new String[]{"size = len([1, 2, 3])", "size = size([1, 2, 3])", "size = count([1, 2, 3])"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 21. การแปลงข้อความตัวเลขเป็นจำนวนเต็มด้วย int()
-         list.add(new Question("21. การแปลงข้อความตัวเลขเป็นจำนวนเต็มด้วย int()",
-                 "n = \"123\".to_int()",
-                 new String[]{"n = int(\"123\")", "n = Integer.parse(\"123\")", "n = (int)\"123\""},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 21. การแปลงข้อความตัวเลขเป็นจำนวนเต็มด้วย int()
+        list.add(new Question("21. การแปลงข้อความตัวเลขเป็นจำนวนเต็มด้วย int()",
+                "n = \"123\".to_int()",
+                new String[]{"n = int(\"123\")", "n = Integer.parse(\"123\")", "n = (int)\"123\""},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 22. การแปลงตัวเลขเป็นข้อความด้วย str()
-         list.add(new Question("22. การแปลงตัวเลขเป็นข้อความด้วย str()",
-                 "s = 100.toString()",
-                 new String[]{"s = str(100)", "s = String(100)", "s = 100.text()"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 22. การแปลงตัวเลขเป็นข้อความด้วย str()
+        list.add(new Question("22. การแปลงตัวเลขเป็นข้อความด้วย str()",
+                "s = 100.toString()",
+                new String[]{"s = str(100)", "s = String(100)", "s = 100.text()"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 23. การแปลงตัวเลขเป็นทศนิยมด้วย float()
-         list.add(new Question("23. การแปลงตัวเลขเป็นทศนิยมด้วย float()",
-                 "f = \"3.14\".toDouble()",
-                 new String[]{"f = float(\"3.14\")", "f = Double(\"3.14\")", "f = (float)\"3.14\""},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 23. การแปลงตัวเลขเป็นทศนิยมด้วย float()
+        list.add(new Question("23. การแปลงตัวเลขเป็นทศนิยมด้วย float()",
+                "f = \"3.14\".toDouble()",
+                new String[]{"f = float(\"3.14\")", "f = Double(\"3.14\")", "f = (float)\"3.14\""},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 24. การเข้าถึงสมาชิกตัวสุดท้ายของลิสต์ด้วย Index ติดลบ (-1)
-         list.add(new Question("24. การเข้าถึงสมาชิกตัวสุดท้ายของลิสต์ด้วย Index ติดลบ (-1)",
-                 "items = [10, 20, 30]\nlast = items[3]",
-                 new String[]{"last = items[-1]", "last = items[last]", "last = items.last()"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 24. การเข้าถึงสมาชิกตัวสุดท้ายของลิสต์ด้วย Index ติดลบ (-1)
+        list.add(new Question("24. การเข้าถึงสมาชิกตัวสุดท้ายของลิสต์ด้วย Index ติดลบ (-1)",
+                "items = [10, 20, 30]\nlast = items[3]",
+                new String[]{"last = items[-1]", "last = items[last]", "last = items.last()"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 25. การตรวจสอบประเภทข้อมูลด้วยฟังก์ชัน type()
-         list.add(new Question("25. การตรวจสอบประเภทข้อมูลด้วยฟังก์ชัน type()",
-                 "t = gettype(5)",
-                 new String[]{"t = type(5)", "t = typeof(5)", "t = 5.type()"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 25. การตรวจสอบประเภทข้อมูลด้วยฟังก์ชัน type()
+        list.add(new Question("25. การตรวจสอบประเภทข้อมูลด้วยฟังก์ชัน type()",
+                "t = gettype(5)",
+                new String[]{"t = type(5)", "t = typeof(5)", "t = 5.type()"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 26. การสร้างดิกชันนารี (Dictionary) พื้นฐาน
-         list.add(new Question("26. การสร้างดิกชันนารี (Dictionary) พื้นฐาน",
-                 "d = ( \"key\": 1 )",
-                 new String[]{"d = { \"key\": 1 }", "d = [ \"key\": 1 ]", "d = < \"key\": 1 >"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 26. การสร้างดิกชันนารี (Dictionary) พื้นฐาน
+        list.add(new Question("26. การสร้างดิกชันนารี (Dictionary) พื้นฐาน",
+                "d = ( \"key\": 1 )",
+                new String[]{"d = { \"key\": 1 }", "d = [ \"key\": 1 ]", "d = < \"key\": 1 >"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 27. การเข้าถึงค่าใน Dictionary ด้วย Key
-         list.add(new Question("27. การเข้าถึงค่าใน Dictionaryด้วย Key",
-                 "d = {'a': 1}\nval = d.a",
-                 new String[]{"val = d['a']", "val = d.get_key('a')", "val = d(a)"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 27. การเข้าถึงค่าใน Dictionary ด้วย Key
+        list.add(new Question("27. การเข้าถึงค่าใน Dictionaryด้วย Key",
+                "d = {'a': 1}\nval = d.a",
+                new String[]{"val = d['a']", "val = d.get_key('a')", "val = d(a)"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 28. การใช้เมธอด append เพิ่มข้อมูลเข้าลิสต์
-         list.add(new Question("28. การใช้เมธอด append เพิ่มข้อมูลเข้าลิสต์",
-                 "l = [1, 2]\nl.add(3)",
-                 new String[]{"l.append(3)", "l.push(3)", "l.insert(3)"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 28. การใช้เมธอด append เพิ่มข้อมูลเข้าลิสต์
+        list.add(new Question("28. การใช้เมธอด append เพิ่มข้อมูลเข้าลิสต์",
+                "l = [1, 2]\nl.add(3)",
+                new String[]{"l.append(3)", "l.push(3)", "l.insert(3)"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 29. การใช้เมธอด remove ลบข้อมูลออกจากลิสต์
-         list.add(new Question("29. การใช้เมธอด remove ลบข้อมูลออกจากลิสต์",
-                 "l = [1, 2, 3]\nl.delete(2)",
-                 new String[]{"l.remove(2)", "l.pop(2)", "l.del(2)"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 29. การใช้เมธอด remove ลบข้อมูลออกจากลิสต์
+        list.add(new Question("29. การใช้เมธอด remove ลบข้อมูลออกจากลิสต์",
+                "l = [1, 2, 3]\nl.delete(2)",
+                new String[]{"l.remove(2)", "l.pop(2)", "l.del(2)"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 30. การสร้างทัปเปิล (Tuple) ข้อมูลแบบแก้ไขไม่ได้
-         list.add(new Question("30. การสร้างทัปเปิล (Tuple) ข้อมูลแบบแก้ไขไม่ได้",
-                 "t = [1, 2, 3] (as immutable)",
-                 new String[]{"t = (1, 2, 3)", "t = {1, 2, 3}", "t = const [1, 2, 3]"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 30. การสร้างทัปเปิล (Tuple) ข้อมูลแบบแก้ไขไม่ได้
+        list.add(new Question("30. การสร้างทัปเปิล (Tuple) ข้อมูลแบบแก้ไขไม่ได้",
+                "t = [1, 2, 3] (as immutable)",
+                new String[]{"t = (1, 2, 3)", "t = {1, 2, 3}", "t = const [1, 2, 3]"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 31. การใช้งานฟังก์ชัน abs() หาค่าสัมบูรณ์
-         list.add(new Question("31. การใช้งานฟังก์ชัน abs() หาค่าสัมบูรณ์",
-                 "val = math.absolute(-10)",
-                 new String[]{"val = abs(-10)", "val = absolute(-10)", "val = (-10).abs()"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 31. การใช้งานฟังก์ชัน abs() หาค่าสัมบูรณ์
+        list.add(new Question("31. การใช้งานฟังก์ชัน abs() หาค่าสัมบูรณ์",
+                "val = math.absolute(-10)",
+                new String[]{"val = abs(-10)", "val = absolute(-10)", "val = (-10).abs()"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 32. การใช้งานฟังก์ชัน max() และ min()
-         list.add(new Question("32. การใช้งานฟังก์ชัน max() และ min()",
-                 "m = maximum([1, 5, 3])",
-                 new String[]{"m = max([1, 5, 3])", "m = [1, 5, 3].max()", "m = highest([1, 5, 3])"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 32. การใช้งานฟังก์ชัน max() และ min()
+        list.add(new Question("32. การใช้งานฟังก์ชัน max() และ min()",
+                "m = maximum([1, 5, 3])",
+                new String[]{"m = max([1, 5, 3])", "m = [1, 5, 3].max()", "m = highest([1, 5, 3])"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 33. การใช้เครื่องหมายคูณสตริงเพื่อทำซ้ำข้อความ
-         list.add(new Question("33. การใช้เครื่องหมายคูณสตริงเพื่อทำซ้ำข้อความ",
-                 "s = \"A\" * 3",
-                 new String[]{"s = \"A\" * 3", "s = repeat(\"A\", 3)", "s = \"A\" ** 3"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 33. การใช้เครื่องหมายคูณสตริงเพื่อทำซ้ำข้อความ
+        list.add(new Question("33. การใช้เครื่องหมายคูณสตริงเพื่อทำซ้ำข้อความ",
+                "s = \"A\" * 3",
+                new String[]{"s = \"A\" * 3", "s = repeat(\"A\", 3)", "s = \"A\" ** 3"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 34. ฟังก์ชันไม่มีการส่งค่า (คืนค่า None อัตโนมัติ)
-         list.add(new Question("34. ฟังก์ชันไม่มีการส่งค่า (คืนค่า None อัตโนมัติ)",
-                 "def add(a, b):\n    a + b\nresult = add(1, 2)",
-                 new String[]{"def add(a, b):\n    return a + b", "def add(a, b):\n    print(a + b)", "def add(a, b):\n    yield a + b"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 34. ฟังก์ชันไม่มีการส่งค่า (คืนค่า None อัตโนมัติ)
+        list.add(new Question("34. ฟังก์ชันไม่มีการส่งค่า (คืนค่า None อัตโนมัติ)",
+                "def add(a, b):\n    a + b\nresult = add(1, 2)",
+                new String[]{"def add(a, b):\n    return a + b", "def add(a, b):\n    print(a + b)", "def add(a, b):\n    yield a + b"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 35. การใช้เงื่อนไขทางเลือก elif
-         list.add(new Question("35. การใช้เงื่อนไขทางเลือก elif",
-                 "if x > 0:\n    pass\nelse if x == 0:\n    pass",
-                 new String[]{"elif x == 0:", "elseif x == 0:", "else if x == 0:"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 35. การใช้เงื่อนไขทางเลือก elif
+        list.add(new Question("35. การใช้เงื่อนไขทางเลือก elif",
+                "if x > 0:\n    pass\nelse if x == 0:\n    pass",
+                new String[]{"elif x == 0:", "elseif x == 0:", "else if x == 0:"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 36. การใช้เงื่อนไขทางเลือกสุดท้าย else
-         list.add(new Question("36. การใช้เงื่อนไขทางเลือกสุดท้าย else",
-                 "if x > 0:\n    pass\notherwise:\n    pass",
-                 new String[]{"else:", "default:", "otherwise:"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 36. การใช้เงื่อนไขทางเลือกสุดท้าย else
+        list.add(new Question("36. การใช้เงื่อนไขทางเลือกสุดท้าย else",
+                "if x > 0:\n    pass\notherwise:\n    pass",
+                new String[]{"else:", "default:", "otherwise:"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 37. การใช้งานตัวดำเนินการตรรกะ and
-         list.add(new Question("37. การใช้งานตัวดำเนินการตรรกะ and",
-                 "if a > 0 && b > 0:",
-                 new String[]{"if a > 0 and b > 0:", "if a > 0 & b > 0:", "if a > 0 AND b > 0:"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 37. การใช้งานตัวดำเนินการตรรกะ and
+        list.add(new Question("37. การใช้งานตัวดำเนินการตรรกะ and",
+                "if a > 0 && b > 0:",
+                new String[]{"if a > 0 and b > 0:", "if a > 0 & b > 0:", "if a > 0 AND b > 0:"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 38. การใช้งานตัวดำเนินการตรรกะ or
-         list.add(new Question("38. การใช้งานตัวดำเนินการตรรกะ or",
-                 "if a == 1 || b == 1:",
-                 new String[]{"if a == 1 or b == 1:", "if a == 1 | b == 1:", "if a == 1 OR b == 1:"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 38. การใช้งานตัวดำเนินการตรรกะ or
+        list.add(new Question("38. การใช้งานตัวดำเนินการตรรกะ or",
+                "if a == 1 || b == 1:",
+                new String[]{"if a == 1 or b == 1:", "if a == 1 | b == 1:", "if a == 1 OR b == 1:"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 39. การใช้งานตัวดำเนินการตรรกะ not
-         list.add(new Question("39. การใช้งานตัวดำเนินการตรรกะ not",
-                 "if !flag:",
-                 new String[]{"if not flag:", "if ~flag:", "if NOT flag:"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 39. การใช้งานตัวดำเนินการตรรกะ not
+        list.add(new Question("39. การใช้งานตัวดำเนินการตรรกะ not",
+                "if !flag:",
+                new String[]{"if not flag:", "if ~flag:", "if NOT flag:"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 40. การสร้างเซต (Set) ข้อมูลที่ไม่ซ้ำกัน
-         list.add(new Question("40. การสร้างเซต (Set) ข้อมูลที่ไม่ซ้ำกัน",
-                 "s = [1, 1, 2] (unique set)",
-                 new String[]{"s = {1, 1, 2}", "s = set([1, 1, 2])", "Both A and B are correct"},
-                 2, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 40. การสร้างเซต (Set) ข้อมูลที่ไม่ซ้ำกัน
+        list.add(new Question("40. การสร้างเซต (Set) ข้อมูลที่ไม่ซ้ำกัน",
+                "s = [1, 1, 2] (unique set)",
+                new String[]{"s = set([1, 1, 2])", "s = unique[1, 1, 2]", "s = (1, 1, 2).unique()"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 41. การใช้เมธอด add เพิ่มข้อมูลลงใน Set
-         list.add(new Question("41. การใช้เมธอด add เพิ่มข้อมูลลงใน Set",
-                 "s = {1}\ns.append(2)",
-                 new String[]{"s.add(2)", "s.push(2)", "s.insert(2)"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 41. การใช้เมธอด add เพิ่มข้อมูลลงใน Set
+        list.add(new Question("41. การใช้เมธอด add เพิ่มข้อมูลลงใน Set",
+                "s = {1}\ns.append(2)",
+                new String[]{"s.add(2)", "s.push(2)", "s.insert(2)"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 42. การกำหนดพารามิเตอร์เริ่มต้นให้ฟังก์ชัน (Default Argument)
-         list.add(new Question("42. การกำหนดพารามิเตอร์เริ่มต้นให้ฟังก์ชัน (Default Argument)",
-                 "def greet(name = \"Bot\"):\n    pass",
-                 new String[]{"def greet(name = \"Bot\"):", "def greet(name := \"Bot\"):", "def greet(optional name = \"Bot\"):"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 42. การกำหนดพารามิเตอร์เริ่มต้นให้ฟังก์ชัน (Default Argument)
+        list.add(new Question("42. การกำหนดพารามิเตอร์เริ่มต้นให้ฟังก์ชัน (Default Argument)",
+                "def greet(name = \"Bot\"):\n    pass",
+                new String[]{"def greet(name = \"Bot\"):", "def greet(name := \"Bot\"):", "def greet(optional name = \"Bot\"):"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 43. การใช้ pass เป็นคำสั่งว่างเปล่าชั่วคราว
-         list.add(new Question("43. การใช้ pass เป็นคำสั่งว่างเปล่าชั่วคราว",
-                 "def todo():\n    # empty function",
-                 new String[]{"pass", "nil", "continue"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 43. การใช้ pass เป็นคำสั่งว่างเปล่าชั่วคราว
+        list.add(new Question("43. การใช้ pass เป็นคำสั่งว่างเปล่าชั่วคราว",
+                "def todo():\n    # empty function",
+                new String[]{"pass", "nil", "continue"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 44. การใช้งานเมธอด upper() แปลงข้อความตัวพิมพ์ใหญ่
-         list.add(new Question("44. การใช้งานเมธอด upper() แปลงข้อความตัวพิมพ์ใหญ่",
-                 "s = \"bot\".to_upper()",
-                 new String[]{"s = \"bot\".upper()", "s = upper(\"bot\")", "s = \"bot\".toUpperCase()"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 44. การใช้งานเมธอด upper() แปลงข้อความตัวพิมพ์ใหญ่
+        list.add(new Question("44. การใช้งานเมธอด upper() แปลงข้อความตัวพิมพ์ใหญ่",
+                "s = \"bot\".to_upper()",
+                new String[]{"s = \"bot\".upper()", "s = upper(\"bot\")", "s = \"bot\".toUpperCase()"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 45. การใช้งานเมธอด lower() แปลงข้อความตัวพิมพ์เล็ก
-         list.add(new Question("45. การใช้งานเมธอด lower() แปลงข้อความตัวพิมพ์เล็ก",
-                 "s = \"BOT\".to_lower()",
-                 new String[]{"s = \"BOT\".lower()", "s = lower(\"BOT\")", "s = \"BOT\".toLowerCase()"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 45. การใช้งานเมธอด lower() แปลงข้อความตัวพิมพ์เล็ก
+        list.add(new Question("45. การใช้งานเมธอด lower() แปลงข้อความตัวพิมพ์เล็ก",
+                "s = \"BOT\".to_lower()",
+                new String[]{"s = \"BOT\".lower()", "s = lower(\"BOT\")", "s = \"BOT\".toLowerCase()"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 46. การใช้เมธอด strip() ตัดช่องว่างหัวท้ายสตริง
-         list.add(new Question("46. การใช้เมธอด strip() ตัดช่องว่างหัวท้ายสตริง",
-                 "s = \"  bot  \".trim()",
-                 new String[]{"s = \"  bot  \".strip()", "s = \"  bot  \".clean()", "s = trim(\"  bot  \")"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 46. การใช้เมธอด strip() ตัดช่องว่างหัวท้ายสตริง
+        list.add(new Question("46. การใช้เมธอด strip() ตัดช่องว่างหัวท้ายสตริง",
+                "s = \"  bot  \".trim()",
+                new String[]{"s = \"  bot  \".strip()", "s = \"  bot  \".clean()", "s = trim(\"  bot  \")"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 47. การใช้งานเมธอด split() แยกข้อความสตริงเป็นลิสต์
-         list.add(new Question("47. การใช้งานเมธอด split() แยกข้อความสตริงเป็นลิสต์",
-                 "words = \"a,b,c\".explode(\",\")",
-                 new String[]{"words = \"a,b,c\".split(\",\")", "words = split(\"a,b,c\", \",\")", "words = \"a,b,c\".tokens()"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 47. การใช้งานเมธอด split() แยกข้อความสตริงเป็นลิสต์
+        list.add(new Question("47. การใช้งานเมธอด split() แยกข้อความสตริงเป็นลิสต์",
+                "words = \"a,b,c\".explode(\",\")",
+                new String[]{"words = \"a,b,c\".split(\",\")", "words = split(\"a,b,c\", \",\")", "words = \"a,b,c\".tokens()"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 48. การใช้งานเมธอด join() รวมลิสต์สตริงเป็นข้อความเดียว
-         list.add(new Question("48. การใช้งานเมธอด join() รวมลิสต์สตริงเป็นข้อความเดียว",
-                 "text = [\"a\", \"b\"].concat(\",\")",
-                 new String[]{"text = \",\".join([\"a\", \"b\"])", "text = join([\"a\", \"b\"], \",\")", "text = [\"a\", \"b\"].join(\",\")"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 48. การใช้งานเมธอด join() รวมลิสต์สตริงเป็นข้อความเดียว
+        list.add(new Question("48. การใช้งานเมธอด join() รวมลิสต์สตริงเป็นข้อความเดียว",
+                "text = [\"a\", \"b\"].concat(\",\")",
+                new String[]{"text = \",\".join([\"a\", \"b\"])", "text = join([\"a\", \"b\"], \",\")", "text = [\"a\", \"b\"].join(\",\")"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 49. การใช้ del ลบตัวแปรหรือสมาชิกในลิสต์
-         list.add(new Question("49. การใช้ del ลบตัวแปรหรือสมาชิกในลิสต์",
-                 "l = [1, 2, 3]\nremove l[0]",
-                 new String[]{"del l[0]", "delete l[0]", "erase l[0]"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 49. การใช้ del ลบตัวแปรหรือสมาชิกในลิสต์
+        list.add(new Question("49. การใช้ del ลบตัวแปรหรือสมาชิกในลิสต์",
+                "l = [1, 2, 3]\nremove l[0]",
+                new String[]{"del l[0]", "delete l[0]", "erase l[0]"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // 50. การใช้อินเดนเทชันภายในบล็อกคำสั่ง if
-         list.add(new Question("50. การใช้อินเดนเทชันภายในบล็อกคำสั่ง if",
-                 "if True:\nprint('A')",
-                 new String[]{"if True:\nprint('A');", "if True:\n    print('A')", "if True:\n{ print('A') }"},
-                 1, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
+        // 50. การใช้อินเดนเทชันภายในบล็อกคำสั่ง if
+        list.add(new Question("50. การใช้อินเดนเทชันภายในบล็อกคำสั่ง if",
+                "if True:\nprint('A')",
+                new String[]{"if True:\nprint('A');", "if True:\n    print('A')", "if True:\n{ print('A') }"},
+                1, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
-         // NORMAL
+        // NORMAL
 // 1. KeyError เวลาดึงค่าจาก Dictionary ด้วย key ตรงๆ
-         list.add(new Question("1. KeyError เวลาดึงค่าจาก Dictionary ด้วย key ตรงๆ",
-                 "d = {'a': 1}\nprint(d['b'])",
-                 new String[]{"print(d.get('b'))", "print(d.index('b'))", "print(d.find('b'))"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        list.add(new Question("1. KeyError เวลาดึงค่าจาก Dictionary ด้วย key ตรงๆ",
+                "d = {'a': 1}\nprint(d['b'])",
+                new String[]{"print(d.get('b'))", "print(d.index('b'))", "print(d.find('b'))"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 2. วนลูป Dictionary ได้ทั้ง Key และ Value ด้วย items()
-         list.add(new Question("2. วนลูป Dictionary ได้ทั้ง Key และ Value ด้วย items()",
-                 "for k, v in d:\n    print(v)",
-                 new String[]{"for k, v in d.items():", "for k, v in d.values():", "for k, v in d.keys():"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 2. วนลูป Dictionary ได้ทั้ง Key และ Value ด้วย items()
+        list.add(new Question("2. วนลูป Dictionary ได้ทั้ง Key และ Value ด้วย items()",
+                "for k, v in d:\n    print(v)",
+                new String[]{"for k, v in d.items():", "for k, v in d.values():", "for k, v in d.keys():"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 3. แก้ไขค่า Global Variable ภายในฟังก์ชัน
-         list.add(new Question("3. แก้ไขค่า Global Variable ภายในฟังก์ชัน",
-                 "x = 0\ndef fix():\n    x += 1",
-                 new String[]{"def fix():\n    global x\n    x += 1", "def fix():\n    super x\n    x += 1", "def fix(x):\n    x += 1"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 3. แก้ไขค่า Global Variable ภายในฟังก์ชัน
+        list.add(new Question("3. แก้ไขค่า Global Variable ภายในฟังก์ชัน",
+                "x = 0\ndef fix():\n    x += 1",
+                new String[]{"def fix():\n    global x\n    x += 1", "def fix():\n    super x\n    x += 1", "def fix(x):\n    x += 1"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 4. Mutable Default Argument (ตัวแปร List จำค่าเดิม)
-         list.add(new Question("4. Mutable Default Argument (ตัวแปร List จำค่าเดิม)",
-                 "def add(l=[]):\n    l.append(1)",
-                 new String[]{"def add(l=None):\n    if l is None: l = []", "def add(l=list()):", "def add(l={}):"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 4. Mutable Default Argument (ตัวแปร List จำค่าเดิม)
+        list.add(new Question("4. Mutable Default Argument (ตัวแปร List จำค่าเดิม)",
+                "def add(l=[]):\n    l.append(1)",
+                new String[]{"def add(l=None):\n    if l is None: l = []", "def add(l=list()):", "def add(l={}):"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 5. จัดการเปิดและปิดไฟล์อย่างปลอดภัย (Context Manager)
-         list.add(new Question("5. จัดการเปิดและปิดไฟล์อย่างปลอดภัย (Context Manager)",
-                 "f = open('log.txt')\nf.write('Error')",
-                 new String[]{"with open('log.txt', 'w') as f:\n    f.write('Error')", "file = open('log.txt')\nfile.close", "f = open('log.txt', 'write')"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 5. จัดการเปิดและปิดไฟล์อย่างปลอดภัย (Context Manager)
+        list.add(new Question("5. จัดการเปิดและปิดไฟล์อย่างปลอดภัย (Context Manager)",
+                "f = open('log.txt')\nf.write('Error')",
+                new String[]{"with open('log.txt', 'w') as f:\n    f.write('Error')", "file = open('log.txt')\nfile.close", "f = open('log.txt', 'write')"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 6. ลบสมาชิกใน Dictionary ขณะวนลูป
-         list.add(new Question("6. ลบสมาชิกใน Dictionary ขณะวนลูป",
-                 "for k in d:\n    del d[k]",
-                 new String[]{"for k in list(d.keys()):\n    del d[k]", "for k in d.copy():\n    del d[k]", "Both A and B are correct"},
-                 2, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 6. ลบสมาชิกใน Dictionary ขณะวนลูป
+        list.add(new Question("6. ลบสมาชิกใน Dictionary ขณะวนลูป",
+                "for k in d:\n    del d[k]",
+                new String[]{"for k in list(d.keys()):\n    del d[k]", "for k in d.keys():\n    del d[k]", "for k in d.items():\n    del d[k]"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 7. ปัญหาขอบเขตตัวแปร UnboundLocalError
-         list.add(new Question("7. ปัญหาขอบเขตตัวแปร UnboundLocalError",
-                 "x = 10\ndef f():\n    print(x)\n    x = 5",
-                 new String[]{"def f():\n    global x\n    print(x)\n    x = 5", "def f():\n    local x\n    print(x)", "def f():\n    nonlocal x"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 7. ปัญหาขอบเขตตัวแปร UnboundLocalError
+        list.add(new Question("7. ปัญหาขอบเขตตัวแปร UnboundLocalError",
+                "x = 10\ndef f():\n    print(x)\n    x = 5",
+                new String[]{"def f():\n    global x\n    print(x)\n    x = 5", "def f():\n    local x\n    print(x)", "def f():\n    nonlocal x"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 8. Shallow Copy กับ List ซ้อน List ด้วย copy()
-         list.add(new Question("8. Shallow Copy กับ List ซ้อน List ด้วย copy()",
-                 "a = [[1]]\nb = a.copy()\nb[0][0] = 9",
-                 new String[]{"import copy\nb = copy.deepcopy(a)", "b = a.shallow_copy()", "b = a[:]"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 8. Shallow Copy กับ List ซ้อน List ด้วย copy()
+        list.add(new Question("8. Shallow Copy กับ List ซ้อน List ด้วย copy()",
+                "a = [[1]]\nb = a.copy()\nb[0][0] = 9",
+                new String[]{"import copy\nb = copy.deepcopy(a)", "b = a.shallow_copy()", "b = a[:]"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 9. ลืมใส่ตัว f หน้า f-string
-         list.add(new Question("9. ลืมใส่ตัว f หน้า f-string",
-                 "name = \"Bot\"\nprint(\"Hello {name}\")",
-                 new String[]{"name = \"Bot\"\nprint(f\"Hello {name}\")", "name = \"Bot\"\nprint(\"Hello %name\")", "name = \"Bot\"\nprint(\"Hello $name\")"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 9. ลืมใส่ตัว f หน้า f-string
+        list.add(new Question("9. ลืมใส่ตัว f หน้า f-string",
+                "name = \"Bot\"\nprint(\"Hello {name}\")",
+                new String[]{"name = \"Bot\"\nprint(f\"Hello {name}\")", "name = \"Bot\"\nprint(\"Hello %name\")", "name = \"Bot\"\nprint(\"Hello $name\")"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 10. การใช้ Generator ซ้ำหลังจากข้อมูลหมดแล้ว
-         list.add(new Question("10. การใช้ Generator ซ้ำหลังจากข้อมูลหมดแล้ว",
-                 "g = (x for x in range(3))\nlist(g)\nprint(list(g))",
-                 new String[]{"g = [x for x in range(3)]\nlist(g)\nprint(list(g))", "g = (x for x in range(3))\nlist(g).reset()", "g = (x for x in range(3))\nprint(next(g))"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 10. การใช้ Generator ซ้ำหลังจากข้อมูลหมดแล้ว
+        list.add(new Question("10. การใช้ Generator ซ้ำหลังจากข้อมูลหมดแล้ว",
+                "g = (x for x in range(3))\nlist(g)\nprint(list(g))",
+                new String[]{"g = [x for x in range(3)]\nlist(g)\nprint(list(g))", "g = (x for x in range(3))\nlist(g).reset()", "g = (x for x in range(3))\nprint(next(g))"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 11. การใช้ enumerate ในลูปฟอร์เพื่อเอา Index
-         list.add(new Question("11. การใช้ enumerate ในลูปฟอร์เพื่อเอา Index",
-                 "for i, val in [10, 20]:\n    print(i)",
-                 new String[]{"for i, val in enumerate([10, 20]):", "for i, val in range([10, 20]):", "for i, val in index([10, 20]):"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 11. การใช้ enumerate ในลูปฟอร์เพื่อเอา Index
+        list.add(new Question("11. การใช้ enumerate ในลูปฟอร์เพื่อเอา Index",
+                "for i, val in [10, 20]:\n    print(i)",
+                new String[]{"for i, val in enumerate([10, 20]):", "for i, val in range([10, 20]):", "for i, val in index([10, 20]):"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 12. การใช้ zip วนลูปขนานหลายลิสต์
-         list.add(new Question("12. การใช้ zip วนลูปขนานหลายลิสต์",
-                 "for a, b in [1, 2], [3, 4]:",
-                 new String[]{"for a, b in zip([1, 2], [3, 4]):", "for a, b in combine([1, 2], [3, 4]):", "for a, b in parallel([1, 2], [3, 4]):"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 12. การใช้ zip วนลูปขนานหลายลิสต์
+        list.add(new Question("12. การใช้ zip วนลูปขนานหลายลิสต์",
+                "for a, b in [1, 2], [3, 4]:",
+                new String[]{"for a, b in zip([1, 2], [3, 4]):", "for a, b in combine([1, 2], [3, 4]):", "for a, b in parallel([1, 2], [3, 4]):"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 13. การสร้าง List Comprehension พื้นฐาน
-         list.add(new Question("13. การสร้าง List Comprehension พื้นฐาน",
-                 "res = [x * 2 for x in range(3)]",
-                 new String[]{"res = [x * 2 for x in range(3)]", "res = [for x in range(3): x * 2]", "res = map(x * 2, range(3))"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 13. การสร้าง List Comprehension พื้นฐาน
+        list.add(new Question("13. การสร้าง List Comprehension พื้นฐาน",
+                "res = [x * 2 for x in range(3)]",
+                new String[]{"res = [x * 2 for x in range(3)]", "res = [for x in range(3): x * 2]", "res = map(x * 2, range(3))"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 14. การใช้ฟังก์ชัน map()
-         list.add(new Question("14. การใช้ฟังก์ชัน map()",
-                 "res = map(lambda x: x*2, [1, 2, 3])",
-                 new String[]{"res = list(map(lambda x: x*2, [1, 2, 3]))", "res = map(lambda x: x*2, [1, 2, 3]).to_list()", "res = [map(lambda x: x*2, [1, 2, 3])]"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 14. การใช้ฟังก์ชัน map()
+        list.add(new Question("14. การใช้ฟังก์ชัน map()",
+                "res = map(lambda x: x*2, [1, 2, 3])",
+                new String[]{"res = list(map(lambda x: x*2, [1, 2, 3]))", "res = map(lambda x: x*2, [1, 2, 3]).to_list()", "res = [map(lambda x: x*2, [1, 2, 3])]"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 15. การใช้ฟังก์ชัน filter()
-         list.add(new Question("15. การใช้ฟังก์ชัน filter()",
-                 "res = filter(lambda x: x>0, [-1, 0, 1])",
-                 new String[]{"res = list(filter(lambda x: x>0, [-1, 0, 1]))", "res = filter(lambda x: x>0, [-1, 0, 1]).getList()", "res = [filter(lambda x: x>0)]"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 15. การใช้ฟังก์ชัน filter()
+        list.add(new Question("15. การใช้ฟังก์ชัน filter()",
+                "res = filter(lambda x: x>0, [-1, 0, 1])",
+                new String[]{"res = list(filter(lambda x: x>0, [-1, 0, 1]))", "res = filter(lambda x: x>0, [-1, 0, 1]).getList()", "res = [filter(lambda x: x>0)]"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 16. การสร้างฟังก์ชันนิรนามด้วย lambda
-         list.add(new Question("16. การสร้างฟังก์ชันนิรนามด้วย lambda",
-                 "f = function(x): x + 1",
-                 new String[]{"f = lambda x: x + 1", "f = def(x): return x + 1", "f = anon x: x + 1"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 16. การสร้างฟังก์ชันนิรนามด้วย lambda
+        list.add(new Question("16. การสร้างฟังก์ชันนิรนามด้วย lambda",
+                "f = function(x): x + 1",
+                new String[]{"f = lambda x: x + 1", "f = def(x): return x + 1", "f = anon x: x + 1"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 17. การใช้เมธอด update() รวม Dictionary
-         list.add(new Question("17. การใช้เมธอด update() รวม Dictionary",
-                 "d1 = {1: 'a'}\nd1.merge({2: 'b'})",
-                 new String[]{"d1.update({2: 'b'})", "d1.join({2: 'b'})", "d1.append({2: 'b'})"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 17. การใช้เมธอด update() รวม Dictionary
+        list.add(new Question("17. การใช้เมธอด update() รวม Dictionary",
+                "d1 = {1: 'a'}\nd1.merge({2: 'b'})",
+                new String[]{"d1.update({2: 'b'})", "d1.join({2: 'b'})", "d1.append({2: 'b'})"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 18. การใช้เมธอด pop() ของลิสต์
-         list.add(new Question("18. การใช้เมธอด pop() ของลิสต์",
-                 "l = [1, 2, 3]\nval = l.pop(1)",
-                 new String[]{"val = l.pop(1)", "val = l.remove(1)", "val = l.delete(1)"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 18. การใช้เมธอด pop() ของลิสต์
+        list.add(new Question("18. การใช้เมธอด pop() ของลิสต์",
+                "l = [1, 2, 3]\nval = l.pop(1)",
+                new String[]{"val = l.pop(1)", "val = l.remove(1)", "val = l.delete(1)"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 19. การใช้เมธอด insert() แทรกข้อมูลลงในลิสต์
-         list.add(new Question("19. การใช้เมธอด insert() แทรกข้อมูลลงในลิสต์",
-                 "l = [1, 3]\nl.insert(1, 2)",
-                 new String[]{"l.insert(1, 2)", "l.add(1, 2)", "l.push(1, 2)"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 19. การใช้เมธอด insert() แทรกข้อมูลลงในลิสต์
+        list.add(new Question("19. การใช้เมธอด insert() แทรกข้อมูลลงในลิสต์",
+                "l = [1, 3]\nl.insert(1, 2)",
+                new String[]{"l.insert(1, 2)", "l.add(1, 2)", "l.push(1, 2)"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 20. การใช้เมธอด count() นับจำนวนสมาชิกในลิสต์
-         list.add(new Question("20. การใช้เมธอด count() นับจำนวนสมาชิกในลิสต์",
-                 "c = [1, 2, 2, 3].occurrences(2)",
-                 new String[]{"c = [1, 2, 2, 3].count(2)", "c = count([1, 2, 2, 3], 2)", "c = [1, 2, 2, 3].frequency(2)"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 20. การใช้เมธอด count() นับจำนวนสมาชิกในลิสต์
+        list.add(new Question("20. การใช้เมธอด count() นับจำนวนสมาชิกในลิสต์",
+                "c = [1, 2, 2, 3].occurrences(2)",
+                new String[]{"c = [1, 2, 2, 3].count(2)", "c = count([1, 2, 2, 3], 2)", "c = [1, 2, 2, 3].frequency(2)"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 21. การใช้เมธอด index() หาตำแหน่ง Index ในลิสต์
-         list.add(new Question("21. การใช้เมธอด index() หาตำแหน่ง Index ในลิสต์",
-                 "idx = [10, 20, 30].find(20)",
-                 new String[]{"idx = [10, 20, 30].index(20)", "idx = [10, 20, 30].search(20)", "idx = search_index([10, 20, 30], 20)"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 21. การใช้เมธอด index() หาตำแหน่ง Index ในลิสต์
+        list.add(new Question("21. การใช้เมธอด index() หาตำแหน่ง Index ในลิสต์",
+                "idx = [10, 20, 30].find(20)",
+                new String[]{"idx = [10, 20, 30].index(20)", "idx = [10, 20, 30].search(20)", "idx = search_index([10, 20, 30], 20)"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 22. การใช้ฟังก์ชัน sorted() เรียงลำดับข้อมูล
-         list.add(new Question("22. การใช้ฟังก์ชัน sorted() เรียงลำดับข้อมูล",
-                 "new_l = [3, 1, 2].sort()",
-                 new String[]{"new_l = sorted([3, 1, 2])", "new_l = [3, 1, 2].order()", "new_l = arrange([3, 1, 2])"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 22. การใช้ฟังก์ชัน sorted() เรียงลำดับข้อมูล
+        list.add(new Question("22. การใช้ฟังก์ชัน sorted() เรียงลำดับข้อมูล",
+                "new_l = [3, 1, 2].sort()",
+                new String[]{"new_l = sorted([3, 1, 2])", "new_l = [3, 1, 2].order()", "new_l = arrange([3, 1, 2])"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 23. การใช้เมธอด sort() เรียงลำดับข้อมูลในลิสต์เดิม
-         list.add(new Question("23. การใช้เมธอด sort() เรียงลำดับข้อมูลในลิสต์เดิม",
-                 "l = [3, 1, 2]\nsorted(l)",
-                 new String[]{"l.sort()", "l.order()", "l.arrange()"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 23. การใช้เมธอด sort() เรียงลำดับข้อมูลในลิสต์เดิม
+        list.add(new Question("23. การใช้เมธอด sort() เรียงลำดับข้อมูลในลิสต์เดิม",
+                "l = [3, 1, 2]\nsorted(l)",
+                new String[]{"l.sort()", "l.order()", "l.arrange()"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 24. การใช้ฟังก์ชัน reversed() พลิกกลับลำดับข้อมูล
-         list.add(new Question("24. การใช้ฟังก์ชัน reversed() พลิกกลับลำดับข้อมูล",
-                 "r = [1, 2, 3].reverse_new()",
-                 new String[]{"r = list(reversed([1, 2, 3]))", "r = [1, 2, 3].inverse()", "r = reverse([1, 2, 3])"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 24. การใช้ฟังก์ชัน reversed() พลิกกลับลำดับข้อมูล
+        list.add(new Question("24. การใช้ฟังก์ชัน reversed() พลิกกลับลำดับข้อมูล",
+                "r = [1, 2, 3].reverse_new()",
+                new String[]{"r = list(reversed([1, 2, 3]))", "r = [1, 2, 3].inverse()", "r = reverse([1, 2, 3])"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 25. การใช้เมธอด reverse() พลิกกลับลำดับข้อมูลในลิสต์เดิม
-         list.add(new Question("25. การใช้เมธอด reverse() พลิกกลับลำดับข้อมูลในลิสต์เดิม",
-                 "l = [1, 2, 3]\nl.invert()",
-                 new String[]{"l.reverse()", "l.flip()", "l.back()"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 25. การใช้เมธอด reverse() พลิกกลับลำดับข้อมูลในลิสต์เดิม
+        list.add(new Question("25. การใช้เมธอด reverse() พลิกกลับลำดับข้อมูลในลิสต์เดิม",
+                "l = [1, 2, 3]\nl.invert()",
+                new String[]{"l.reverse()", "l.flip()", "l.back()"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 26. Tuple Unpacking เบื้องต้น
-         list.add(new Question("26. Tuple Unpacking เบื้องต้น",
-                 "a, b = (1, 2, 3)",
-                 new String[]{"ValueError: too many values to unpack", "a = 1, b = 2", "Works normally"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 26. Tuple Unpacking เบื้องต้น
+        list.add(new Question("26. Tuple Unpacking เบื้องต้น",
+                "a, b = (1, 2, 3)",
+                new String[]{"ValueError: too many values to unpack", "a = 1, b = 2", "Works normally"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 27. การใช้ *args สำหรับ Variable-length Arguments
-         list.add(new Question("27. การใช้ *args สำหรับ Variable-length Arguments",
-                 "def func(*args): pass",
-                 new String[]{"Accepts any number of positional arguments", "Accepts only keyword arguments", "Accepts fixed 2 arguments"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 27. การใช้ *args สำหรับ Variable-length Arguments
+        list.add(new Question("27. การใช้ *args สำหรับ Variable-length Arguments",
+                "def func(*args): pass",
+                new String[]{"Accepts any number of positional arguments", "Accepts only keyword arguments", "Accepts fixed 2 arguments"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 28. การใช้ **kwargs สำหรับ Keyword Arguments
-         list.add(new Question("28. การใช้ **kwargs สำหรับ Keyword Arguments",
-                 "def func(**kwargs): pass",
-                 new String[]{"Accepts any number of keyword arguments", "Accepts positional only", "Accepts lists only"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 28. การใช้ **kwargs สำหรับ Keyword Arguments
+        list.add(new Question("28. การใช้ **kwargs สำหรับ Keyword Arguments",
+                "def func(**kwargs): pass",
+                new String[]{"Accepts any number of keyword arguments", "Accepts positional only", "Accepts lists only"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 29. การเปิดไฟล์โหมดอ่านไบนารี ('rb')
-         list.add(new Question("29. การเปิดไฟล์โหมดอ่านไบนารี ('rb')",
-                 "f = open('img.png', 'read_binary')",
-                 new String[]{"f = open('img.png', 'rb')", "f = open('img.png', 'bin')", "f = open('img.png', 'rB')"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 29. การเปิดไฟล์โหมดอ่านไบนารี ('rb')
+        list.add(new Question("29. การเปิดไฟล์โหมดอ่านไบนารี ('rb')",
+                "f = open('img.png', 'read_binary')",
+                new String[]{"f = open('img.png', 'rb')", "f = open('img.png', 'bin')", "f = open('img.png', 'rB')"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 30. การอ่านบรรทัดไฟล์ทั้งหมดด้วย readlines()
-         list.add(new Question("30. การอ่านบรรทัดไฟล์ทั้งหมดด้วย readlines()",
-                 "lines = f.read_all_lines()",
-                 new String[]{"lines = f.readlines()", "lines = f.getLines()", "lines = f.loadLines()"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 30. การอ่านบรรทัดไฟล์ทั้งหมดด้วย readlines()
+        list.add(new Question("30. การอ่านบรรทัดไฟล์ทั้งหมดด้วย readlines()",
+                "lines = f.read_all_lines()",
+                new String[]{"lines = f.readlines()", "lines = f.getLines()", "lines = f.loadLines()"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 31. การใช้งานโมดูล os สำหรับตรวจสอบเส้นทาง
-         list.add(new Question("31. การใช้งานโมดูล os สำหรับตรวจสอบเส้นทาง",
-                 "import os\nexists = os.path.exists('file.txt')",
-                 new String[]{"import os\nexists = os.path.exists('file.txt')", "import os\nexists = os.exists('file.txt')", "import os\nexists = file.exists('file.txt')"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 31. การใช้งานโมดูล os สำหรับตรวจสอบเส้นทาง
+        list.add(new Question("31. การใช้งานโมดูล os สำหรับตรวจสอบเส้นทาง",
+                "import os\nexists = os.path.exists('file.txt')",
+                new String[]{"import os\nexists = os.path.exists('file.txt')", "import os\nexists = os.exists('file.txt')", "import os\nexists = file.exists('file.txt')"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 32. การใช้งานโมดูล sys อ่านพารามิเตอร์ Command Line
-         list.add(new Question("32. การใช้งานโมดูล sys อ่านพารามิเตอร์ Command Line",
-                 "import sys\nargs = sys.arguments",
-                 new String[]{"import sys\nargs = sys.argv", "import sys\nargs = sys.parameters", "import sys\nargs = sys.args"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 32. การใช้งานโมดูล sys อ่านพารามิเตอร์ Command Line
+        list.add(new Question("32. การใช้งานโมดูล sys อ่านพารามิเตอร์ Command Line",
+                "import sys\nargs = sys.arguments",
+                new String[]{"import sys\nargs = sys.argv", "import sys\nargs = sys.parameters", "import sys\nargs = sys.args"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 33. การใช้งานโมดูล math คำนวณค่ารากที่สอง
-         list.add(new Question("33. การใช้งานโมดูล math คำนวณค่ารากที่สอง",
-                 "import math\nval = math.root(16)",
-                 new String[]{"import math\nval = math.sqrt(16)", "import math\nval = math.sqr(16)", "import math\nval = math.power(16, 0.5)"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 33. การใช้งานโมดูล math คำนวณค่ารากที่สอง
+        list.add(new Question("33. การใช้งานโมดูล math คำนวณค่ารากที่สอง",
+                "import math\nval = math.root(16)",
+                new String[]{"import math\nval = math.sqrt(16)", "import math\nval = math.sqr(16)", "import math\nval = math.power(16, 0.5)"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 34. การใช้งานโมดูล random สุ่มตัวเลขช่วง
-         list.add(new Question("34. การใช้งานโมดูล random สุ่มตัวเลขช่วง",
-                 "import random\nn = random.randInt(1, 10)",
-                 new String[]{"import random\nn = random.randint(1, 10)", "import random\nn = random.randomInt(1, 10)", "import random\nn = random.between(1, 10)"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 34. การใช้งานโมดูล random สุ่มตัวเลขช่วง
+        list.add(new Question("34. การใช้งานโมดูล random สุ่มตัวเลขช่วง",
+                "import random\nn = random.randInt(1, 10)",
+                new String[]{"import random\nn = random.randint(1, 10)", "import random\nn = random.randomInt(1, 10)", "import random\nn = random.between(1, 10)"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 35. การใช้งานโมดูล datetime ดึงเวลาปัจจุบัน
-         list.add(new Question("35. การใช้งานโมดูล datetime ดึงเวลาปัจจุบัน",
-                 "from datetime import datetime\nnow = datetime.getNow()",
-                 new String[]{"from datetime import datetime\nnow = datetime.now()", "from datetime import datetime\nnow = datetime.current()", "from datetime import datetime\nnow = datetime.todayTime()"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 35. การใช้งานโมดูล datetime ดึงเวลาปัจจุบัน
+        list.add(new Question("35. การใช้งานโมดูล datetime ดึงเวลาปัจจุบัน",
+                "from datetime import datetime\nnow = datetime.getNow()",
+                new String[]{"from datetime import datetime\nnow = datetime.now()", "from datetime import datetime\nnow = datetime.current()", "from datetime import datetime\nnow = datetime.todayTime()"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 36. การใช้เมธอด find ค้นหาตำแหน่งข้อความ
-         list.add(new Question("36. การใช้เมธอด find ค้นหาตำแหน่งข้อความ",
-                 "pos = \"Robot\".search(\"o\")",
-                 new String[]{"pos = \"Robot\".find(\"o\")", "pos = \"Robot\".locate(\"o\")", "pos = \"Robot\".index_of(\"o\")"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 36. การใช้เมธอด find ค้นหาตำแหน่งข้อความ
+        list.add(new Question("36. การใช้เมธอด find ค้นหาตำแหน่งข้อความ",
+                "pos = \"Robot\".search(\"o\")",
+                new String[]{"pos = \"Robot\".find(\"o\")", "pos = \"Robot\".locate(\"o\")", "pos = \"Robot\".index_of(\"o\")"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 37. การใช้เมธอด replace แทนที่ข้อความ
-         list.add(new Question("37. การใช้เมธอด replace แทนที่ข้อความ",
-                 "new_s = \"Hello Bot\".sub(\"Bot\", \"Rob\")",
-                 new String[]{"new_s = \"Hello Bot\".replace(\"Bot\", \"Rob\")", "new_s = \"Hello Bot\".change(\"Bot\", \"Rob\")", "new_s = \"Hello Bot\".swap(\"Bot\", \"Rob\")"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 37. การใช้เมธอด replace แทนที่ข้อความ
+        list.add(new Question("37. การใช้เมธอด replace แทนที่ข้อความ",
+                "new_s = \"Hello Bot\".sub(\"Bot\", \"Rob\")",
+                new String[]{"new_s = \"Hello Bot\".replace(\"Bot\", \"Rob\")", "new_s = \"Hello Bot\".change(\"Bot\", \"Rob\")", "new_s = \"Hello Bot\".swap(\"Bot\", \"Rob\")"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 38. การตรวจสอบสตริงด้วย isdigit()
-         list.add(new Question("38. การตรวจสอบสตริงด้วย isdigit()",
-                 "is_num = \"123\".is_number()",
-                 new String[]{"is_num = \"123\".isdigit()", "is_num = \"123\".isNumeric()", "is_num = is_digit(\"123\")"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 38. การตรวจสอบสตริงด้วย isdigit()
+        list.add(new Question("38. การตรวจสอบสตริงด้วย isdigit()",
+                "is_num = \"123\".is_number()",
+                new String[]{"is_num = \"123\".isdigit()", "is_num = \"123\".isNumeric()", "is_num = is_digit(\"123\")"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 39. การใช้คำสั่ง raise โยนข้อผิดพลาด
-         list.add(new Question("39. การใช้คำสั่ง raise โยนข้อผิดพลาด",
-                 "throw ValueError(\"Invalid\")",
-                 new String[]{"raise ValueError(\"Invalid\")", "signal ValueError(\"Invalid\")", "exception ValueError(\"Invalid\")"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 39. การใช้คำสั่ง raise โยนข้อผิดพลาด
+        list.add(new Question("39. การใช้คำสั่ง raise โยนข้อผิดพลาด",
+                "throw ValueError(\"Invalid\")",
+                new String[]{"raise ValueError(\"Invalid\")", "signal ValueError(\"Invalid\")", "exception ValueError(\"Invalid\")"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 40. การสร้าง Custom Exception
-         list.add(new Question("40. การสร้าง Custom Exception",
-                 "class MyError(Error): pass",
-                 new String[]{"class MyError(Exception): pass", "class MyError extends Exception: pass", "class MyError throws Exception: pass"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 40. การสร้าง Custom Exception
+        list.add(new Question("40. การสร้าง Custom Exception",
+                "class MyError(Error): pass",
+                new String[]{"class MyError(Exception): pass", "class MyError extends Exception: pass", "class MyError throws Exception: pass"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 41. การใช้ assert ตรวจสอบเงื่อนไข
-         list.add(new Question("41. การใช้ assert ตรวจสอบเงื่อนไข",
-                 "verify x > 0",
-                 new String[]{"assert x > 0", "check x > 0", "test x > 0"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 41. การใช้ assert ตรวจสอบเงื่อนไข
+        list.add(new Question("41. การใช้ assert ตรวจสอบเงื่อนไข",
+                "verify x > 0",
+                new String[]{"assert x > 0", "check x > 0", "test x > 0"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 42. การใช้ Ellipsis (...) ในโครงสร้างโค้ด
-         list.add(new Question("42. การใช้ Ellipsis (...) ในโครงสร้างโค้ด",
-                 "def stub():\n    ...",
-                 new String[]{"Valid placeholder syntax", "Syntax error", "Infinite loop trigger"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 42. การใช้ Ellipsis (...) ในโครงสร้างโค้ด
+        list.add(new Question("42. การใช้ Ellipsis (...) ในโครงสร้างโค้ด",
+                "def stub():\n    ...",
+                new String[]{"Valid placeholder syntax", "Syntax error", "Infinite loop trigger"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 43. การเช็กสมาชิกใน Set ด้วย in
-         list.add(new Question("43. การเช็กสมาชิกใน Set ด้วย in",
-                 "s = {1, 2}\nif 1 in s:",
-                 new String[]{"Valid and highly optimized O(1) average lookup", "O(N) linear lookup like list", "Invalid syntax for sets"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 43. การเช็กสมาชิกใน Set ด้วย in
+        list.add(new Question("43. การเช็กสมาชิกใน Set ด้วย in",
+                "s = {1, 2}\nif 1 in s:",
+                new String[]{"Valid and highly optimized O(1) average lookup", "O(N) linear lookup like list", "Invalid syntax for sets"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 44. การใช้ pass ในโครงสร้างคลาสว่าง
-         list.add(new Question("44. การใช้ pass ในโครงสร้างคลาสว่าง",
-                 "class EmptyClass:\n    pass",
-                 new String[]{"Valid way to define an empty class block", "Syntax error", "Creates a None instance"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 44. การใช้ pass ในโครงสร้างคลาสว่าง
+        list.add(new Question("44. การใช้ pass ในโครงสร้างคลาสว่าง",
+                "class EmptyClass:\n    pass",
+                new String[]{"Valid way to define an empty class block", "Syntax error", "Creates a None instance"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 45. การใช้งาน dictionary comprehension
-         list.add(new Question("45. การใช้งาน dictionary comprehension",
-                 "d = {x: x*2 for x in range(3)}",
-                 new String[]{"Valid dictionary comprehension syntax producing {0: 0, 1: 2, 2: 4}", "Syntax error", "Produces a list instead"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 45. การใช้งาน dictionary comprehension
+        list.add(new Question("45. การใช้งาน dictionary comprehension",
+                "d = {x: x*2 for x in range(3)}",
+                new String[]{"Valid dictionary comprehension syntax producing {0: 0, 1: 2, 2: 4}", "Syntax error", "Produces a list instead"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 46. การใช้งาน set comprehension
-         list.add(new Question("46. การใช้งาน set comprehension",
-                 "s = {x for x in [1, 1, 2]}",
-                 new String[]{"Valid set comprehension producing unique items {1, 2}", "Syntax error", "Produces a tuple"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 46. การใช้งาน set comprehension
+        list.add(new Question("46. การใช้งาน set comprehension",
+                "s = {x for x in [1, 1, 2]}",
+                new String[]{"Valid set comprehension producing unique items {1, 2}", "Syntax error", "Produces a tuple"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 47. การใช้สตริงหลายบรรทัดด้วย Triple Quotes
-         list.add(new Question("47. การใช้สตริงหลายบรรทัดด้วย Triple Quotes",
-                 "text = \"\"\"Line 1\nLine 2\"\"\"",
-                 new String[]{"Valid multi-line string syntax", "Syntax error", "Treated as comment"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 47. การใช้สตริงหลายบรรทัดด้วย Triple Quotes
+        list.add(new Question("47. การใช้สตริงหลายบรรทัดด้วย Triple Quotes",
+                "text = \"\"\"Line 1\nLine 2\"\"\"",
+                new String[]{"Valid multi-line string syntax", "Syntax error", "Treated as comment"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 48. การใช้อาร์กิวเมนต์แบบ Keyword-only ใน Python 3
-         list.add(new Question("48. การใช้อาร์กิวเมนต์แบบ Keyword-only ใน Python 3",
-                 "def f(a, *, b): pass",
-                 new String[]{"b must be passed as keyword argument", "b is optional positional", "Syntax error in Python 3"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 48. การใช้อาร์กิวเมนต์แบบ Keyword-only ใน Python 3
+        list.add(new Question("48. การใช้อาร์กิวเมนต์แบบ Keyword-only ใน Python 3",
+                "def f(a, *, b): pass",
+                new String[]{"b must be passed as keyword argument", "b is optional positional", "Syntax error in Python 3"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 49. การใช้เดคอเรเตอร์พื้นฐาน @staticmethod
-         list.add(new Question("49. การใช้เดคอเรเตอร์พื้นฐาน @staticmethod",
-                 "class A:\n    @staticmethod\n    def f(): pass",
-                 new String[]{"Defines a static method not requiring self or cls", "Requires self parameter", "Invalid decorator"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 49. การใช้เดคอเรเตอร์พื้นฐาน @staticmethod
+        list.add(new Question("49. การใช้เดคอเรเตอร์พื้นฐาน @staticmethod",
+                "class A:\n    @staticmethod\n    def f(): pass",
+                new String[]{"Defines a static method not requiring self or cls", "Requires self parameter", "Invalid decorator"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // 50. การใช้เดคอเรเตอร์ @classmethod
-         list.add(new Question("50. การใช้เดคอเรเตอร์ @classmethod",
-                 "class A:\n    @classmethod\n    def f(cls): pass",
-                 new String[]{"Receives class cls as first argument", "Receives self as first argument", "Requires no arguments"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
+        // 50. การใช้เดคอเรเตอร์ @classmethod
+        list.add(new Question("50. การใช้เดคอเรเตอร์ @classmethod",
+                "class A:\n    @classmethod\n    def f(cls): pass",
+                new String[]{"Receives class cls as first argument", "Receives self as first argument", "Requires no arguments"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_NORMAL));
 
-         // HARD
+        // HARD
 // 1. Lambda Closure (ปัญหาตัวแปร i ในลูป)
-         list.add(new Question("1. Lambda Closure (ปัญหาตัวแปร i ในลูป)",
-                 "funcs = [lambda: i for i in range(3)]",
-                 new String[]{"funcs = [lambda i=i: i for i in range(3)]", "funcs = [lambda(i): i for i in range(3)]", "funcs = [lambda i: i for i in range(3)]"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        list.add(new Question("1. Lambda Closure (ปัญหาตัวแปร i ในลูป)",
+                "funcs = [lambda: i for i in range(3)]",
+                new String[]{"funcs = [lambda i=i: i for i in range(3)]", "funcs = [lambda(i): i for i in range(3)]", "funcs = [lambda i: i for i in range(3)]"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 2. สร้าง 2D List แต่ Reference เดียวกันหมดด้วย *
-         list.add(new Question("2. สร้าง 2D List แต่ Reference เดียวกันหมดด้วย *",
-                 "matrix = [[0]] * 3\nmatrix[0][0] = 1",
-                 new String[]{"matrix = [[0] for _ in range(3)]", "matrix = [[0]] ** 3", "matrix = Array(3, [0])"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 2. สร้าง 2D List แต่ Reference เดียวกันหมดด้วย *
+        list.add(new Question("2. สร้าง 2D List แต่ Reference เดียวกันหมดด้วย *",
+                "matrix = [[0]] * 3\nmatrix[0][0] = 1",
+                new String[]{"matrix = [[0] for _ in range(3)]", "matrix = [[0]] ** 3", "matrix = Array(3, [0])"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 3. แก้ไข Tuple ที่มี List ซ้อนอยู่ข้างใน
-         list.add(new Question("3. แก้ไข Tuple ที่มี List ซ้อนอยู่ข้างใน",
-                 "t = (1, [2])\nt[1] += [3]",
-                 new String[]{"t[1].extend([3])", "t[1] = [2, 3]", "t.append([3])"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 3. แก้ไข Tuple ที่มี List ซ้อนอยู่ข้างใน
+        list.add(new Question("3. แก้ไข Tuple ที่มี List ซ้อนอยู่ข้างใน",
+                "t = (1, [2])\nt[1] += [3]",
+                new String[]{"t[1].extend([3])", "t[1] = [2, 3]", "t.append([3])"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 4. ใช้งาน __slots__ ไม่ครบตามตัวแปรที่ประกาศ
-         list.add(new Question("4. ใช้งาน __slots__ ไม่ครบตามตัวแปรที่ประกาศ",
-                 "class A:\n    __slots__ = ['x']\n    def __init__(self):\n        self.y = 1",
-                 new String[]{"__slots__ = ['x', 'y']", "self.x = 1", "del self.y"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 4. ใช้งาน __slots__ ไม่ครบตามตัวแปรที่ประกาศ
+        list.add(new Question("4. ใช้งาน __slots__ ไม่ครบตามตัวแปรที่ประกาศ",
+                "class A:\n    __slots__ = ['x']\n    def __init__(self):\n        self.y = 1",
+                new String[]{"__slots__ = ['x', 'y']", "self.x = 1", "del self.y"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 5. แชร์ Class Attribute โดยไม่ตั้งใจผ่าน Class Body
-         list.add(new Question("5. แชร์ Class Attribute โดยไม่ตั้งใจผ่าน Class Body",
-                 "class Bot:\n    items = []",
-                 new String[]{"class Bot:\n    def __init__(self):\n        self.items = []", "class Bot:\n    static items = []", "class Bot:\n    private items = []"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 5. แชร์ Class Attribute โดยไม่ตั้งใจผ่าน Class Body
+        list.add(new Question("5. แชร์ Class Attribute โดยไม่ตั้งใจผ่าน Class Body",
+                "class Bot:\n    items = []",
+                new String[]{"class Bot:\n    def __init__(self):\n        self.items = []", "class Bot:\n    static items = []", "class Bot:\n    private items = []"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 6. Decorator ทำลายข้อมูล Metadata ของฟังก์ชัน
-         list.add(new Question("6. Decorator ทำลายข้อมูล Metadata ของฟังก์ชัน",
-                 "def my_dec(f):\n    def wrapper():\n        return f()\n    return wrapper",
-                 new String[]{"from functools import wraps\ndef my_dec(f):\n    @wraps(f)\n    def wrapper():\n        return f()\n    return wrapper", "def my_dec(f):\n    @staticmethod\n    def wrapper():", "def my_dec(f):"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 6. Decorator ทำลายข้อมูล Metadata ของฟังก์ชัน
+        list.add(new Question("6. Decorator ทำลายข้อมูล Metadata ของฟังก์ชัน",
+                "def my_dec(f):\n    def wrapper():\n        return f()\n    return wrapper",
+                new String[]{"from functools import wraps\ndef my_dec(f):\n    @wraps(f)\n    def wrapper():\n        return f()\n    return wrapper", "def my_dec(f):\n    @staticmethod\n    def wrapper():", "def my_dec(f):"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 7. จับ Exception แบบกว้างเกินไปแล้วปล่อยเงียบ (Swallowing Exceptions)
-         list.add(new Question("7. จับ Exception แบบกว้างเกินไปแล้วปล่อยเงียบ (Swallowing Exceptions)",
-                 "try:\n    do_something()\nexcept:\n    pass",
-                 new String[]{"try:\n    do_something()\nexcept Exception as e:\n    logger.error(e)\n    raise", "try:\n    do_something()\ncatch Exception:", "try:\n    do_something()\nexcept Error:"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 7. จับ Exception แบบกว้างเกินไปแล้วปล่อยเงียบ (Swallowing Exceptions)
+        list.add(new Question("7. จับ Exception แบบกว้างเกินไปแล้วปล่อยเงียบ (Swallowing Exceptions)",
+                "try:\n    do_something()\nexcept:\n    pass",
+                new String[]{"try:\n    do_something()\nexcept Exception as e:\n    logger.error(e)\n    raise", "try:\n    do_something()\ncatch Exception:", "try:\n    do_something()\nexcept Error:"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 8. ลืมใช้ await หน้า Async Function
-         list.add(new Question("8. ลืมใช้ await หน้า Async Function",
-                 "async def main():\n    fetch_data()",
-                 new String[]{"async def main():\n    await fetch_data()", "async def main():\n    async fetch_data()", "async def main():\n    yield fetch_data()"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 8. ลืมใช้ await หน้า Async Function
+        list.add(new Question("8. ลืมใช้ await หน้า Async Function",
+                "async def main():\n    fetch_data()",
+                new String[]{"async def main():\n    await fetch_data()", "async def main():\n    async fetch_data()", "async def main():\n    yield fetch_data()"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 9. แก้ไข List ขณะกำลังทำ List Comprehension ที่มี Side Effect
-         list.add(new Question("9. แก้ไข List ขณะกำลังทำ List Comprehension ที่มี Side Effect",
-                 "lst = [1, 2]\n[lst.append(x) for x in range(3)]",
-                 new String[]{"lst = [1, 2]\nlst.extend(range(3))", "lst = [1, 2]\nlst.add(range(3))", "lst = [1, 2]\n[lst.push(x) for x in range(3)]"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 9. แก้ไข List ขณะกำลังทำ List Comprehension ที่มี Side Effect
+        list.add(new Question("9. แก้ไข List ขณะกำลังทำ List Comprehension ที่มี Side Effect",
+                "lst = [1, 2]\n[lst.append(x) for x in range(3)]",
+                new String[]{"lst = [1, 2]\nlst.extend(range(3))", "lst = [1, 2]\nlst.add(range(3))", "lst = [1, 2]\n[lst.push(x) for x in range(3)]"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 10. ลบสมาชิกใน List ขณะวนลูปตัวเองโดยไม่สำเนา
-         list.add(new Question("10. ลบสมาชิกใน List ขณะวนลูปตัวเองโดยไม่สำเนา",
-                 "for i in lst:\n    lst.remove(i)",
-                 new String[]{"for i in lst[:]:\n    lst.remove(i)", "for i in lst.copy():", "Both A and B are correct"},
-                 2, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 10. ลบสมาชิกใน List ขณะวนลูปตัวเองโดยไม่สำเนา
+        list.add(new Question("10. ลบสมาชิกใน List ขณะวนลูปตัวเองโดยไม่สำเนา",
+                "for i in lst:\n    lst.remove(i)",
+                new String[]{"for i in lst[:]:\n    lst.remove(i)", "for i in lst.reverse():\n    lst.remove(i)", "for i in lst.pop():\n    lst.remove(i)"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 11. การใช้ Descriptor ปรับแต่งการเข้าถึงแอตทริบิวต์
-         list.add(new Question("11. การใช้ Descriptor ปรับแต่งการเข้าถึงแอตทริบิวต์",
-                 "class Desc:\n    def __get__(self, instance, owner): pass",
-                 new String[]{"Implements descriptor protocol (__get__, __set__, __delete__)", "Requires only __init__", "Is deprecated in Python 3"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 11. การใช้ Descriptor ปรับแต่งการเข้าถึงแอตทริบิวต์
+        list.add(new Question("11. การใช้ Descriptor ปรับแต่งการเข้าถึงแอตทริบิวต์",
+                "class Desc:\n    def __get__(self, instance, owner): pass",
+                new String[]{"Implements descriptor protocol (__get__, __set__, __delete__)", "Requires only __init__", "Is deprecated in Python 3"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 12. การใช้ Metaclass ควบคุมการสร้างคลาส
-         list.add(new Question("12. การใช้ Metaclass ควบคุมการสร้างคลาส",
-                 "class Meta(type): pass",
-                 new String[]{"Metaclass inherits from type and customizes class creation", "Metaclass inherits from object only", "Metaclass is identical to decorator"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 12. การใช้ Metaclass ควบคุมการสร้างคลาส
+        list.add(new Question("12. การใช้ Metaclass ควบคุมการสร้างคลาส",
+                "class Meta(type): pass",
+                new String[]{"Metaclass inherits from type and customizes class creation", "Metaclass inherits from object only", "Metaclass is identical to decorator"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 13. การใช้ Property Decorator
-         list.add(new Question("13. การใช้ Property Decorator",
-                 "class A:\n    @property\n    def x(self): return self._x",
-                 new String[]{"Allows method access like a normal attribute (obj.x)", "Makes attribute private and inaccessible", "Converts method to static"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 13. การใช้ Property Decorator
+        list.add(new Question("13. การใช้ Property Decorator",
+                "class A:\n    @property\n    def x(self): return self._x",
+                new String[]{"Allows method access like a normal attribute (obj.x)", "Makes attribute private and inaccessible", "Converts method to static"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 14. การใช้งาน Abstract Base Classes (ABC)
-         list.add(new Question("14. การใช้งาน Abstract Base Classes (ABC)",
-                 "from abc import ABC, abstractmethod",
-                 new String[]{"Enforces subclassing implementation of abstract methods", "Optional documentation only", "Prevents class inheritance"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 14. การใช้งาน Abstract Base Classes (ABC)
+        list.add(new Question("14. การใช้งาน Abstract Base Classes (ABC)",
+                "from abc import ABC, abstractmethod",
+                new String[]{"Enforces subclassing implementation of abstract methods", "Optional documentation only", "Prevents class inheritance"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 15. Type Hinting และ Static Type Checking
-         list.add(new Question("15. Type Hinting และ Static Type Checking",
-                 "def add(a: int, b: int) -> int: return a + b",
-                 new String[]{"Provides hints for type checkers like mypy, enforced optionally", "Enforces runtime strict type errors strictly", "Disables dynamic typing completely"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 15. Type Hinting และ Static Type Checking
+        list.add(new Question("15. Type Hinting และ Static Type Checking",
+                "def add(a: int, b: int) -> int: return a + b",
+                new String[]{"Provides hints for type checkers like mypy, enforced optionally", "Enforces runtime strict type errors strictly", "Disables dynamic typing completely"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 16. การใช้ __getitem__ เพื่อทำ Custom Container
-         list.add(new Question("16. การใช้ __getitem__ เพื่อทำ Custom Container",
-                 "def __getitem__(self, index): pass",
-                 new String[]{"Enables indexing support (obj[key])", "Enables iteration only", "Enables deletion"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 16. การใช้ __getitem__ เพื่อทำ Custom Container
+        list.add(new Question("16. การใช้ __getitem__ เพื่อทำ Custom Container",
+                "def __getitem__(self, index): pass",
+                new String[]{"Enables indexing support (obj[key])", "Enables iteration only", "Enables deletion"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 17. การใช้ __iter__ และ __next__ ทำ Custom Iterator
-         list.add(new Question("17. การใช้ __iter__ และ __next__ ทำ Custom Iterator",
-                 "def __iter__(self): return self",
-                 new String[]{"Required magic methods for iterator protocol", "Optional methods for lists", "Causes infinite recursion"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 17. การใช้ __iter__ และ __next__ ทำ Custom Iterator
+        list.add(new Question("17. การใช้ __iter__ และ __next__ ทำ Custom Iterator",
+                "def __iter__(self): return self",
+                new String[]{"Required magic methods for iterator protocol", "Optional methods for lists", "Causes infinite recursion"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 18. การใช้ __enter__ และ __exit__ ทำ Custom Context Manager
-         list.add(new Question("18. การใช้ __enter__ และ __exit__ ทำ Custom Context Manager",
-                 "def __exit__(self, exc_type, exc_val, exc_tb): pass",
-                 new String[]{"Enables usage with 'with' statement for resource cleanup", "Handles file exceptions globally", "Defines class destructor"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 18. การใช้ __enter__ และ __exit__ ทำ Custom Context Manager
+        list.add(new Question("18. การใช้ __enter__ และ __exit__ ทำ Custom Context Manager",
+                "def __exit__(self, exc_type, exc_val, exc_tb): pass",
+                new String[]{"Enables usage with 'with' statement for resource cleanup", "Handles file exceptions globally", "Defines class destructor"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 19. ปัญหา Circular Import ระหว่างโมดูล
-         list.add(new Question("19. ปัญหา Circular Import ระหว่างโมดูล",
-                 "import moduleA inside moduleB and vice versa at top-level",
-                 new String[]{"Causes ImportError / AttributeError at runtime due to uninitialized modules", "Resolved automatically by interpreter", "Encouraged best practice"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 19. ปัญหา Circular Import ระหว่างโมดูล
+        list.add(new Question("19. ปัญหา Circular Import ระหว่างโมดูล",
+                "import moduleA inside moduleB and vice versa at top-level",
+                new String[]{"Causes ImportError / AttributeError at runtime due to uninitialized modules", "Resolved automatically by interpreter", "Encouraged best practice"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 20. Global Interpreter Lock (GIL) และ Threading
-         list.add(new Question("20. Global Interpreter Lock (GIL) และ Threading",
-                 "Python's GIL allows true multi-core parallel execution for CPU-bound threads",
-                 new String[]{"False: GIL prevents multiple native threads from executing Python bytecodes simultaneously", "True: Full parallel execution across all CPU cores", "GIL only applies to network I/O"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 20. Global Interpreter Lock (GIL) และ Threading
+        list.add(new Question("20. Global Interpreter Lock (GIL) และ Threading",
+                "Python's GIL allows true multi-core parallel execution for CPU-bound threads",
+                new String[]{"False: GIL prevents multiple native threads from executing Python bytecodes simultaneously", "True: Full parallel execution across all CPU cores", "GIL only applies to network I/O"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 21. multiprocessing สำหรับ CPU-bound tasks
-         list.add(new Question("21. multiprocessing สำหรับ CPU-bound tasks",
-                 "multiprocessing module bypasses GIL by using separate processes",
-                 new String[]{"True: Each process has its own Python interpreter and memory space", "False: Shares same memory space like threads", "Only works on Windows"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 21. multiprocessing สำหรับ CPU-bound tasks
+        list.add(new Question("21. multiprocessing สำหรับ CPU-bound tasks",
+                "multiprocessing module bypasses GIL by using separate processes",
+                new String[]{"True: Each process has its own Python interpreter and memory space", "False: Shares same memory space like threads", "Only works on Windows"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 22. concurrent.futures ThreadPoolExecutor
-         list.add(new Question("22. concurrent.futures ThreadPoolExecutor",
-                 "executor = ThreadPoolExecutor(max_workers=4)",
-                 new String[]{"Ideal for I/O-bound tasks running concurrently", "Ideal for CPU-bound matrix calculations", "Bypasses GIL for CPU tasks"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 22. concurrent.futures ThreadPoolExecutor
+        list.add(new Question("22. concurrent.futures ThreadPoolExecutor",
+                "executor = ThreadPoolExecutor(max_workers=4)",
+                new String[]{"Ideal for I/O-bound tasks running concurrently", "Ideal for CPU-bound matrix calculations", "Bypasses GIL for CPU tasks"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 23. asyncio Event Loop
-         list.add(new Question("23. asyncio Event Loop",
-                 "asyncio.run(main())",
-                 new String[]{"Manages and runs async coroutines on a single-thread event loop", "Spawns multi-processing pool", "Blocks main thread synchronously"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 23. asyncio Event Loop
+        list.add(new Question("23. asyncio Event Loop",
+                "asyncio.run(main())",
+                new String[]{"Manages and runs async coroutines on a single-thread event loop", "Spawns multi-processing pool", "Blocks main thread synchronously"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 24. weakref โมดูลป้องกัน Memory Leak
-         list.add(new Question("24. weakref โมดูลป้องกัน Memory Leak",
-                 "import weakref\nwr = weakref.ref(obj)",
-                 new String[]{"Creates a weak reference that does not increase object reference count", "Increases reference count by 2", "Deletes object immediately"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 24. weakref โมดูลป้องกัน Memory Leak
+        list.add(new Question("24. weakref โมดูลป้องกัน Memory Leak",
+                "import weakref\nwr = weakref.ref(obj)",
+                new String[]{"Creates a weak reference that does not increase object reference count", "Increases reference count by 2", "Deletes object immediately"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 25. collections.defaultdict
-         list.add(new Question("25. collections.defaultdict",
-                 "from collections import defaultdict\nd = defaultdict(list)",
-                 new String[]{"Automatically initializes missing keys with default factory (e.g. list)", "Raises KeyError on missing key", "Is slower than regular dict always"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 25. collections.defaultdict
+        list.add(new Question("25. collections.defaultdict",
+                "from collections import defaultdict\nd = defaultdict(list)",
+                new String[]{"Automatically initializes missing keys with default factory (e.g. list)", "Raises KeyError on missing key", "Is slower than regular dict always"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 26. collections.Counter
-         list.add(new Question("26. collections.Counter",
-                 "from collections import Counter\nc = Counter(['a', 'b', 'a'])",
-                 new String[]{"Specialized dict subclass for counting hashable objects", "Counts lines in text files only", "Sorts items by value automatically"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 26. collections.Counter
+        list.add(new Question("26. collections.Counter",
+                "from collections import Counter\nc = Counter(['a', 'b', 'a'])",
+                new String[]{"Specialized dict subclass for counting hashable objects", "Counts lines in text files only", "Sorts items by value automatically"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 27. collections.namedtuple
-         list.add(new Question("27. collections.namedtuple",
-                 "Point = namedtuple('Point', ['x', 'y'])",
-                 new String[]{"Creates lightweight tuple subclasses with named fields for readability", "Mutable tuple structure", "Dictionary replacement"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 27. collections.namedtuple
+        list.add(new Question("27. collections.namedtuple",
+                "Point = namedtuple('Point', ['x', 'y'])",
+                new String[]{"Creates lightweight tuple subclasses with named fields for readability", "Mutable tuple structure", "Dictionary replacement"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 28. collections.deque
-         list.add(new Question("28. collections.deque",
-                 "from collections import deque\nq = deque([1, 2], maxlen=2)",
-                 new String[]{"Double-ended queue supporting O(1) appends and pops from both ends", "O(N) operations like list", "Fixed memory stack only"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 28. collections.deque
+        list.add(new Question("28. collections.deque",
+                "from collections import deque\nq = deque([1, 2], maxlen=2)",
+                new String[]{"Double-ended queue supporting O(1) appends and pops from both ends", "O(N) operations like list", "Fixed memory stack only"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 29. itertools.product
-         list.add(new Question("29. itertools.product",
-                 "import itertools\nres = list(itertools.product([1, 2], [3, 4]))",
-                 new String[]{"Cartesian product of input iterables", "Scalar dot product", "Matrix multiplication"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 29. itertools.product
+        list.add(new Question("29. itertools.product",
+                "import itertools\nres = list(itertools.product([1, 2], [3, 4]))",
+                new String[]{"Cartesian product of input iterables", "Scalar dot product", "Matrix multiplication"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 30. functools.lru_cache (Memoization)
-         list.add(new Question("30. functools.lru_cache (Memoization)",
-                 "from functools import lru_cache\n@lru_cache(maxsize=None)",
-                 new String[]{"Caches function return values to optimize recursive/expensive calls", "Encrypts function data", "Limits recursion depth"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 30. functools.lru_cache (Memoization)
+        list.add(new Question("30. functools.lru_cache (Memoization)",
+                "from functools import lru_cache\n@lru_cache(maxsize=None)",
+                new String[]{"Caches function return values to optimize recursive/expensive calls", "Encrypts function data", "Limits recursion depth"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 31. functools.partial
-         list.add(new Question("31. functools.partial",
-                 "from functools import partial\nnew_func = partial(func, 10)",
-                 new String[]{"Fixes a subset of function arguments to produce a new callable", "Splits function into two parts", "Deletes function arguments"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 31. functools.partial
+        list.add(new Question("31. functools.partial",
+                "from functools import partial\nnew_func = partial(func, 10)",
+                new String[]{"Fixes a subset of function arguments to produce a new callable", "Splits function into two parts", "Deletes function arguments"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 32. functools.reduce
-         list.add(new Question("32. functools.reduce",
-                 "from functools import reduce\nres = reduce(lambda x, y: x + y, [1, 2, 3])",
-                 new String[]{"Applies a function of two arguments cumulatively to sequence items to reduce to single value", "Filters sequence items", "Maps sequence items"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 32. functools.reduce
+        list.add(new Question("32. functools.reduce",
+                "from functools import reduce\nres = reduce(lambda x, y: x + y, [1, 2, 3])",
+                new String[]{"Applies a function of two arguments cumulatively to sequence items to reduce to single value", "Filters sequence items", "Maps sequence items"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 33. dataclasses module
-         list.add(new Question("33. dataclasses module",
-                 "from dataclasses import dataclass\n@dataclass\nclass Point: x: int; y: int",
-                 new String[]{"Automatically generates __init__, __repr__, __eq__ for data classes", "Manual boilerplate required", "Immutable tuple only"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 33. dataclasses module
+        list.add(new Question("33. dataclasses module",
+                "from dataclasses import dataclass\n@dataclass\nclass Point: x: int; y: int",
+                new String[]{"Automatically generates __init__, __repr__, __eq__ for data classes", "Manual boilerplate required", "Immutable tuple only"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 34. __bool__ and __len__ truthiness evaluation
-         list.add(new Question("34. __bool__ and __len__ truthiness evaluation",
-                 "Python evaluates object truth value by checking __bool__ first, then __len__",
-                 new String[]{"True: Falls back to __len__ if __bool__ is not defined", "False: Checks __len__ first always", "Objects are always True"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 34. __bool__ and __len__ truthiness evaluation
+        list.add(new Question("34. __bool__ and __len__ truthiness evaluation",
+                "Python evaluates object truth value by checking __bool__ first, then __len__",
+                new String[]{"True: Falls back to __len__ if __bool__ is not defined", "False: Checks __len__ first always", "Objects are always True"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 35. RecursionError and stack depth limit
-         list.add(new Question("35. RecursionError and stack depth limit",
-                 "Exceeding maximum recursion depth raises RecursionError",
-                 new String[]{"True: Prevented by stack frame limits (default 1000)", "False: Infinite recursion is allowed", "Automatically converted to iteration"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 35. RecursionError and stack depth limit
+        list.add(new Question("35. RecursionError and stack depth limit",
+                "Exceeding maximum recursion depth raises RecursionError",
+                new String[]{"True: Prevented by stack frame limits (default 1000)", "False: Infinite recursion is allowed", "Automatically converted to iteration"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 36. gc module control
-         list.add(new Question("36. gc module control",
-                 "import gc\ngc.collect()",
-                 new String[]{"Explicitly triggers garbage collection of cyclic references", "Deletes all variables in memory", "Disables garbage collector"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 36. gc module control
+        list.add(new Question("36. gc module control",
+                "import gc\ngc.collect()",
+                new String[]{"Explicitly triggers garbage collection of cyclic references", "Deletes all variables in memory", "Disables garbage collector"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 37. Cyclic Reference and __del__
-         list.add(new Question("37. Cyclic Reference and __del__",
-                 "Objects with __del__ methods involved in cyclic references can leak memory in older Python versions",
-                 new String[]{"True: Garbage collector cannot determine safe destruction order easily", "False: Handled instantly without issues", "Only affects C extensions"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 37. Cyclic Reference and __del__
+        list.add(new Question("37. Cyclic Reference and __del__",
+                "Objects with __del__ methods involved in cyclic references can leak memory in older Python versions",
+                new String[]{"True: Garbage collector cannot determine safe destruction order easily", "False: Handled instantly without issues", "Only affects C extensions"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 38. super() and MRO (Method Resolution Order)
-         list.add(new Question("38. super() and MRO (Method Resolution Order)",
-                 "super() delegates method calls to the next class in the Method Resolution Order",
-                 new String[]{"True: Follows C3 linearization algorithm", "False: Calls parent class hardcoded blindly", "Only works for single inheritance"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 38. super() and MRO (Method Resolution Order)
+        list.add(new Question("38. super() and MRO (Method Resolution Order)",
+                "super() delegates method calls to the next class in the Method Resolution Order",
+                new String[]{"True: Follows C3 linearization algorithm", "False: Calls parent class hardcoded blindly", "Only works for single inheritance"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 39. Mixin Classes architecture
-         list.add(new Question("39. Mixin Classes architecture",
-                 "Mixins provide modular method functionality to be inherited by multiple classes without standalone instantiation",
-                 new String[]{"True: Designed for composition via multiple inheritance", "False: Standalone base classes with full state", "Forbidden in Python"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 39. Mixin Classes architecture
+        list.add(new Question("39. Mixin Classes architecture",
+                "Mixins provide modular method functionality to be inherited by multiple classes without standalone instantiation",
+                new String[]{"True: Designed for composition via multiple inheritance", "False: Standalone base classes with full state", "Forbidden in Python"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 40. __init_subclass__ hook
-         list.add(new Question("40. __init_subclass__ hook",
-                 "class Base:\n    def __init_subclass__(cls, **kwargs): pass",
-                 new String[]{"Called whenever a subclass is created, useful for plugin/registry architectures", "Called on every instance creation", "Deprecated syntax"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 40. __init_subclass__ hook
+        list.add(new Question("40. __init_subclass__ hook",
+                "class Base:\n    def __init_subclass__(cls, **kwargs): pass",
+                new String[]{"Called whenever a subclass is created, useful for plugin/registry architectures", "Called on every instance creation", "Deprecated syntax"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 41. __new__ vs __init__
-         list.add(new Question("41. __new__ vs __init__",
-                 "__new__ is responsible for creating the instance, while __init__ initializes it",
-                 new String[]{"True: __new__ returns the new object instance before __init__ runs", "False: __init__ creates the instance", "They are identical methods"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 41. __new__ vs __init__
+        list.add(new Question("41. __new__ vs __init__",
+                "__new__ is responsible for creating the instance, while __init__ initializes it",
+                new String[]{"True: __new__ returns the new object instance before __init__ runs", "False: __init__ creates the instance", "They are identical methods"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 42. File encoding specification
-         list.add(new Question("42. File encoding specification",
-                 "f = open('data.txt', 'r', encoding='utf-8')",
-                 new String[]{"Ensures proper character decoding across different platform default encodings", "Optional performance boost", "Forces binary read mode"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 42. File encoding specification
+        list.add(new Question("42. File encoding specification",
+                "f = open('data.txt', 'r', encoding='utf-8')",
+                new String[]{"Ensures proper character decoding across different platform default encodings", "Optional performance boost", "Forces binary read mode"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 43. struct module binary packing
-         list.add(new Question("43. struct module binary packing",
-                 "import struct\npacked = struct.pack('i', 10)",
-                 new String[]{"Converts Python values to C-style byte strings according to format string", "Compresses file size", "Encrypts integer data"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 43. struct module binary packing
+        list.add(new Question("43. struct module binary packing",
+                "import struct\npacked = struct.pack('i', 10)",
+                new String[]{"Converts Python values to C-style byte strings according to format string", "Compresses file size", "Encrypts integer data"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 44. pickle module serialization security warning
-         list.add(new Question("44. pickle module serialization security warning",
-                 "Unpickling untrusted data can execute arbitrary malicious code",
-                 new String[]{"True: Pickle format is inherently unsafe against arbitrary code execution", "False: Pickle is fully sandboxed and secure", "Only affects string types"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 44. pickle module serialization security warning
+        list.add(new Question("44. pickle module serialization security warning",
+                "Unpickling untrusted data can execute arbitrary malicious code",
+                new String[]{"True: Pickle format is inherently unsafe against arbitrary code execution", "False: Pickle is fully sandboxed and secure", "Only affects string types"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 45. eval() and exec() security risks
-         list.add(new Question("45. eval() and exec() security risks",
-                 "Passing external unvalidated user input to eval() creates severe remote code execution vulnerabilities",
-                 new String[]{"True: Executes dynamic Python code with current permissions", "False: Automatically sanitizes input strings", "Only evaluates math expressions safely"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 45. eval() and exec() security risks
+        list.add(new Question("45. eval() and exec() security risks",
+                "Passing external unvalidated user input to eval() creates severe remote code execution vulnerabilities",
+                new String[]{"True: Executes dynamic Python code with current permissions", "False: Automatically sanitizes input strings", "Only evaluates math expressions safely"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 46. Namespace packages (PEP 420)
-         list.add(new Question("46. Namespace packages (PEP 420)",
-                 "Namespace packages allow splitting a single Python package across multiple directories without __init__.py",
-                 new String[]{"True: Supported natively since Python 3.3", "False: Requires __init__.py strictly in all directories", "Deprecated feature"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 46. Namespace packages (PEP 420)
+        list.add(new Question("46. Namespace packages (PEP 420)",
+                "Namespace packages allow splitting a single Python package across multiple directories without __init__.py",
+                new String[]{"True: Supported natively since Python 3.3", "False: Requires __init__.py strictly in all directories", "Deprecated feature"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 47. Walrus operator (:=) assignment expression
-         list.add(new Question("47. Walrus operator (:=) assignment expression",
-                 "if (n := len(a)) > 3:\n    print(n)",
-                 new String[]{"Assigns value to variable as part of a larger expression (Python 3.8+)", "Syntax error", "Equality comparison"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 47. Walrus operator (:=) assignment expression
+        list.add(new Question("47. Walrus operator (:=) assignment expression",
+                "if (n := len(a)) > 3:\n    print(n)",
+                new String[]{"Assigns value to variable as part of a larger expression (Python 3.8+)", "Syntax error", "Equality comparison"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 48. Positional-only parameters (/)
-         list.add(new Question("48. Positional-only parameters (/)",
-                 "def f(a, b, /, c): pass",
-                 new String[]{"Parameters before slash (/) must be specified positionally, not as keywords", "All parameters become keyword-only", "Syntax error"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 48. Positional-only parameters (/)
+        list.add(new Question("48. Positional-only parameters (/)",
+                "def f(a, b, /, c): pass",
+                new String[]{"Parameters before slash (/) must be specified positionally, not as keywords", "All parameters become keyword-only", "Syntax error"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 49. Generator delegation with yield from
-         list.add(new Question("49. Generator delegation with yield from",
-                 "def gen():\n    yield from [1, 2, 3]",
-                 new String[]{"Delegates sub-generator iteration cleanly and efficiently", "Yields generator object itself", "Throws syntax error"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // 49. Generator delegation with yield from
+        list.add(new Question("49. Generator delegation with yield from",
+                "def gen():\n    yield from [1, 2, 3]",
+                new String[]{"Delegates sub-generator iteration cleanly and efficiently", "Yields generator object itself", "Throws syntax error"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
 
-         // 50. __mro__ attribute inspection
-         list.add(new Question("50. __mro__ attribute inspection",
-                 "print(MyClass.__mro__)",
-                 new String[]{"Returns a tuple of classes inspected in method resolution order", "Returns object instance count", "Returns parent class name string"},
-                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
-    // C
+        // 50. __mro__ attribute inspection
+        list.add(new Question("50. __mro__ attribute inspection",
+                "print(MyClass.__mro__)",
+                new String[]{"Returns a tuple of classes inspected in method resolution order", "Returns object instance count", "Returns parent class name string"},
+                0, GameConstants.LANG_PYTHON, GameConstants.DIFF_HARD));
+        // C
         //EASY
 // 1. ตรวจสอบกฎพื้นฐานการปิดท้ายคำสั่งด้วย Semicolon
         list.add(new Question("1. ตรวจสอบกฎพื้นฐานการปิดท้ายคำสั่งด้วย Semicolon",
@@ -1977,7 +1977,7 @@ public class QuestionRepository {
         // 21. ตัวแปรชนิดทศนิยมความแม่นยำสูง
         list.add(new Question("21. ตัวแปรชนิดทศนิยมความแม่นยำสูง",
                 "float pi = 3.1415926535;",
-                new String[]{"double pi = 3.1415926535;", "short pi = 3.14;int pi = 3;"},
+                new String[]{"double pi = 3.1415926535;", "short pi = 3.1415926535;", "int pi = 3.1415926535;"},
                 0, GameConstants.LANG_C, GameConstants.DIFF_EASY));
 
         // 22. รูปแบบ format specifier สำหรับตัวเลขฐานสิบหก (Hex)
@@ -2127,8 +2127,8 @@ public class QuestionRepository {
         // 46. การประกาศตัวแปรห้ามเปลี่ยนค่าด้วย const
         list.add(new Question("46. การประกาศตัวแปรห้ามเปลี่ยนค่าด้วย const",
                 "changeable const int limit = 10;",
-                new String[]{"const int limit = 10;", "int const limit = 10;", "Both A and B are correct"},
-                2, GameConstants.LANG_C, GameConstants.DIFF_EASY));
+                new String[]{"const int limit = 10;", "constant int limit = 10;", "final int limit = 10;"},
+                0, GameConstants.LANG_C, GameConstants.DIFF_EASY));
 
         // 47. การใช้ format specifier พิมพ์เลขทศนิยม 2 ตำแหน่ง
         list.add(new Question("47. การใช้ format specifier พิมพ์เลขทศนิยม 2 ตำแหน่ง",

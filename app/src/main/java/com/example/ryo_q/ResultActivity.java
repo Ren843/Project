@@ -3,9 +3,11 @@ package com.example.ryo_q;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ResultActivity extends AppCompatActivity {
@@ -15,16 +17,28 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // ซ่อน Status Bar
         getWindow().setFlags(
-                android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
         setContentView(R.layout.activity_result);
 
-        int stars = getIntent().getIntExtra("stars", 0);
-        int correctCount = getIntent().getIntExtra("correctCount", 0);
-        int totalQuestions = getIntent().getIntExtra("totalQuestions", 0);
-        String language = getIntent().getStringExtra("language");
-        String difficulty = getIntent().getStringExtra("difficulty");
+        processIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(@NonNull Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        processIntent(intent);
+    }
+
+    private void processIntent(Intent intent) {
+        if (intent == null) return;
+        int stars = intent.getIntExtra("stars", 0);
+        int correctCount = intent.getIntExtra("correctCount", 0);
+        int totalQuestions = intent.getIntExtra("totalQuestions", 0);
+        String language = intent.getStringExtra("language");
+        String difficulty = intent.getStringExtra("difficulty");
 
         TextView resultTitle = findViewById(R.id.resultTitle);
         TextView correctText = findViewById(R.id.correctText);
@@ -37,8 +51,8 @@ public class ResultActivity extends AppCompatActivity {
         if (btnReview != null) {
             btnReview.setOnClickListener(v -> {
                 Intent reviewIntent = new Intent(ResultActivity.this, ReviewActivity.class);
-                reviewIntent.putExtra("questionList", (java.io.Serializable) getIntent().getSerializableExtra("questionList"));
-                reviewIntent.putExtra("selectedAnswers", (java.io.Serializable) getIntent().getSerializableExtra("selectedAnswers"));
+                reviewIntent.putExtra("questionList", getIntent().getSerializableExtra("questionList"));
+                reviewIntent.putExtra("selectedAnswers", getIntent().getSerializableExtra("selectedAnswers"));
                 startActivity(reviewIntent);
             });
         }
@@ -56,19 +70,19 @@ public class ResultActivity extends AppCompatActivity {
 
         if (btnPlayAgain != null) {
             btnPlayAgain.setOnClickListener(v -> {
-                Intent intent = new Intent(ResultActivity.this, GameplayActivity.class);
-                intent.putExtra("language", language);
-                intent.putExtra("difficulty", difficulty);
-                startActivity(intent);
+                Intent playIntent = new Intent(ResultActivity.this, GameplayActivity.class);
+                playIntent.putExtra("language", language);
+                playIntent.putExtra("difficulty", difficulty);
+                startActivity(playIntent);
                 finish();
             });
         }
 
         if (btnExitHome != null) {
             btnExitHome.setOnClickListener(v -> {
-                Intent intent = new Intent(ResultActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                Intent homeIntent = new Intent(ResultActivity.this, MainActivity.class);
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(homeIntent);
                 finish();
             });
         }

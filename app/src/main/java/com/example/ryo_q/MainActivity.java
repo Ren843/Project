@@ -2,6 +2,7 @@ package com.example.ryo_q;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -24,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        //hide ActionBar
+
+ //hide ActionBar
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -51,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
         View btnPlay = findViewById(R.id.btnMenuPlay);
         View btnExit = findViewById(R.id.btnMenuExit);
         View btnStats = findViewById(R.id.btnMenuStats);
-        //Animation Button Floating
+    //Animation Button Floating
         if (btnPlay != null) {
             setupButtonTouchAnimation(btnPlay);
             btnPlay.setOnClickListener(v -> {
                 Log.d("UI", "Play Button Clicked");
-                android.content.Intent intent = new android.content.Intent(MainActivity.this, CategoryActivity.class);
+                Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
                 startActivity(intent);
             });
         }
@@ -68,15 +70,18 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             });
         }
+
         if (btnStats != null) {
             setupButtonTouchAnimation(btnStats);
-            btnStats.setOnClickListener(v ->
-                    startActivity(new android.content.Intent(MainActivity.this, StatsActivity.class)));
+            btnStats.setOnClickListener(v -> {
+                Log.d("UI", "Stats Button Clicked");
+                Intent intent = new Intent(MainActivity.this, StatsActivity.class);
+                startActivity(intent);
+            });
         }
     }
-
     //Animation Button
-    private void setupButtonTouchAnimation(View view) {
+    private void setupButtonTouchAnimation(View view){
         view.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:

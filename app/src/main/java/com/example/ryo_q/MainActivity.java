@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         View btnPlay = findViewById(R.id.btnMenuPlay);
         View btnExit = findViewById(R.id.btnMenuExit);
         View btnStats = findViewById(R.id.btnMenuStats);
-    //Animation Button Floating
+    //Animation Button
         if (btnPlay != null) {
             setupButtonTouchAnimation(btnPlay);
             btnPlay.setOnClickListener(v -> {

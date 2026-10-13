@@ -202,7 +202,7 @@ public class GameplayActivity extends AppCompatActivity {
         finish();
     }
 
-    // [FIX 4] หยุดเวลาตอนแอปไม่อยู่หน้าจอ แล้วเดินต่อจากเวลาที่เหลือ
+    //  หยุดเวลาตอนแอปไม่อยู่หน้าจอ แล้วเดินต่อจากเวลาที่เหลือ
     @Override
     protected void onStop() {
         super.onStop();

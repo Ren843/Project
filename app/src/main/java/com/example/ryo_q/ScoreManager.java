@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
  // คลาส ScoreManager ทำหน้าที่จัดการการบันทึกและดึงข้อมูลคะแนนดาว
  // โดยใช้ SharedPreferences ในการเก็บข้อมูลลงในเครื่อง
 public class ScoreManager {
-    private static final String PREF_NAME = "RobotRepairScores";
+    private static final String PREF_NAME = "Code Solve";
     private static final String KEY_PREFIX = "STARS_";
 
      // บันทึกจำนวนดาวที่ทำได้ในแต่ละด่าน
@@ -51,10 +51,10 @@ public class ScoreManager {
     }
 
     // ล้างข้อมูลคะแนนทั้งหมด (Reset Game)
-    public static void clearAllScores(Context context) {
+   /* public static void clearAllScores(Context context) {
         SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         pref.edit().clear().apply();
-    }
+    } */
 
     // สร้าง Key สำหรับจัดเก็บข้อมูลเพื่อให้เป็นรูปแบบเดียวกัน
     private static String generateKey(String lang, String diff) {

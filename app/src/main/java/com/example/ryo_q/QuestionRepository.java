@@ -26,7 +26,7 @@ public class QuestionRepository {
     // @return List ของคำถามทั้งหมดที่มีในเกม
     private static List<Question> getAllQuestions() {
         List<Question> list = new ArrayList<>();
-
+//Java
         // บั๊ก: ลืมใส่ ; ท้ายคำสั่ง | เฉลย: int hp = 100;
         list.add(new Question("1. ตรวจสอบการลืมใส่เครื่องหมาย ; ปิดท้ายคำสั่ง",
                 "int hp = 100\nSystem.out.println(hp);",
@@ -266,8 +266,6 @@ public class QuestionRepository {
                 "int 2nd = 5;",
                 new String[]{"int second = 5;", "int 2nd_ = 5;", "int 'second' = 5;"},
                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_EASY));
-
-        // ---------- ข้อ 41-50 ----------
 
         // บั๊ก: ประกาศ int a ซ้ำสองครั้ง | เฉลย: ประกาศครั้งเดียวแล้วกำหนดค่าใหม่ a = 2;
         list.add(new Question("41. ตรวจสอบการประกาศตัวแปรชื่อซ้ำในขอบเขตเดียวกัน",
@@ -579,7 +577,6 @@ public class QuestionRepository {
                 new String[]{"s = s.toUpperCase();", "s.toUpperCase(s);", "s.upper();"},
                 0, GameConstants.LANG_JAVA, GameConstants.DIFF_NORMAL));
 
-        // ---------- ข้อ 41-50 ----------
 
         // บั๊ก: String ไม่มี method reverse() | เฉลย: StringBuilder(...).reverse().toString()
         list.add(new Question("41. ตรวจสอบการกลับด้านข้อความ (String ไม่มี reverse())",
@@ -949,7 +946,7 @@ public class QuestionRepository {
                 new String[]{"CompletableFuture.supplyAsync(() -> 1 / 0)\n .thenAccept(System.out::println)\n .catch(e -> 0);", "CompletableFuture.supplyAsync(() -> 1 / 0)\n .exceptionally(e -> 0)\n .thenAccept(System.out::println);", "CompletableFuture.supplyAsync(() -> 1 / 0)\n .thenAccept(System.out::println)\n .finally(() -> {});"},
                 1, GameConstants.LANG_JAVA, GameConstants.DIFF_HARD));
 
-
+//Python
         // EASY
 // 1. การใช้งานตัวพิมพ์ใหญ่-เล็กของค่า Boolean
         list.add(new Question("1. การใช้งานตัวพิมพ์ใหญ่-เล็กของค่า Boolean",
